@@ -1,0 +1,95 @@
+= Character
+:toc: left
+:toclevels: 2
+
+== Skills
+
+* Animal Handling
+* Athletics
+* Camouflage?
+* Cartography
+* Climbing?
+* Cooking
+* Constitution, Endurance, Health, Stamina
+* Fishing?
+* Herb Lore
+* Navigation
+** sub-skills for underground, land, sea
+* Perception
+* Riding
+* Strength, Might
+* Stealth
+* Survival
+** sub-skills for different terrain types
+* Swimming?
+* Tactics
+** spot ambushes together with Area Knowledge or Survival
+* Tracking
+* Traps
+* Weather Sense
+
+=== Skill Ranks
+
+[cols="1,2a,2a", options="header"]
+|===
+|Rank
+|Attribute
+|Skill
+
+| -4
+|average child
+|
+
+| -2
+| average teenager
+|
+
+| 0
+| average adult
+| untrained
+
+| 2
+| above average
+|
+* beginner
+* page
+* apprentice
+
+| 4
+| good
+|
+* intermediate
+* squire
+* journeyman
+
+| 6
+| great
+|
+* advanced
+* knight
+* master
+
+| 8
+| fantastic
+|
+* experienced knight
+* grand master
+
+| 10
+2+| legendary
+
+|===
+
+=== Skill Check
+
+* Skill + d6 - d6 - Difficulty
+** >=5: Critical Success
+** >=0: Success
+** >-5: Failure
+** <=-5: Critical Failure
+
+== Traits
+
+* consumption
+* memory
+* senses
