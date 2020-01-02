@@ -1,0 +1,24 @@
+* skills
+** Animal Handling
+** Athletics
+** Camouflage?
+** Cartography
+** Climbing?
+** Cooking
+** Constitution, Endurance, Health, Stamina
+** Fishing?
+** Herb Lore
+** Navigation
+*** sub-skills for underground, land, sea
+** Perception
+** Riding
+** Strength, Might
+** Stealth
+** Survival
+*** sub-skills for different terrain types
+** Swimming?
+** Tactics
+*** spot ambushes together with Area Knowledge or Survival
+** Tracking
+** Traps
+** Weather Sense
