@@ -22,3 +22,30 @@
 ** Tracking
 ** Traps
 ** Weather Sense
+* traits
+** consumption
+** memory
+** senses
+* items
+** clothing
+** food
+** shelter
+*** tent, lean-to, hut, cave
+** tools
+*** e.g. compass, firelighter, cooking pot, instrument
+** vehicles
+*** e.g. wagons, flying carpet, boat, walking hut
+** weapons
+* animals
+** hunting animals
+** mounts
+** predators
+** prey
+* terrain
+** climate
+*** e.g. desert, arctic, tropical
+** weather
+*** e.g. storm, fog, rain of frogs
+** obstacles
+*** e.g. avalanche, falling tree, quicksand
+** locations
