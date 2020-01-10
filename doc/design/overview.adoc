@@ -1,6 +1,8 @@
 * items
 ** clothing
-** food
+** consumables
+*** food
+*** potions
 ** shelter
 *** tent, lean-to, hut, cave
 ** tools

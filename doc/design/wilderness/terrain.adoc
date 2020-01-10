@@ -1,0 +1,41 @@
+= Terrain
+
+* can be seasonal
+** e.g. seasonal deserts or lakes
+
+== Obstacles
+
+* acid swamp
+** dissolves shoes first and then the feet
+* chasms
+** climb, jump, swinging on a rope or a vine, fly
+** lower others with a rope
+** build a rope bridge
+* craters filled with mutating water
+** bottle it without falling into it
+* falling rocks
+* falling trees
+* insect swarms
+* razor grass
+** looks harmless, but causes damage
+* thin ice
+* quicksand or warpsand
+** pulls victim quickly down
+** sometimes a cave is below?
+
+== Weather
+
+* dust or sand storm
+* fog
+* hail
+* rain
+* snowfall
+* wind
+
+=== Exotic Weather
+
+* acid rain
+** damages characters & equipment
+* fire storm
+* meteoric rain
+* Rain of Frogs

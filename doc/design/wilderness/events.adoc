@@ -1,0 +1,53 @@
+= Wilderness Events
+
+* worse travel conditions
+* better travel conditions
+* an additional chance to get lost
+* random equipment is damaged
+* reduced food rations
+** damaged by accident
+** eaten by vermin
+* diseases, madness, curses
+** victims
+*** suffering or already dead?
+** warnings
+* a vantage point
+** can it spread to other hexes?
+* local obstacle
+* local weather
+** continue, try to move around it or look for a shelter?
+
+== Terrain
+
+* avalanche
+* forest fire
+
+== Mount
+
+* hurt  and can not continue
+* does not want to continue
+** did it sense something?
+** use Animal Handling to continue
+** use violence to continue
+** take a short break
+* runs away
+* knocks off rider
+
+== Encounter
+
+* who?
+** animals
+** monsters
+** a hunting party of natives
+* how?
+** ambush
+** tracks
+** a distant sound
+*** cries for help
+*** howling
+*** music
+*** sound of combat
+** remains of a victim
+** a nest or camp
+** a battle
+** a stampede
