@@ -8,6 +8,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import jfw.util.rendering.CanvasRenderer;
+import jfw.util.rendering.TileMap;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -24,15 +25,16 @@ public class RenderingDemo extends Application {
 		primaryStage.show();
 
 		CanvasRenderer canvasRenderer = new CanvasRenderer(canvas.getGraphicsContext2D());
+		TileMap tileMap = new TileMap(canvasRenderer, 0, 0,  16, 16, 10, 10);
 
-		render(canvasRenderer);
+		render(tileMap);
 	}
 
-	private void render(CanvasRenderer canvasRenderer) {
+	private void render(TileMap tileMap) {
 		log.info("render()");
 
-		canvasRenderer.setColor(Color.RED);
-		canvasRenderer.renderRectangle(100, 0, 50, 50);
+		tileMap.clear();
+		tileMap.renderTile(5, 8, Color.RED);
 	}
 
 	public static void main(String[] args) {
