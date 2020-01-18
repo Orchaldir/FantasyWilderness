@@ -37,6 +37,25 @@ public class TileMap {
 		renderer.clear(startX, startY, width, height);
 	}
 
+	public void renderCharacter(char character, int column, int row, Color color) {
+		renderer.setColor(color);
+		renderCharacter(character, column, row);
+	}
+
+	private void renderCharacter(char character, int column, int row) {
+		renderer.renderCharacter(character, getCenterX(column), getCenterY(row), tileHeight);
+	}
+
+	public void renderText(String text, int column, int row, Color color) {
+		renderer.setColor(color);
+
+		int index = 0;
+
+		for (char character : text.toCharArray()) {
+			renderCharacter(character, column + index++, row);
+		}
+	}
+
 	public void renderTile(int column, int row, Color color) {
 		renderer.setColor(color);
 		renderer.renderRectangle(getX(column), getY(row), tileWidth, tileHeight);
@@ -48,5 +67,13 @@ public class TileMap {
 
 	private int getY(int row) {
 		return startY + row * tileHeight;
+	}
+
+	private int getCenterX(int column) {
+		return getX(column) + tileWidth / 2;
+	}
+
+	private int getCenterY(int row) {
+		return getY(row) + tileHeight / 2;
 	}
 }

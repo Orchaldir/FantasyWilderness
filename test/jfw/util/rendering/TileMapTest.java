@@ -39,6 +39,35 @@ class TileMapTest {
 	}
 
 	@Test
+	void testRenderCharacter() {
+		tileMap.renderCharacter('T', 2, 7, color);
+
+		int x = (int) (START_X + TILE_WIDTH * 2.5);
+		int y = (int) (START_Y + TILE_HEIGHT * 7.5);
+
+		verify(renderer).setColor(ArgumentMatchers.eq(color));
+		verify(renderer).renderCharacter('T', x, y, TILE_HEIGHT);
+		verifyNoMoreInteractions(renderer);
+	}
+
+	@Test
+	void testRenderText() {
+		tileMap.renderText("A test!", 2, 7, color);
+
+		int y = (int) (START_Y + TILE_HEIGHT * 7.5);
+
+		verify(renderer).setColor(ArgumentMatchers.eq(color));
+		verify(renderer).renderCharacter('A', 125, y, TILE_HEIGHT);
+		verify(renderer).renderCharacter(' ', 135, y, TILE_HEIGHT);
+		verify(renderer).renderCharacter('t', 145, y, TILE_HEIGHT);
+		verify(renderer).renderCharacter('e', 155, y, TILE_HEIGHT);
+		verify(renderer).renderCharacter('s', 165, y, TILE_HEIGHT);
+		verify(renderer).renderCharacter('t', 175, y, TILE_HEIGHT);
+		verify(renderer).renderCharacter('!', 185, y, TILE_HEIGHT);
+		verifyNoMoreInteractions(renderer);
+	}
+
+	@Test
 	void testRenderTile() {
 		tileMap.renderTile(3, 5, color);
 
