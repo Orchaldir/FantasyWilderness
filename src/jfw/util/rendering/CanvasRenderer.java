@@ -10,7 +10,7 @@ public class CanvasRenderer implements Renderer {
 	private final GraphicsContext graphicsContext;
 
 	@Override
-	public void clear(double x, double y, double width, double height) {
+	public void clear(int x, int y, int width, int height) {
 		graphicsContext.clearRect(x, y, width, height);
 	}
 
@@ -20,7 +20,7 @@ public class CanvasRenderer implements Renderer {
 	}
 
 	@Override
-	public void renderRectangle(double x, double y, double width, double height) {
+	public void renderRectangle(int x, int y, int width, int height) {
 		graphicsContext.fillRect(x, y, width, height);
 	}
 }

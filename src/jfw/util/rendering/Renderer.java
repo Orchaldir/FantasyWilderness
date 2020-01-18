@@ -4,9 +4,9 @@ import javafx.scene.paint.Color;
 
 public interface Renderer {
 
-	void clear(double x, double y, double width, double height);
+	void clear(int x, int y, int width, int height);
 
 	void setColor(Color color);
 
-	void renderRectangle(double x, double y, double width, double height);
+	void renderRectangle(int x, int y, int width, int height);
 }
