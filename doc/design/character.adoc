@@ -83,10 +83,10 @@
 === Skill Check
 
 * Skill + d6 - d6 - Difficulty
-** >=5: Critical Success
-** >=0: Success
+** &ge;5: Critical Success
+** &ge;0: Success
 ** >-5: Failure
-** <=-5: Critical Failure
+** &le;-5: Critical Failure
 
 == Traits
 
