@@ -15,9 +15,9 @@ class TileMapTest {
 	private static final int TILE_HEIGHT = 20;
 	private static final int NUMBER_OF_COLUMNS = 30;
 	private static final int NUMBER_OF_ROWS = 40;
+	private static final Color COLOR = Color.RED;
 
 	private Renderer renderer;
-	private Color color = Color.RED;
 
 	private TileMap tileMap;
 
@@ -40,23 +40,23 @@ class TileMapTest {
 
 	@Test
 	void testRenderCharacter() {
-		tileMap.renderCharacter('T', 2, 7, color);
+		tileMap.renderCharacter('T', 2, 7, COLOR);
 
 		int x = (int) (START_X + TILE_WIDTH * 2.5);
 		int y = (int) (START_Y + TILE_HEIGHT * 7.5);
 
-		verify(renderer).setColor(ArgumentMatchers.eq(color));
+		verify(renderer).setColor(ArgumentMatchers.eq(COLOR));
 		verify(renderer).renderCharacter('T', x, y, TILE_HEIGHT);
 		verifyNoMoreInteractions(renderer);
 	}
 
 	@Test
 	void testRenderText() {
-		tileMap.renderText("A test!", 2, 7, color);
+		tileMap.renderText("A test!", 2, 7, COLOR);
 
 		int y = (int) (START_Y + TILE_HEIGHT * 7.5);
 
-		verify(renderer).setColor(ArgumentMatchers.eq(color));
+		verify(renderer).setColor(ArgumentMatchers.eq(COLOR));
 		verify(renderer).renderCharacter('A', 125, y, TILE_HEIGHT);
 		verify(renderer).renderCharacter(' ', 135, y, TILE_HEIGHT);
 		verify(renderer).renderCharacter('t', 145, y, TILE_HEIGHT);
@@ -69,12 +69,12 @@ class TileMapTest {
 
 	@Test
 	void testRenderTile() {
-		tileMap.renderTile(3, 5, color);
+		tileMap.renderTile(3, 5, COLOR);
 
 		int x = START_X + TILE_WIDTH * 3;
 		int y = START_Y + TILE_HEIGHT * 5;
 
-		verify(renderer).setColor(ArgumentMatchers.eq(color));
+		verify(renderer).setColor(ArgumentMatchers.eq(COLOR));
 		verify(renderer).renderRectangle(x, y, TILE_WIDTH, TILE_HEIGHT);
 		verifyNoMoreInteractions(renderer);
 	}

@@ -9,6 +9,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import jfw.util.rendering.CanvasRenderer;
 import jfw.util.rendering.TileMap;
+import jfw.util.rendering.tile.CharacterTile;
+import jfw.util.rendering.tile.FullTile;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -33,14 +35,17 @@ public class RenderingDemo extends Application {
 	private void render(TileMap tileMap) {
 		log.info("render()");
 
+		CharacterTile wTile = new CharacterTile('W', Color.BLACK);
+		FullTile redTile = new FullTile(Color.RED);
+
 		tileMap.clear();
-		tileMap.renderTile(5, 0, Color.RED);
-		tileMap.renderTile(7, 1, Color.RED);
-		tileMap.renderTile(9, 1, Color.RED);
-		tileMap.renderTile(11, 1, Color.RED);
-		tileMap.renderTile(13, 1, Color.RED);
-		tileMap.renderTile(18, 1, Color.RED);
-		tileMap.renderCharacter('W', 5, 0, Color.BLACK);
+		redTile.render(tileMap, 5, 0);
+		redTile.render(tileMap, 7, 1);
+		redTile.render(tileMap, 9, 1);
+		redTile.render(tileMap, 11, 1);
+		redTile.render(tileMap, 13, 1);
+		redTile.render(tileMap, 18, 1);
+		wTile.render(tileMap, 5, 0);
 		tileMap.renderText("Hello & goodbye", 5, 1, Color.BLUE);
 		tileMap.renderCenteredText("Centered", 8, Color.GREEN);
 	}
