@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class TileMapTest {
@@ -27,6 +28,12 @@ class TileMapTest {
 
 		tileMap = new TileMap(renderer, START_X, START_Y,
 				TILE_WIDTH, TILE_HEIGHT, NUMBER_OF_COLUMNS, NUMBER_OF_ROWS);
+	}
+
+	@Test
+	void testRendererIsNull() {
+		assertThrows(NullPointerException.class, () -> new TileMap(null, START_X, START_Y,
+				TILE_WIDTH, TILE_HEIGHT, NUMBER_OF_COLUMNS, NUMBER_OF_ROWS));
 	}
 
 	@Test

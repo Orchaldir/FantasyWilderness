@@ -1,6 +1,7 @@
 package jfw.util.rendering;
 
 import javafx.scene.paint.Color;
+import lombok.NonNull;
 
 public class TileMap {
 
@@ -17,7 +18,7 @@ public class TileMap {
 	private final int numberOfColumns;
 	private final int numberOfRows;
 
-	public TileMap(Renderer renderer,
+	public TileMap(@NonNull Renderer renderer,
 					int startX, int startY,
 					int tileWidth, int tileHeight,
 					int numberOfColumns, int numberOfRows) {

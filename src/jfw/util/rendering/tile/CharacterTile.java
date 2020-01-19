@@ -3,11 +3,13 @@ package jfw.util.rendering.tile;
 import javafx.scene.paint.Color;
 import jfw.util.rendering.TileMap;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 
 @AllArgsConstructor
 public class CharacterTile implements Tile {
 
 	private final char character;
+	@NonNull
 	private final Color color;
 
 	@Override

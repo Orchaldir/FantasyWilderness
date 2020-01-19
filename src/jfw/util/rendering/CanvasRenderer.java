@@ -6,10 +6,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 
 @AllArgsConstructor
 public class CanvasRenderer implements Renderer {
 
+	@NonNull
 	private final GraphicsContext graphicsContext;
 
 	@Override
@@ -31,7 +33,7 @@ public class CanvasRenderer implements Renderer {
 	}
 
 	@Override
-	public void setColor(Color color) {
+	public void setColor(@NonNull Color color) {
 		graphicsContext.setFill(color);
 	}
 }

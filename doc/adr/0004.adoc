@@ -1,0 +1,24 @@
+= ADR 0004 - Fail Fast
+
+*Status:* accepted
+
+*Date:* 2020-01-19
+
+== Considered Options
+
+* Fail Fast
+** Fail as early as possible
+* Fail Safe
+** Prevent or mitigate consequences of the failure.
+** e.g. Null object pattern
+
+== Decision Outcome
+
+*Chosen option:* Fail Fast
+
+* Validate arguments of constructors
+* Use
+** Lombok's @NonNull
+** Objects.requireNonNull()
+* Only use the Null object pattern, if it does not affect the application's behavior
+** For missing images, sounds, ...
