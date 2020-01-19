@@ -1,0 +1,23 @@
+= ADR 0005 - Use AssertJ for testing
+
+*Status:* accepted
+
+*Date:* 2020-01-19
+
+== Considered Options
+
+* AssertJ
+* Hamcrest
+* Truth
+
+== Decision Outcome
+
+*Chosen option:* AssertJ
+
+* Works better with autocomplete
+
+== Links
+
+* https://joel-costigliola.github.io/assertj/
+* http://hamcrest.org/JavaHamcrest/
+* https://truth.dev
