@@ -42,6 +42,7 @@ public class RenderingDemo extends Application {
 		tileMap.renderTile(18, 1, Color.RED);
 		tileMap.renderCharacter('W', 5, 0, Color.BLACK);
 		tileMap.renderText("Hello & goodbye", 5, 1, Color.BLUE);
+		tileMap.renderCenteredText("Centered", 8, Color.GREEN);
 	}
 
 	public static void main(String[] args) {

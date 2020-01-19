@@ -56,6 +56,11 @@ public class TileMap {
 		}
 	}
 
+	public void renderCenteredText(String text, int row, Color color) {
+		int column = numberOfColumns - text.length() / 2;
+		renderText(text, column, row, color);
+	}
+
 	public void renderTile(int column, int row, Color color) {
 		renderer.setColor(color);
 		renderer.renderRectangle(getX(column), getY(row), tileWidth, tileHeight);
