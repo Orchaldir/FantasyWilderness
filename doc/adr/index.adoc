@@ -1,0 +1,5 @@
+= Architectural Decision Records
+
+* link:0001.adoc[ADR 0001 - Use Mockito for testing]
+* link:0002.adoc[ADR 0002 - Use Lombok to avoid repetitive code]
+* link:0003.adoc[ADR 0003 - Using AsciiDoc for documentation]

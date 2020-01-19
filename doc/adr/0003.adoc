@@ -1,0 +1,26 @@
+= ADR 0003 - Using AsciiDoc for documentation
+
+*Status:* accepted
+
+*Date:* 2020-01-19
+
+== Considered Options
+
+* Markdown
+* AsciiDoc
+
+== Decision Outcome
+
+*Chosen option:* AsciiDoc
+
+* AsciiDoc more powerful than Markdown.
+* More familiar with AsciiDoc.
+
+== Build
+
+Execute Maven Goal `generate-resources` to generate the documentation in html.
+
+== Links
+
+* http://asciidoc.org
+* https://asciidoctor.org/docs/asciidoc-vs-markdown[AsciiDoc vs Markdown]
