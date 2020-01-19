@@ -1,6 +1,7 @@
 package jfw.util.rendering;
 
 import javafx.scene.paint.Color;
+import jfw.util.OutsideMapException;
 import lombok.NonNull;
 
 import static jfw.util.Validator.requireGreater;
@@ -41,6 +42,7 @@ public class TileMap {
 	}
 
 	public void renderCharacter(char character, int column, int row, Color color) {
+		validateInside(column, row);
 		renderer.setColor(color);
 		renderCharacter(character, column, row);
 	}
@@ -55,12 +57,16 @@ public class TileMap {
 		int index = 0;
 
 		for (char character : text.toCharArray()) {
-			renderCharacter(character, column + index++, row);
+			int currentColumn = column + index++;
+
+			if (isInside(currentColumn, row)) {
+				renderCharacter(character, currentColumn, row);
+			}
 		}
 	}
 
 	public void renderCenteredText(String text, int row, Color color) {
-		int column = numberOfColumns - text.length() / 2;
+		int column = (numberOfColumns - text.length()) / 2;
 		renderText(text, column, row, color);
 	}
 
@@ -83,5 +89,20 @@ public class TileMap {
 
 	private int getCenterY(int row) {
 		return getY(row) + tileHeight / 2;
+	}
+
+	private void validateInside(int column, int row) {
+		if(isOutside(column, row)) {
+			throw new OutsideMapException(column, row);
+		}
+	}
+
+	private boolean isInside(int column, int row) {
+		return !isOutside(column, row);
+	}
+
+	private boolean isOutside(int column, int row) {
+		return column < 0 || column >= numberOfColumns ||
+				row < 0 || row >= numberOfRows;
 	}
 }

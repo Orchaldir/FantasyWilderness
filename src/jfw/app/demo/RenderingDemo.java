@@ -27,7 +27,7 @@ public class RenderingDemo extends Application {
 		primaryStage.show();
 
 		CanvasRenderer canvasRenderer = new CanvasRenderer(canvas.getGraphicsContext2D());
-		TileMap tileMap = new TileMap(canvasRenderer, 0, 0,  22, 32, 10, 10);
+		TileMap tileMap = new TileMap(canvasRenderer, 0, 0,  22, 32, 20, 10);
 
 		render(tileMap);
 	}
