@@ -3,6 +3,8 @@ package jfw.util.rendering;
 import javafx.scene.paint.Color;
 import lombok.NonNull;
 
+import static jfw.util.Validator.requireGreater;
+
 public class TileMap {
 
 	private final Renderer renderer;
@@ -23,12 +25,12 @@ public class TileMap {
 					int tileWidth, int tileHeight,
 					int numberOfColumns, int numberOfRows) {
 		this.renderer = renderer;
-		this.startX = startX;
-		this.startY = startY;
-		this.tileWidth = tileWidth;
-		this.tileHeight = tileHeight;
-		this.numberOfColumns = numberOfColumns;
-		this.numberOfRows = numberOfRows;
+		this.startX = requireGreater(startX, -1, "startX");
+		this.startY = requireGreater(startY, -1, "startY");
+		this.tileWidth = requireGreater(tileWidth, 0, "tileWidth");
+		this.tileHeight = requireGreater(tileHeight, 0, "tileHeight");
+		this.numberOfColumns = requireGreater(numberOfColumns, 0, "numberOfColumns");
+		this.numberOfRows = requireGreater(numberOfRows, 0, "numberOfRows");
 
 		width = tileWidth * numberOfColumns;
 		height = tileHeight * numberOfRows;
