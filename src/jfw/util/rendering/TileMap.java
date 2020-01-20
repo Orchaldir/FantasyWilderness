@@ -2,9 +2,9 @@ package jfw.util.rendering;
 
 import javafx.scene.paint.Color;
 import jfw.util.OutsideMapException;
-import lombok.NonNull;
 
-import static jfw.util.Validator.requireGreater;
+import static jfw.util.Validator.validateGreater;
+import static jfw.util.Validator.validateNotNull;
 
 public class TileMap {
 
@@ -21,17 +21,17 @@ public class TileMap {
 	private final int numberOfColumns;
 	private final int numberOfRows;
 
-	public TileMap(@NonNull Renderer renderer,
+	public TileMap(Renderer renderer,
 					int startX, int startY,
 					int tileWidth, int tileHeight,
 					int numberOfColumns, int numberOfRows) {
-		this.renderer = renderer;
-		this.startX = requireGreater(startX, -1, "startX");
-		this.startY = requireGreater(startY, -1, "startY");
-		this.tileWidth = requireGreater(tileWidth, 0, "tileWidth");
-		this.tileHeight = requireGreater(tileHeight, 0, "tileHeight");
-		this.numberOfColumns = requireGreater(numberOfColumns, 0, "numberOfColumns");
-		this.numberOfRows = requireGreater(numberOfRows, 0, "numberOfRows");
+		this.renderer = validateNotNull(renderer, "renderer");
+		this.startX = validateGreater(startX, -1, "startX");
+		this.startY = validateGreater(startY, -1, "startY");
+		this.tileWidth = validateGreater(tileWidth, 0, "tileWidth");
+		this.tileHeight = validateGreater(tileHeight, 0, "tileHeight");
+		this.numberOfColumns = validateGreater(numberOfColumns, 0, "numberOfColumns");
+		this.numberOfRows = validateGreater(numberOfRows, 0, "numberOfRows");
 
 		width = tileWidth * numberOfColumns;
 		height = tileHeight * numberOfRows;

@@ -2,7 +2,16 @@ package jfw.util;
 
 public class Validator {
 
-	public static int requireGreater(int value, int threshold, String name) {
+	public static <T> T validateNotNull(T object, String name) {
+		if (object == null) {
+			String message = String.format("%s is null!", name);
+			throw new NullPointerException(message);
+		}
+
+		return object;
+	}
+
+	public static int validateGreater(int value, int threshold, String name) {
 		if (value > threshold) {
 			return value;
 		}
