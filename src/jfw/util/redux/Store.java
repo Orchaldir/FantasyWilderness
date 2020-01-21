@@ -2,10 +2,15 @@ package jfw.util.redux;
 
 import lombok.Getter;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Consumer;
+
 import static jfw.util.Validator.validateNotNull;
 
 public class Store<Action, State> {
 
+	private final Set<Consumer<State>> consumers = new HashSet<>();
 	private final Reducer<Action, State> reducer;
 
 	@Getter
@@ -16,9 +21,22 @@ public class Store<Action, State> {
 		this.state = validateNotNull(state, "state");
 	}
 
-	public State dispatch(Action action) {
+	public void dispatch(Action action) {
+		validateNotNull(action, "action");
+
 		state = reducer.reduce(action, state);
 
-		return state;
+		notifyConsumers();
+	}
+
+	public void subscribe(Consumer<State> consumer) {
+		validateNotNull(consumer, "consumer");
+		consumers.add(consumer);
+	}
+
+	private void notifyConsumers() {
+		for (Consumer<State> consumer : consumers) {
+			consumer.accept(state);
+		}
 	}
 }
