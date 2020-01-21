@@ -2,11 +2,15 @@ package jfw.util.redux;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class StoreTest {
 
 	private static final String ACTION0 = "action0";
@@ -14,27 +18,26 @@ class StoreTest {
 	private static final Integer STATE0 = 100;
 	private static final Integer STATE1 = 200;
 
+	@Mock
 	private Reducer<String, Integer> reducer;
 	private Store<String, Integer> store;
 
 	@BeforeEach
 	void setUp() {
-		reducer = mock(Reducer.class);
-
-		store = new Store(reducer, STATE0);
+		store = new Store<>(reducer, STATE0);
 	}
 
 	@Test
 	void testInvalidReducer() {
 		assertThatExceptionOfType(NullPointerException.class).
-				isThrownBy(() -> new Store(null, STATE0)).
+				isThrownBy(() -> new Store<>(null, STATE0)).
 				withMessage("reducer is null!");
 	}
 
 	@Test
 	void testInvalidState() {
 		assertThatExceptionOfType(NullPointerException.class).
-				isThrownBy(() -> new Store(reducer, null)).
+				isThrownBy(() -> new Store<>(reducer, null)).
 				withMessage("state is null!");
 	}
 
