@@ -6,15 +6,15 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
 @AllArgsConstructor
-public class CharacterTile implements Tile {
+public class UnicodeTile implements Tile {
 
-	private final char character;
+	private final int codePoint;
 	@NonNull
 	private final Color color;
 
 	@Override
 	public void render(TileMap tileMap, int column, int row) {
-		tileMap.renderCharacter(character, column, row, color);
+		tileMap.renderCharacter(codePoint, column, row, color);
 	}
 
 }

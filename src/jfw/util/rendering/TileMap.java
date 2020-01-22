@@ -41,14 +41,14 @@ public class TileMap {
 		renderer.clear(startX, startY, width, height);
 	}
 
-	public void renderCharacter(char character, int column, int row, Color color) {
+	public void renderCharacter(int codePoint, int column, int row, Color color) {
 		validateInside(column, row);
 		renderer.setColor(color);
-		renderCharacter(character, column, row);
+		renderCharacter(codePoint, column, row);
 	}
 
-	private void renderCharacter(char character, int column, int row) {
-		renderer.renderCharacter(character, getCenterX(column), getCenterY(row), tileHeight);
+	private void renderCharacter(int codePoint, int column, int row) {
+		renderer.renderCharacter(codePoint, getCenterX(column), getCenterY(row), tileHeight);
 	}
 
 	public void renderText(String text, int column, int row, Color color) {

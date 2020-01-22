@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import jfw.util.rendering.CanvasRenderer;
 import jfw.util.rendering.TileMap;
-import jfw.util.rendering.tile.CharacterTile;
+import jfw.util.rendering.tile.UnicodeTile;
 import jfw.util.rendering.tile.FullTile;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,7 +35,7 @@ public class RenderingDemo extends Application {
 	private void render(TileMap tileMap) {
 		log.info("render()");
 
-		CharacterTile wTile = new CharacterTile('W', Color.BLACK);
+		UnicodeTile fireTile = new UnicodeTile(128293, Color.RED);
 		FullTile redTile = new FullTile(Color.RED);
 
 		tileMap.clear();
@@ -45,7 +45,7 @@ public class RenderingDemo extends Application {
 		redTile.render(tileMap, 11, 1);
 		redTile.render(tileMap, 13, 1);
 		redTile.render(tileMap, 18, 1);
-		wTile.render(tileMap, 5, 0);
+		fireTile.render(tileMap, 5, 4);
 		tileMap.renderText("Hello & goodbye", 5, 1, Color.BLUE);
 		tileMap.renderCenteredText("Centered", 8, Color.GREEN);
 	}
