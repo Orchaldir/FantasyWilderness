@@ -1,0 +1,105 @@
+= Architecture with Redux
+:toc: left
+:toclevels: 2
+
+== State
+
+=== Content
+
+* Objects should not change
+* New objects might be created by the user
+
+==== List
+
+* Events
+* Races
+* Skills
+* Terrain Types
+* Weather Types
+
+=== Runtime Data
+
+* Will be constant updated by actions
+
+==== List
+
+* World Map
+* Entity Components
+** Character
+*** skills
+*** conditions
+** Position
+*** index
+** ???
+*** hit points
+*** fatigue points
+** Needs
+*** hunger
+*** thirst
+*** tiredness
+* History
+** e.g. actions, events
+** results
+* Time
+** current time
+** initiative system
+
+=== Gui
+
+* Not saved?
+
+==== List
+
+* Widgets
+** position
+** size
+** state
+*** e.g. open, closed, slider position, text  input
+* selection
+
+== Actions
+
+* Move in direction
+** direction
+** style
+*** e.g. fast, comfortable, careful, stealthy
+* Start camping
+** duration
+** tasks
+*** who?
+*** what: watch, cooking, singing
+
+=== Gui
+
+* Widgets
+** Move
+** Resize
+** Change state
+* Select
+
+== Reducer
+
+* Move in direction
+** Update Position
+** Update Time & Initiative
+** Update Needs
+** Check for Event
+* Camp
+** Handle tasks
+** Update Time & Initiative
+** Update Needs
+** Check for Event
+
+== View
+
+* Camping
+* Combat
+* Event Handling
+* Menu
+* Travelling
+
+== Open Points
+
+* Events VS Initiative
+* Player VS NPCs
+* Viewers VS Widgets
