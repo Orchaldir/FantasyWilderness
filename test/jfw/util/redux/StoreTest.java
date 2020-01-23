@@ -116,4 +116,23 @@ class StoreTest {
 		verify(reducer).reduce(ACTION0, STATE0);
 		verifyNoMoreInteractions(reducer);
 	}
+
+	@Test
+	void testUnsubscribe() {
+		when(reducer.reduce(ACTION0, STATE0)).thenReturn(STATE1);
+
+		Subscription subscription = store.subscribe(consumer0);
+		store.subscribe(consumer1);
+		subscription.unsubscribe();
+
+		store.dispatch(ACTION0);
+
+		assertThat(store.getState()).isEqualTo(STATE1);
+
+		verifyNoInteractions(consumer0);
+		verify(consumer1).accept(STATE1);
+		verifyNoMoreInteractions(consumer1);
+		verify(reducer).reduce(ACTION0, STATE0);
+		verifyNoMoreInteractions(reducer);
+	}
 }

@@ -29,9 +29,11 @@ public class Store<Action, State> {
 		notifyConsumers();
 	}
 
-	public void subscribe(Consumer<State> consumer) {
+	public Subscription subscribe(Consumer<State> consumer) {
 		validateNotNull(consumer, "consumer");
 		consumers.add(consumer);
+
+		return () -> consumers.remove(consumer);
 	}
 
 	private void notifyConsumers() {
