@@ -56,7 +56,7 @@ public class TileMap {
 
 		int index = 0;
 
-		for (char character : text.toCharArray()) {
+		for (int character : text.codePoints().toArray()) {
 			int currentColumn = column + index++;
 
 			if (isInside(currentColumn, row)) {
