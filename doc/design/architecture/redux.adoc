@@ -7,7 +7,7 @@
 === Content
 
 * Objects should not change
-* New objects might be created by the user
+* New objects might be added by the user
 
 ==== List
 
@@ -30,13 +30,16 @@
 *** conditions
 ** Position
 *** index
-** ???
+** Health
 *** hit points
 *** fatigue points
 ** Needs
 *** hunger
 *** thirst
 *** tiredness
+** Group
+*** list of entities belonging to the group
+*** roles for each entity?
 * History
 ** e.g. actions, events
 ** results
@@ -69,6 +72,10 @@
 *** who?
 *** what: watch, cooking, singing
 
+=== System
+
+* Update Needs
+
 === Gui
 
 * Widgets
@@ -82,12 +89,10 @@
 * Move in direction
 ** Update Position
 ** Update Time & Initiative
-** Update Needs
 ** Check for Event
 * Camp
 ** Handle tasks
 ** Update Time & Initiative
-** Update Needs
 ** Check for Event
 
 == View
@@ -103,3 +108,4 @@
 * Events VS Initiative
 * Player VS NPCs
 * Viewers VS Widgets
+* Are all items entities?
