@@ -35,4 +35,10 @@ class UnicodeTileTest {
 				isEqualTo(128293);
 	}
 
+	@Test
+	void testBigSymbol2() {
+		assertThat(new UnicodeTile("🔥", Color.BLACK).getCodePoint()).
+				isEqualTo(128293);
+	}
+
 }

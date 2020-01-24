@@ -8,6 +8,8 @@ import javafx.scene.text.TextAlignment;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
+import static jfw.util.Unicode.codePointToString;
+
 @AllArgsConstructor
 public class CanvasRenderer implements Renderer {
 
@@ -35,11 +37,5 @@ public class CanvasRenderer implements Renderer {
 	@Override
 	public void setColor(@NonNull Color color) {
 		graphicsContext.setFill(color);
-	}
-
-	private static String codePointToString(int codePoint) {
-		StringBuilder stringOut = new StringBuilder();
-		stringOut.appendCodePoint(codePoint);
-		return stringOut.toString();
 	}
 }

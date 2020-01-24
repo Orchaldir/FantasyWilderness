@@ -47,6 +47,7 @@ public class RenderingDemo extends Application {
 		redTile.render(tileMap, 18, 1);
 		fireTile.render(tileMap, 5, 4);
 		tileMap.renderText("Hello & goodbye", 5, 1, Color.BLUE);
+		tileMap.renderText("Test: 🌳 & 🌲", 1, 2, Color.BLUE);
 		tileMap.renderCenteredText("Centered", 8, Color.GREEN);
 	}
 
