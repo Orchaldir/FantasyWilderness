@@ -9,11 +9,11 @@ import static jfw.util.Validator.validateSize;
 public class ArrayMap2d<T> implements Map2d<T> {
 
 	@Getter
-	private final int width;
+	protected final int width;
 	@Getter
-	private final int height;
+	protected final int height;
 
-	private final T[] cells;
+	protected final T[] cells;
 
 	public ArrayMap2d(int width, int height, T[] cells) {
 		this.width = validateGreater(width, 0, "width");

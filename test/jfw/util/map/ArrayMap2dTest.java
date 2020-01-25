@@ -8,31 +8,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ArrayMap2dTest {
+class ArrayMap2dTest extends SharedData {
 
 	// data
-
-	private static final int WIDTH = 4;
-	private static final int HEIGHT = 5;
-	private static final int SIZE = WIDTH * HEIGHT;
 
 	private static final int X0 = 0, Y0 = 0, INDEX0 = 0;
 	private static final int X1 = 2, Y1 = 0, INDEX1 = 2;
 	private static final int X2 = 0, Y2 = 3, INDEX2 = 12;
 	private static final int X3 = 2, Y3 = 1, INDEX3 = 6;
 
-	private static final Integer[] ARRAY;
 	private static final Map2d<Integer> MAP;
 
-	static
-	{
-		ARRAY = new Integer[SIZE];
-
-		for(int i = 0; i < SIZE; i++) {
-			ARRAY[i] = i;
-		}
-
-		MAP = new ArrayMap2d<>(WIDTH, HEIGHT, ARRAY);
+	static {
+		MAP = new ArrayMap2d<>(WIDTH, HEIGHT, createArray());
 	}
 	
 	// tests
@@ -54,13 +42,13 @@ class ArrayMap2dTest {
 
 		private void assertWidth(int width) {
 			assertThatExceptionOfType(IllegalArgumentException.class).
-					isThrownBy(() -> new ArrayMap2d<>(width, HEIGHT, ARRAY)).
+					isThrownBy(() -> new ArrayMap2d<>(width, HEIGHT, createArray())).
 					withMessage("%s requires %d > %d", "width", width, 0);
 		}
 
 		private void assertHeight(int height) {
 			assertThatExceptionOfType(IllegalArgumentException.class).
-					isThrownBy(() -> new ArrayMap2d<>(WIDTH, height, ARRAY)).
+					isThrownBy(() -> new ArrayMap2d<>(WIDTH, height, createArray())).
 					withMessage("%s requires %d > %d", "height", height, 0);
 		}
 
@@ -74,7 +62,7 @@ class ArrayMap2dTest {
 		@Test
 		public void testInvalidArrayLength() {
 			assertThatExceptionOfType(IllegalArgumentException.class).
-					isThrownBy(() -> new ArrayMap2d<>(WIDTH, 3, ARRAY)).
+					isThrownBy(() -> new ArrayMap2d<>(WIDTH, 3, createArray())).
 					withMessage("cells has length %d instead of %d!", 20, 12);
 		}
 	}
