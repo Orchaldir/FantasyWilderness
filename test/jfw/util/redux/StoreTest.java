@@ -63,6 +63,15 @@ class StoreTest {
 	}
 
 	@Test
+	void testPublishAfterSubscribe() {
+		store.subscribe(consumer0);
+
+		verify(consumer0).accept(STATE0);
+		verifyNoMoreInteractions(consumer0);
+		verifyNoInteractions(reducer);
+	}
+
+	@Test
 	void testDispatchWithNull() {
 		assertThatExceptionOfType(NullPointerException.class).
 				isThrownBy(() ->store.dispatch(null)).
@@ -92,6 +101,7 @@ class StoreTest {
 
 		assertThat(store.getState()).isEqualTo(STATE1);
 
+		verify(consumer0).accept(STATE0);
 		verify(consumer0).accept(STATE1);
 		verifyNoMoreInteractions(consumer0);
 		verifyNoInteractions(consumer1);
@@ -109,10 +119,14 @@ class StoreTest {
 
 		assertThat(store.getState()).isEqualTo(STATE1);
 
+		verify(consumer0).accept(STATE0);
 		verify(consumer0).accept(STATE1);
 		verifyNoMoreInteractions(consumer0);
+
+		verify(consumer1).accept(STATE0);
 		verify(consumer1).accept(STATE1);
 		verifyNoMoreInteractions(consumer1);
+
 		verify(reducer).reduce(ACTION0, STATE0);
 		verifyNoMoreInteractions(reducer);
 	}
@@ -129,9 +143,13 @@ class StoreTest {
 
 		assertThat(store.getState()).isEqualTo(STATE1);
 
-		verifyNoInteractions(consumer0);
+		verify(consumer0).accept(STATE0);
+		verifyNoMoreInteractions(consumer0);
+
+		verify(consumer1).accept(STATE0);
 		verify(consumer1).accept(STATE1);
 		verifyNoMoreInteractions(consumer1);
+
 		verify(reducer).reduce(ACTION0, STATE0);
 		verifyNoMoreInteractions(reducer);
 	}

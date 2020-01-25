@@ -33,6 +33,8 @@ public class Store<Action, State> {
 		validateNotNull(consumer, "consumer");
 		consumers.add(consumer);
 
+		consumer.accept(state);
+
 		return () -> consumers.remove(consumer);
 	}
 
