@@ -2,10 +2,12 @@ package jfw.util.rendering;
 
 import javafx.scene.paint.Color;
 import jfw.util.OutsideMapException;
+import lombok.Getter;
 
 import static jfw.util.Validator.validateGreater;
 import static jfw.util.Validator.validateNotNull;
 
+@Getter
 public class TileMap {
 
 	private final Renderer renderer;
