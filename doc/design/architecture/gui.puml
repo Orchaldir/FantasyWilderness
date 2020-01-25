@@ -1,0 +1,50 @@
+@startuml
+
+hide empty members
+
+interface Tile {
+  void render(tileRenderer, x, y)
+}
+interface TileSelector <T> {
+  Tile select(T parameter)
+}
+abstract TileModifier
+note left of TileModifier
+Or an option that can
+be shared between tiles?
+end note
+
+class TileRenderer {
+  void renderTile()
+  void renderUnicode()
+}
+
+interface Map2d <Tile>
+class TileMap {
+  void render(tileRenderer, x, y)
+  void setText(text, x, y)
+  void setTile(tile, x, y)
+  void setTileMap(tileMap, x, y)
+}
+
+interface Widget
+
+Tile <|-- FullTile
+Tile <|-- UnicodeTile
+Tile <|-- TileModifier
+Tile --* TileModifier
+Tile <|-- Animation
+Tile --* Animation
+
+TileModifier <|-- Underscore
+TileModifier <|-- StrikeThrough
+
+Map2d <|-- TileMap
+
+TileMap "1" *-- "1..*" Tile
+
+Widget <|-- MessageLog
+Widget <|-- Window
+Widget <|-- MapViewer
+
+@enduml
