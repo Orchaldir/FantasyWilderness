@@ -15,6 +15,13 @@
         <maven.compiler.target>1.9</maven.compiler.target>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -65,6 +72,16 @@
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.25</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hexworks.zircon</groupId>
+            <artifactId>zircon.core-jvm</artifactId>
+            <version>2019.1.2-PREVIEW</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hexworks.zircon</groupId>
+            <artifactId>zircon.jvm.swing</artifactId>
+            <version>2019.1.2-PREVIEW</version>
         </dependency>
     </dependencies>
 
