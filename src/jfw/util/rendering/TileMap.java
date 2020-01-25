@@ -1,110 +1,65 @@
 package jfw.util.rendering;
 
 import javafx.scene.paint.Color;
-import jfw.util.OutsideMapException;
+import jfw.util.map.Map2d;
+import jfw.util.map.MutableArrayMap2d;
+import jfw.util.map.MutableMap2d;
+import jfw.util.rendering.tile.Tile;
+import jfw.util.rendering.tile.UnicodeTile;
 import lombok.Getter;
+import lombok.NonNull;
 
-import static jfw.util.Validator.validateGreater;
 import static jfw.util.Validator.validateNotNull;
 
 @Getter
 public class TileMap {
 
-	private final Renderer renderer;
+	private final MutableMap2d<Tile> map;
 
-	// in pixels
-	private final int startX;
-	private final int startY;
-	private final int width;
-	private final int height;
-	private final int tileWidth;
-	private final int tileHeight;
+	public TileMap(int width, int height, Tile tile) {
+		validateNotNull(tile, "tile");
+		int size = width * height;
+		Tile[] cells = new Tile[size];
 
-	private final int numberOfColumns;
-	private final int numberOfRows;
-
-	public TileMap(Renderer renderer,
-					int startX, int startY,
-					int tileWidth, int tileHeight,
-					int numberOfColumns, int numberOfRows) {
-		this.renderer = validateNotNull(renderer, "renderer");
-		this.startX = validateGreater(startX, -1, "startX");
-		this.startY = validateGreater(startY, -1, "startY");
-		this.tileWidth = validateGreater(tileWidth, 0, "tileWidth");
-		this.tileHeight = validateGreater(tileHeight, 0, "tileHeight");
-		this.numberOfColumns = validateGreater(numberOfColumns, 0, "numberOfColumns");
-		this.numberOfRows = validateGreater(numberOfRows, 0, "numberOfRows");
-
-		width = tileWidth * numberOfColumns;
-		height = tileHeight * numberOfRows;
+		for (int i = 0; i < size; i++) {
+			cells[i] = tile;
+		}
+		map = new MutableArrayMap2d<>(width, height, cells);
 	}
 
-	public void clear() {
-		renderer.clear(startX, startY, width, height);
+	public Map2d<Tile> getMap() {
+		return map;
 	}
 
-	public void renderCharacter(int codePoint, int column, int row, Color color) {
-		validateInside(column, row);
-		renderer.setColor(color);
-		renderCharacter(codePoint, column, row);
+	public void render(TileRenderer renderer, int column, int row) {
+		int index = 0;
+
+		for (int currentRow = row; currentRow < row + map.getHeight(); currentRow++) {
+			for (int currentColumn = column; currentColumn < column + map.getWidth(); currentColumn++) {
+				map.getNode(index++).render(renderer, currentColumn, currentRow);
+			}
+		}
 	}
 
-	private void renderCharacter(int codePoint, int column, int row) {
-		renderer.renderCharacter(codePoint, getCenterX(column), getCenterY(row), tileHeight);
-	}
-
-	public void renderText(String text, int column, int row, Color color) {
-		renderer.setColor(color);
-
+	public void setText(String text, int column, int row, Color color) {
 		int index = 0;
 
 		for (int character : text.codePoints().toArray()) {
 			int currentColumn = column + index++;
 
-			if (isInside(currentColumn, row)) {
-				renderCharacter(character, currentColumn, row);
+			if (map.isInside(currentColumn, row)) {
+				map.setNode(new UnicodeTile(character, color), currentColumn, row);
 			}
 		}
 	}
 
-	public void renderCenteredText(String text, int row, Color color) {
-		int column = (numberOfColumns - text.length()) / 2;
-		renderText(text, column, row, color);
+	public void setCenteredText(String text, int row, Color color) {
+		int column = (map.getWidth() - text.length()) / 2;
+		setText(text, column, row, color);
 	}
 
-	public void renderTile(int column, int row, Color color) {
-		renderer.setColor(color);
-		renderer.renderRectangle(getX(column), getY(row), tileWidth, tileHeight);
+	public void setTile(@NonNull Tile tile, int column, int row) {
+		map.setNode(tile, column, row);
 	}
 
-	private int getX(int column) {
-		return startX + column * tileWidth;
-	}
-
-	private int getY(int row) {
-		return startY + row * tileHeight;
-	}
-
-	private int getCenterX(int column) {
-		return getX(column) + tileWidth / 2;
-	}
-
-	private int getCenterY(int row) {
-		return getY(row) + tileHeight / 2;
-	}
-
-	private void validateInside(int column, int row) {
-		if(isOutside(column, row)) {
-			throw new OutsideMapException(column, row);
-		}
-	}
-
-	private boolean isInside(int column, int row) {
-		return !isOutside(column, row);
-	}
-
-	private boolean isOutside(int column, int row) {
-		return column < 0 || column >= numberOfColumns ||
-				row < 0 || row >= numberOfRows;
-	}
 }

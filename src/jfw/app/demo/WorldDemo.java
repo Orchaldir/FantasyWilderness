@@ -13,18 +13,23 @@ import jfw.game.state.world.WorldMap;
 import jfw.util.redux.Store;
 import jfw.util.rendering.CanvasRenderer;
 import jfw.util.rendering.TileMap;
+import jfw.util.rendering.TileRenderer;
+import jfw.util.rendering.tile.Tile;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class WorldDemo extends Application {
 
+	private static final int WIDTH = 20;
+	private static final int HEIGHT = 10;
+
 	@AllArgsConstructor
 	private class DemoState {
 		private final WorldMap worldMap;
 	}
 
-	private TileMap tileMap;
+	private TileRenderer tileRenderer;
 	private Store<Integer, DemoState> store;
 
 	@Override
@@ -38,7 +43,7 @@ public class WorldDemo extends Application {
 		primaryStage.show();
 
 		CanvasRenderer canvasRenderer = new CanvasRenderer(canvas.getGraphicsContext2D());
-		tileMap = new TileMap(canvasRenderer, 0, 0,  22, 32, 20, 10);
+		tileRenderer = new TileRenderer(canvasRenderer, 0, 0,  22, 32);
 
 		create();
 	}
@@ -46,14 +51,14 @@ public class WorldDemo extends Application {
 	private void create() {
 		log.info("create()");
 
-		int size = tileMap.getWidth() * tileMap.getHeight();
+		int size = WIDTH * HEIGHT;
 		WorldCell[] cells = new WorldCell[size];
 
 		for (int i = 0; i < size; i++) {
 			cells[i] = new WorldCell(TerrainType.PLAIN);
 		}
 
-		WorldMap worldMap = new WorldMap(tileMap.getWidth(), tileMap.getHeight(), cells);
+		WorldMap worldMap = new WorldMap(WIDTH, HEIGHT, cells);
 		DemoState initState = new DemoState(worldMap);
 		store = new Store<>((action, state) -> state, initState);
 
@@ -63,8 +68,11 @@ public class WorldDemo extends Application {
 	private void render(DemoState state) {
 		log.info("render()");
 
-		tileMap.clear();
-		tileMap.renderCenteredText("🌳 🌲 ⛰ 🌊", 8, Color.GREEN);
+		TileMap tileMap = new TileMap(WIDTH, HEIGHT, Tile.EMPTY);
+
+		tileMap.setCenteredText("🌳 🌲 ⛰ 🌊", 8, Color.GREEN);
+
+		tileMap.render(tileRenderer, 0, 0);
 	}
 
 	public static void main(String[] args) {

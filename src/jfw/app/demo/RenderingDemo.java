@@ -9,6 +9,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import jfw.util.rendering.CanvasRenderer;
 import jfw.util.rendering.TileMap;
+import jfw.util.rendering.TileRenderer;
+import jfw.util.rendering.tile.Tile;
 import jfw.util.rendering.tile.UnicodeTile;
 import jfw.util.rendering.tile.FullTile;
 import lombok.extern.slf4j.Slf4j;
@@ -27,28 +29,30 @@ public class RenderingDemo extends Application {
 		primaryStage.show();
 
 		CanvasRenderer canvasRenderer = new CanvasRenderer(canvas.getGraphicsContext2D());
-		TileMap tileMap = new TileMap(canvasRenderer, 0, 0,  22, 32, 20, 10);
+		TileRenderer tileRenderer = new TileRenderer(canvasRenderer, 0, 0,  22, 32);
 
-		render(tileMap);
+		render(tileRenderer);
 	}
 
-	private void render(TileMap tileMap) {
+	private void render(TileRenderer tileRenderer) {
 		log.info("render()");
 
+		TileMap tileMap = new TileMap(20, 10, Tile.EMPTY);
 		UnicodeTile fireTile = new UnicodeTile(128293, Color.RED);
 		FullTile redTile = new FullTile(Color.RED);
 
-		tileMap.clear();
-		redTile.render(tileMap, 5, 0);
-		redTile.render(tileMap, 7, 1);
-		redTile.render(tileMap, 9, 1);
-		redTile.render(tileMap, 11, 1);
-		redTile.render(tileMap, 13, 1);
-		redTile.render(tileMap, 18, 1);
-		fireTile.render(tileMap, 5, 4);
-		tileMap.renderText("Hello & goodbye", 5, 1, Color.BLUE);
-		tileMap.renderText("Test: 🌳 & 🌲", 1, 2, Color.BLUE);
-		tileMap.renderCenteredText("Centered", 8, Color.GREEN);
+		tileMap.setTile(redTile, 5, 0);
+		tileMap.setTile(redTile, 7, 1);
+		tileMap.setTile(redTile, 9, 1);
+		tileMap.setTile(redTile, 11, 1);
+		tileMap.setTile(redTile, 13, 1);
+		tileMap.setTile(redTile, 18, 1);
+		tileMap.setTile(fireTile, 5, 4);
+		tileMap.setText("Hello & goodbye", 5, 1, Color.BLUE);
+		tileMap.setText("Test: 🌳 & 🌲", 1, 2, Color.BLUE);
+		tileMap.setCenteredText("Centered", 8, Color.GREEN);
+
+		tileMap.render(tileRenderer, 0, 0);
 	}
 
 	public static void main(String[] args) {

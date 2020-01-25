@@ -1,12 +1,14 @@
 package jfw.util.rendering.tile;
 
 import javafx.scene.paint.Color;
-import jfw.util.rendering.TileMap;
+import jfw.util.rendering.TileRenderer;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import static jfw.util.Unicode.stringToCodePoint;
 import static jfw.util.Validator.validateNotNull;
 
+@EqualsAndHashCode
 @Getter
 public class UnicodeTile implements Tile {
 
@@ -23,8 +25,8 @@ public class UnicodeTile implements Tile {
 	}
 
 	@Override
-	public void render(TileMap tileMap, int column, int row) {
-		tileMap.renderCharacter(codePoint, column, row, color);
+	public void render(TileRenderer renderer, int column, int row) {
+		renderer.renderCharacter(codePoint, column, row, color);
 	}
 
 }

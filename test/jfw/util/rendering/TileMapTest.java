@@ -2,147 +2,120 @@ package jfw.util.rendering;
 
 import javafx.scene.paint.Color;
 import jfw.util.OutsideMapException;
+import jfw.util.rendering.tile.Tile;
+import jfw.util.rendering.tile.UnicodeTile;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 
+import static jfw.util.rendering.tile.Tile.EMPTY;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class TileMapTest {
 
-	private static final int START_X = 100;
-	private static final int START_Y = 200;
-	private static final int TILE_WIDTH = 10;
-	private static final int TILE_HEIGHT = 20;
 	private static final int NUMBER_OF_COLUMNS = 30;
 	private static final int NUMBER_OF_ROWS = 40;
 	private static final Color COLOR = Color.RED;
 
-	private Renderer renderer;
+	private Tile tile;
 
 	private TileMap tileMap;
 
 	@BeforeEach
 	void setUp() {
-		renderer = mock(Renderer.class);
+		tile = mock(Tile.class);
 
-		tileMap = new TileMap(renderer, START_X, START_Y,
-				TILE_WIDTH, TILE_HEIGHT, NUMBER_OF_COLUMNS, NUMBER_OF_ROWS);
+		tileMap = new TileMap(NUMBER_OF_COLUMNS, NUMBER_OF_ROWS, EMPTY);
 	}
 
 	@Test
-	void testRendererIsNull() {
-		assertThrows(NullPointerException.class, () -> new TileMap(null, START_X, START_Y,
-				TILE_WIDTH, TILE_HEIGHT, NUMBER_OF_COLUMNS, NUMBER_OF_ROWS));
+	void testDefaultTileIsNull() {
+		assertThrows(NullPointerException.class, () -> new TileMap(NUMBER_OF_COLUMNS, NUMBER_OF_ROWS, null));
 	}
 
-	@Test
-	void testClear() {
-		tileMap.clear();
+	@Nested
+	class TestSetTile {
 
-		verify(renderer).clear(START_X, START_Y,
-				TILE_WIDTH * NUMBER_OF_COLUMNS, TILE_HEIGHT * NUMBER_OF_ROWS);
-		verifyNoMoreInteractions(renderer);
-	}
+		@Test
+		void testSetTile() {
+			tileMap.setTile(tile, 2, 7);
 
-	@Test
-	void testRenderCharacter() {
-		tileMap.renderCharacter('T', 2, 7, COLOR);
+			assertTile(tile, 2, 7);
 
-		int x = (int) (START_X + TILE_WIDTH * 2.5);
-		int y = (int) (START_Y + TILE_HEIGHT * 7.5);
+			verifyNoInteractions(tile);
+		}
 
-		verify(renderer).setColor(ArgumentMatchers.eq(COLOR));
-		verify(renderer).renderCharacter('T', x, y, TILE_HEIGHT);
-		verifyNoMoreInteractions(renderer);
-	}
+		@Test
+		void testSetTileWithNull() {
+			assertThrows(NullPointerException.class, () -> tileMap.setTile(null, 2, 7));
+		}
 
-	@Test
-	void testRenderCharacterWithInvalidColumn() {
-		assertThatExceptionOfType(OutsideMapException.class).
-				isThrownBy(() -> tileMap.renderCharacter('T', -1, 7, COLOR));
-		assertThatExceptionOfType(OutsideMapException.class).
-				isThrownBy(() -> tileMap.renderCharacter('T', NUMBER_OF_COLUMNS, 7, COLOR));
-	}
+		@Test
+		void testSetTileWithInvalidColumn() {
+			assertThatExceptionOfType(OutsideMapException.class).
+					isThrownBy(() -> tileMap.setTile(tile, -1, 7));
+			assertThatExceptionOfType(OutsideMapException.class).
+					isThrownBy(() -> tileMap.setTile(tile, NUMBER_OF_COLUMNS, 7));
+		}
 
-	@Test
-	void testRenderCharacterWithInvalidRow() {
-		assertThatExceptionOfType(OutsideMapException.class).
-				isThrownBy(() -> tileMap.renderCharacter('T', 5, -1, COLOR));
-		assertThatExceptionOfType(OutsideMapException.class).
-				isThrownBy(() -> tileMap.renderCharacter('T', 5, NUMBER_OF_ROWS, COLOR));
+		@Test
+		void testSetTilerWithInvalidRow() {
+			assertThatExceptionOfType(OutsideMapException.class).
+					isThrownBy(() -> tileMap.setTile(tile, 5, -1));
+			assertThatExceptionOfType(OutsideMapException.class).
+					isThrownBy(() -> tileMap.setTile(tile, 5, NUMBER_OF_ROWS));
+		}
 	}
 
 	@Test
 	void testRenderCenteredText() {
-		tileMap.renderCenteredText("test", 5, COLOR);
-
-		int y = (int) (START_Y + TILE_HEIGHT * 5.5);
-
-		verify(renderer).setColor(ArgumentMatchers.eq(COLOR));
-		verify(renderer).renderCharacter('t', 235, y, TILE_HEIGHT);
-		verify(renderer).renderCharacter('e', 245, y, TILE_HEIGHT);
-		verify(renderer).renderCharacter('s', 255, y, TILE_HEIGHT);
-		verify(renderer).renderCharacter('t', 265, y, TILE_HEIGHT);
-		verifyNoMoreInteractions(renderer);
+		tileMap.setCenteredText("test", 5, COLOR);
 	}
 
-	@Test
-	void testRenderText() {
-		tileMap.renderText("A test!", 2, 7, COLOR);
+	@Nested
+	class TestSetText {
 
-		int y = (int) (START_Y + TILE_HEIGHT * 7.5);
+		@Test
+		void testRenderText() {
+			tileMap.setText("A test!", 2, 7, COLOR);
 
-		verify(renderer).setColor(ArgumentMatchers.eq(COLOR));
-		verify(renderer).renderCharacter('A', 125, y, TILE_HEIGHT);
-		verify(renderer).renderCharacter(' ', 135, y, TILE_HEIGHT);
-		verify(renderer).renderCharacter('t', 145, y, TILE_HEIGHT);
-		verify(renderer).renderCharacter('e', 155, y, TILE_HEIGHT);
-		verify(renderer).renderCharacter('s', 165, y, TILE_HEIGHT);
-		verify(renderer).renderCharacter('t', 175, y, TILE_HEIGHT);
-		verify(renderer).renderCharacter('!', 185, y, TILE_HEIGHT);
-		verifyNoMoreInteractions(renderer);
+			assertUnicode("A", 2, 7);
+			assertUnicode(" ", 3, 7);
+			assertUnicode("t", 4, 7);
+			assertUnicode("e", 5, 7);
+			assertUnicode("s", 6, 7);
+			assertUnicode("t", 7, 7);
+			assertUnicode("!", 8, 7);
+		}
+
+		@Test
+		void testRenderTextWithEndOutside() {
+			tileMap.setText("A test!", 27, 7, COLOR);
+
+			assertUnicode("A", 27, 7);
+			assertUnicode(" ", 28, 7);
+			assertUnicode("t", 29, 7);
+		}
+
+		@Test
+		void testRenderTextWithStartOutside() {
+			tileMap.setText("A test!", -3, 7, COLOR);
+
+			assertUnicode("e", 0, 7);
+			assertUnicode("s", 1, 7);
+			assertUnicode("t", 2, 7);
+			assertUnicode("!", 3, 7);
+		}
 	}
 
-	@Test
-	void testRenderTextWithEndOutside() {
-		tileMap.renderText("A test!", 27, 7, COLOR);
-
-		int y = (int) (START_Y + TILE_HEIGHT * 7.5);
-
-		verify(renderer).setColor(ArgumentMatchers.eq(COLOR));
-		verify(renderer).renderCharacter('A', 375, y, TILE_HEIGHT);
-		verify(renderer).renderCharacter(' ', 385, y, TILE_HEIGHT);
-		verify(renderer).renderCharacter('t', 395, y, TILE_HEIGHT);
-		verifyNoMoreInteractions(renderer);
+	private void assertTile(Tile tile, int x, int y) {
+		assertThat(tileMap.getMap().getNode(x, y)).isEqualTo(tile);
 	}
 
-	@Test
-	void testRenderTextWithStartOutside() {
-		tileMap.renderText("A test!", -3, 7, COLOR);
-
-		int y = (int) (START_Y + TILE_HEIGHT * 7.5);
-
-		verify(renderer).setColor(ArgumentMatchers.eq(COLOR));
-		verify(renderer).renderCharacter('e', 105, y, TILE_HEIGHT);
-		verify(renderer).renderCharacter('s', 115, y, TILE_HEIGHT);
-		verify(renderer).renderCharacter('t', 125, y, TILE_HEIGHT);
-		verify(renderer).renderCharacter('!', 135, y, TILE_HEIGHT);
-		verifyNoMoreInteractions(renderer);
+	private void assertUnicode(String symbol, int x, int y) {
+		assertTile(new UnicodeTile(symbol, COLOR), x, y);
 	}
-
-	@Test
-	void testRenderTile() {
-		tileMap.renderTile(3, 5, COLOR);
-
-		int x = START_X + TILE_WIDTH * 3;
-		int y = START_Y + TILE_HEIGHT * 5;
-
-		verify(renderer).setColor(ArgumentMatchers.eq(COLOR));
-		verify(renderer).renderRectangle(x, y, TILE_WIDTH, TILE_HEIGHT);
-		verifyNoMoreInteractions(renderer);
-	}
-
 }
