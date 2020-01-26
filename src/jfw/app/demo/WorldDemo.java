@@ -51,14 +51,7 @@ public class WorldDemo extends Application {
 	private void create() {
 		log.info("create()");
 
-		int size = WIDTH * HEIGHT;
-		WorldCell[] cells = new WorldCell[size];
-
-		for (int i = 0; i < size; i++) {
-			cells[i] = new WorldCell(TerrainType.PLAIN);
-		}
-
-		WorldMap worldMap = new WorldMap(WIDTH, HEIGHT, cells);
+		WorldMap worldMap = new WorldMap(WIDTH, HEIGHT, new WorldCell(TerrainType.PLAIN));
 		DemoState initState = new DemoState(worldMap);
 		store = new Store<>((action, state) -> state, initState);
 

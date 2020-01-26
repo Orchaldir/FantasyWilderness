@@ -18,13 +18,8 @@ public class TileMap {
 
 	public TileMap(int width, int height, Tile tile) {
 		validateNotNull(tile, "tile");
-		int size = width * height;
-		Tile[] cells = new Tile[size];
-
-		for (int i = 0; i < size; i++) {
-			cells[i] = tile;
-		}
-		map = new MutableArrayMap2d<>(width, height, cells);
+		Tile[] cells = new Tile[width * height];
+		map = new MutableArrayMap2d<>(width, height, cells, tile);
 	}
 
 	public Map2d<Tile> getMap() {

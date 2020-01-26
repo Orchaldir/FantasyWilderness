@@ -3,8 +3,7 @@ package jfw.util.map;
 import jfw.util.OutsideMapException;
 import lombok.Getter;
 
-import static jfw.util.Validator.validateGreater;
-import static jfw.util.Validator.validateSize;
+import static jfw.util.Validator.*;
 
 public class ArrayMap2d<T> implements Map2d<T> {
 
@@ -18,8 +17,20 @@ public class ArrayMap2d<T> implements Map2d<T> {
 	public ArrayMap2d(int width, int height, T[] cells) {
 		this.width = validateGreater(width, 0, "width");
 		this.height = validateGreater(height, 0, "height");
-		int size = width * height;
+		final int size = width * height;
+		this.cells = validateNotEmpty(cells, size, "cells");
+	}
+
+	public ArrayMap2d(int width, int height, T[] cells, T defaultCell) {
+		validateNotNull(defaultCell, "defaultCell");
+		this.width = validateGreater(width, 0, "width");
+		this.height = validateGreater(height, 0, "height");
+		final int size = width * height;
 		this.cells = validateSize(cells, size, "cells");
+
+		for (int i = 0; i < size; i++) {
+			this.cells[i] = defaultCell;
+		}
 	}
 
 	@Override

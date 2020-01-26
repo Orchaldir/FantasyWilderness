@@ -8,6 +8,10 @@ public class MutableArrayMap2d<T> extends ArrayMap2d<T> implements MutableMap2d<
 		super(width, height, cells);
 	}
 
+	public MutableArrayMap2d(int width, int height, T[] cells, T defaultCell) {
+		super(width, height, cells, defaultCell);
+	}
+
 	@Override
 	public void setNode(T node, int index) {
 		if (isInside(index)) {

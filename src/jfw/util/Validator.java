@@ -22,6 +22,16 @@ public class Validator {
 		return array;
 	}
 
+	public static <T> T[] validateNotEmpty(T[] array, int desiredLength, String name) {
+		array = validateSize(array, desiredLength, name);
+
+		for (int i = 0; i < desiredLength; i++) {
+			validateNotNull(array[i], name+"[i]");
+		}
+
+		return array;
+	}
+
 	public static String validateUnicode(String text, int desiredCodePoints, String name) {
 		text = validateNotNull(text, name);
 
