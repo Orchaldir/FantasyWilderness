@@ -2,7 +2,9 @@ package jfw.game.state.world;
 
 import jfw.util.map.ArrayMap2d;
 import jfw.util.map.Map2d;
+import lombok.Getter;
 
+@Getter
 public class WorldMap {
 
 	private final Map2d<WorldCell> cells;

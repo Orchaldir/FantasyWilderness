@@ -4,7 +4,6 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import jfw.game.state.world.TerrainType;
@@ -14,7 +13,9 @@ import jfw.util.redux.Store;
 import jfw.util.rendering.CanvasRenderer;
 import jfw.util.rendering.TileMap;
 import jfw.util.rendering.TileRenderer;
+import jfw.util.rendering.tile.FullTile;
 import jfw.util.rendering.tile.Tile;
+import jfw.util.rendering.tile.TileSelector;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,6 +24,21 @@ public class WorldDemo extends Application {
 
 	private static final int WIDTH = 20;
 	private static final int HEIGHT = 10;
+
+	private static final Tile PLAIN_TILE = new FullTile(Color.GREEN);
+	private static final Tile HILL_TILE = new FullTile(Color.BROWN);
+	private static final Tile MOUNTAIN_TILE = new FullTile(Color.GREY);
+
+	private static final TileSelector<WorldCell> TILE_SELECTOR = cell -> {
+		switch (cell.getTerrainType()) {
+			case PLAIN:
+				return PLAIN_TILE;
+			case HILL:
+				return HILL_TILE;
+			default:
+				return MOUNTAIN_TILE;
+		}
+	};
 
 	@AllArgsConstructor
 	private class DemoState {
@@ -37,7 +53,6 @@ public class WorldDemo extends Application {
 		primaryStage.setTitle("World Demo");
 		Group root = new Group();
 		Canvas canvas = new Canvas(1000, 600);
-		GraphicsContext gc = canvas.getGraphicsContext2D();
 		root.getChildren().add(canvas);
 		primaryStage.setScene(new Scene(root));
 		primaryStage.show();
@@ -61,11 +76,14 @@ public class WorldDemo extends Application {
 	private void render(DemoState state) {
 		log.info("render()");
 
-		TileMap tileMap = new TileMap(WIDTH, HEIGHT, Tile.EMPTY);
+		TileMap worldMap = new TileMap(WIDTH, HEIGHT, Tile.EMPTY);
 
-		tileMap.setCenteredText("🌳 🌲 ⛰ 🌊", 8, Color.GREEN);
+		worldMap.setMap(state.worldMap.getCells(), 1, 2, TILE_SELECTOR);
+		worldMap.setCenteredText("🌳 🌲 ⛰ 🌊", 8, Color.GREEN);
 
-		tileMap.render(tileRenderer, 0, 0);
+		worldMap.render(tileRenderer, 0, 0);
+
+		log.info("render(): finished");
 	}
 
 	public static void main(String[] args) {

@@ -42,17 +42,19 @@ public class RenderingDemo extends Application {
 		FullTile redTile = new FullTile(Color.RED);
 
 		tileMap.setTile(redTile, 5, 0);
-		tileMap.setTile(redTile, 7, 1);
-		tileMap.setTile(redTile, 9, 1);
-		tileMap.setTile(redTile, 11, 1);
-		tileMap.setTile(redTile, 13, 1);
-		tileMap.setTile(redTile, 18, 1);
+		tileMap.setTile(redTile, 7, 0);
+		tileMap.setTile(redTile, 9, 0);
+		tileMap.setTile(redTile, 11, 0);
+		tileMap.setTile(redTile, 13, 0);
+		tileMap.setTile(redTile, 18, 0);
 		tileMap.setTile(fireTile, 5, 4);
 		tileMap.setText("Hello & goodbye", 5, 1, Color.BLUE);
 		tileMap.setText("Test: 🌳 & 🌲", 1, 2, Color.BLUE);
 		tileMap.setCenteredText("Centered", 8, Color.GREEN);
 
 		tileMap.render(tileRenderer, 0, 0);
+
+		log.info("render(): finished");
 	}
 
 	public static void main(String[] args) {

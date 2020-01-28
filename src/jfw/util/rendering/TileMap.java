@@ -5,6 +5,7 @@ import jfw.util.map.Map2d;
 import jfw.util.map.MutableArrayMap2d;
 import jfw.util.map.MutableMap2d;
 import jfw.util.rendering.tile.Tile;
+import jfw.util.rendering.tile.TileSelector;
 import jfw.util.rendering.tile.UnicodeTile;
 import lombok.Getter;
 import lombok.NonNull;
@@ -32,6 +33,19 @@ public class TileMap {
 		for (int currentRow = row; currentRow < row + map.getHeight(); currentRow++) {
 			for (int currentColumn = column; currentColumn < column + map.getWidth(); currentColumn++) {
 				map.getNode(index++).render(renderer, currentColumn, currentRow);
+			}
+		}
+	}
+
+	public <T> void setMap(Map2d<T> map, int column, int row, TileSelector<T> selector) {
+		for (int r = 0; r < map.getHeight(); r++) {
+			for (int c = 0; c < map.getWidth(); c++) {
+				int currentColumn = column + c;
+				int currentRow = row + r;
+
+				if (this.map.isInside(currentColumn, currentRow)) {
+					this.map.setNode(selector.select(map.getNode(c, r)), currentColumn, currentRow);
+				}
 			}
 		}
 	}
