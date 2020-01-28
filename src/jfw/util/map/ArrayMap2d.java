@@ -33,6 +33,13 @@ public class ArrayMap2d<T> implements Map2d<T> {
 		}
 	}
 
+	public ArrayMap2d<T> withCell(T cell, int index) {
+		T[] newCells = cells.clone();
+		newCells[index] = cell;
+
+		return new ArrayMap2d<>(width, height, newCells);
+	}
+
 	@Override
 	public int getSize() {
 		return cells.length;

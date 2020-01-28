@@ -1,13 +1,12 @@
 package jfw.game.state.world;
 
 import jfw.util.map.ArrayMap2d;
-import jfw.util.map.Map2d;
 import lombok.Getter;
 
 @Getter
 public class WorldMap {
 
-	private final Map2d<WorldCell> cells;
+	private final ArrayMap2d<WorldCell> cells;
 
 	public WorldMap(int width, int height, WorldCell[] cells) {
 		this.cells = new ArrayMap2d<>(width, height, cells);

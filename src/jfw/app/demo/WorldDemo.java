@@ -8,7 +8,9 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import jfw.game.state.world.TerrainType;
 import jfw.game.state.world.WorldCell;
-import jfw.game.state.world.WorldMap;
+import jfw.util.map.ArrayMap2d;
+import jfw.util.map.Map2d;
+import jfw.util.redux.Reducer;
 import jfw.util.redux.Store;
 import jfw.util.rendering.CanvasRenderer;
 import jfw.util.rendering.TileMap;
@@ -17,6 +19,7 @@ import jfw.util.rendering.tile.FullTile;
 import jfw.util.rendering.tile.Tile;
 import jfw.util.rendering.tile.TileSelector;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -42,11 +45,24 @@ public class WorldDemo extends Application {
 
 	@AllArgsConstructor
 	private class DemoState {
-		private final WorldMap worldMap;
+		private final ArrayMap2d<WorldCell> worldMap;
 	}
 
+	@AllArgsConstructor
+	@Getter
+	private class WorldAction {
+		private final int index;
+		private final TerrainType terrainType;
+	}
+
+	private final Reducer<WorldAction, DemoState> REDUCER = (action, oldState) -> {
+		ArrayMap2d<WorldCell> newWorldMap = oldState.worldMap.withCell(new WorldCell(action.terrainType), action.index);
+
+		return new DemoState(newWorldMap);
+	};
+
 	private TileRenderer tileRenderer;
-	private Store<Integer, DemoState> store;
+	private Store<WorldAction, DemoState> store;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -57,6 +73,8 @@ public class WorldDemo extends Application {
 		primaryStage.setScene(new Scene(root));
 		primaryStage.show();
 
+		canvas.setOnMouseClicked(event -> onMouseClick((int)event.getX(), (int)event.getY()));
+
 		CanvasRenderer canvasRenderer = new CanvasRenderer(canvas.getGraphicsContext2D());
 		tileRenderer = new TileRenderer(canvasRenderer, 0, 0,  22, 32);
 
@@ -66,9 +84,10 @@ public class WorldDemo extends Application {
 	private void create() {
 		log.info("create()");
 
-		WorldMap worldMap = new WorldMap(WIDTH, HEIGHT, new WorldCell(TerrainType.PLAIN));
-		DemoState initState = new DemoState(worldMap);
-		store = new Store<>((action, state) -> state, initState);
+		int size = WIDTH * HEIGHT;
+		WorldCell[] cells = new WorldCell[size];
+		DemoState initState = new DemoState(new ArrayMap2d<>(WIDTH, HEIGHT, cells, new WorldCell(TerrainType.PLAIN)));
+		store = new Store<>(REDUCER, initState);
 
 		store.subscribe(this::render);
 	}
@@ -78,12 +97,25 @@ public class WorldDemo extends Application {
 
 		TileMap worldMap = new TileMap(WIDTH, HEIGHT, Tile.EMPTY);
 
-		worldMap.setMap(state.worldMap.getCells(), 1, 2, TILE_SELECTOR);
+		worldMap.setMap(state.worldMap, 0, 0, TILE_SELECTOR);
 		worldMap.setCenteredText("🌳 🌲 ⛰ 🌊", 8, Color.GREEN);
 
 		worldMap.render(tileRenderer, 0, 0);
 
 		log.info("render(): finished");
+	}
+
+	private void onMouseClick(int x, int y) {
+		int column = tileRenderer.getColumn(x);
+		int row = tileRenderer.getRow(y);
+		log.info("onMouseClick(): screen={}|{} -> tile={}|{}", x, y, column, row);
+
+		Map2d<WorldCell> map = store.getState().worldMap;
+
+		if (map.isInside(column, row)) {
+			WorldAction action = new WorldAction(map.getIndex(column, row), TerrainType.MOUNTAIN);
+			store.dispatch(action);
+		}
 	}
 
 	public static void main(String[] args) {

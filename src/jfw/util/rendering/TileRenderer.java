@@ -30,27 +30,35 @@ public class TileRenderer {
 
 	public void renderCharacter(int codePoint, int column, int row, @NonNull Color color) {
 		renderer.setColor(color);
-		renderer.renderCharacter(codePoint, getCenterX(column), getCenterY(row), tileHeight);
+		renderer.renderCharacter(codePoint, getCenterPixelX(column), getCenterPixelY(row), tileHeight);
 	}
 
 	public void renderTile(int column, int row, @NonNull Color color) {
 		renderer.setColor(color);
-		renderer.renderRectangle(getStartX(column), getStartY(row), tileWidth, tileHeight);
+		renderer.renderRectangle(getStartPixelX(column), getStartPixelY(row), tileWidth, tileHeight);
 	}
 
-	private int getStartX(int column) {
+	public int getColumn(int x) {
+		return (x - startX) / tileWidth;
+	}
+
+	public int getRow(int y) {
+		return (y - startY) / tileHeight;
+	}
+
+	private int getStartPixelX(int column) {
 		return startX + column * tileWidth;
 	}
 
-	private int getStartY(int row) {
+	private int getStartPixelY(int row) {
 		return startY + row * tileHeight;
 	}
 
-	private int getCenterX(int column) {
-		return getStartX(column) + tileWidth / 2;
+	private int getCenterPixelX(int column) {
+		return getStartPixelX(column) + tileWidth / 2;
 	}
 
-	private int getCenterY(int row) {
-		return getStartY(row) + tileHeight / 2;
+	private int getCenterPixelY(int row) {
+		return getStartPixelY(row) + tileHeight / 2;
 	}
 }
