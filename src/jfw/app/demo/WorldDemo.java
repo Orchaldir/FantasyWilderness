@@ -28,6 +28,9 @@ public class WorldDemo extends Application {
 	private static final int WIDTH = 20;
 	private static final int HEIGHT = 10;
 
+	private static final int TILE_WIDTH = 22;
+	private static final int TILE_HEIGHT = 32;
+
 	private static final Tile PLAIN_TILE = new FullTile(Color.GREEN);
 	private static final Tile HILL_TILE = new FullTile(Color.BROWN);
 	private static final Tile MOUNTAIN_TILE = new FullTile(Color.GREY);
@@ -72,7 +75,7 @@ public class WorldDemo extends Application {
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("World Demo");
 		Group root = new Group();
-		Canvas canvas = new Canvas(1000, 600);
+		Canvas canvas = new Canvas(WIDTH * TILE_WIDTH, HEIGHT * TILE_HEIGHT);
 		root.getChildren().add(canvas);
 		primaryStage.setScene(new Scene(root));
 		primaryStage.show();
@@ -80,7 +83,7 @@ public class WorldDemo extends Application {
 		canvas.setOnMouseClicked(event -> onMouseClick((int)event.getX(), (int)event.getY()));
 
 		CanvasRenderer canvasRenderer = new CanvasRenderer(canvas.getGraphicsContext2D());
-		tileRenderer = new TileRenderer(canvasRenderer, 0, 0,  22, 32);
+		tileRenderer = new TileRenderer(canvasRenderer, 0, 0,  TILE_WIDTH, TILE_HEIGHT);
 
 		create();
 	}
