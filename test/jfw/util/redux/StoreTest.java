@@ -110,6 +110,22 @@ class StoreTest {
 	}
 
 	@Test
+	void testDispatchButNoStateChange() {
+		when(reducer.reduce(ACTION0, STATE0)).thenReturn(STATE0);
+
+		store.subscribe(consumer0);
+		store.dispatch(ACTION0);
+
+		assertThat(store.getState()).isEqualTo(STATE0);
+
+		verify(consumer0).accept(STATE0);
+		verifyNoMoreInteractions(consumer0);
+		verifyNoInteractions(consumer1);
+		verify(reducer).reduce(ACTION0, STATE0);
+		verifyNoMoreInteractions(reducer);
+	}
+
+	@Test
 	void testDispatchWithTwoConsumers() {
 		when(reducer.reduce(ACTION0, STATE0)).thenReturn(STATE1);
 

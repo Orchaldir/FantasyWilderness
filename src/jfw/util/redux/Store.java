@@ -24,9 +24,13 @@ public class Store<Action, State> {
 	public void dispatch(Action action) {
 		validateNotNull(action, "action");
 
-		state = reducer.reduce(action, state);
+		State newState = reducer.reduce(action, state);
 
-		notifyConsumers();
+		if (newState != state) {
+			state = newState;
+
+			notifyConsumers();
+		}
 	}
 
 	public Subscription subscribe(Consumer<State> consumer) {

@@ -56,6 +56,10 @@ public class WorldDemo extends Application {
 	}
 
 	private final Reducer<WorldAction, DemoState> REDUCER = (action, oldState) -> {
+		if (oldState.worldMap.getNode(action.index).getTerrainType() == action.terrainType) {
+			return oldState;
+		}
+
 		ArrayMap2d<WorldCell> newWorldMap = oldState.worldMap.withCell(new WorldCell(action.terrainType), action.index);
 
 		return new DemoState(newWorldMap);
