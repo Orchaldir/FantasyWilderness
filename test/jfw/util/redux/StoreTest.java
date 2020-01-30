@@ -6,8 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.function.Consumer;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.*;
@@ -21,10 +19,10 @@ class StoreTest {
 	private static final Integer STATE1 = 200;
 
 	@Mock
-	private Consumer<Integer> consumer0;
+	private Subscriber<Integer> consumer0;
 
 	@Mock
-	private Consumer<Integer> consumer1;
+	private Subscriber<Integer> consumer1;
 
 	@Mock
 	private Reducer<String, Integer> reducer;
@@ -66,7 +64,7 @@ class StoreTest {
 	void testPublishAfterSubscribe() {
 		store.subscribe(consumer0);
 
-		verify(consumer0).accept(STATE0);
+		verify(consumer0).onStateChanged(STATE0);
 		verifyNoMoreInteractions(consumer0);
 		verifyNoInteractions(reducer);
 	}
@@ -101,8 +99,8 @@ class StoreTest {
 
 		assertThat(store.getState()).isEqualTo(STATE1);
 
-		verify(consumer0).accept(STATE0);
-		verify(consumer0).accept(STATE1);
+		verify(consumer0).onStateChanged(STATE0);
+		verify(consumer0).onStateChanged(STATE1);
 		verifyNoMoreInteractions(consumer0);
 		verifyNoInteractions(consumer1);
 		verify(reducer).reduce(ACTION0, STATE0);
@@ -118,7 +116,7 @@ class StoreTest {
 
 		assertThat(store.getState()).isEqualTo(STATE0);
 
-		verify(consumer0).accept(STATE0);
+		verify(consumer0).onStateChanged(STATE0);
 		verifyNoMoreInteractions(consumer0);
 		verifyNoInteractions(consumer1);
 		verify(reducer).reduce(ACTION0, STATE0);
@@ -135,12 +133,12 @@ class StoreTest {
 
 		assertThat(store.getState()).isEqualTo(STATE1);
 
-		verify(consumer0).accept(STATE0);
-		verify(consumer0).accept(STATE1);
+		verify(consumer0).onStateChanged(STATE0);
+		verify(consumer0).onStateChanged(STATE1);
 		verifyNoMoreInteractions(consumer0);
 
-		verify(consumer1).accept(STATE0);
-		verify(consumer1).accept(STATE1);
+		verify(consumer1).onStateChanged(STATE0);
+		verify(consumer1).onStateChanged(STATE1);
 		verifyNoMoreInteractions(consumer1);
 
 		verify(reducer).reduce(ACTION0, STATE0);
@@ -159,11 +157,11 @@ class StoreTest {
 
 		assertThat(store.getState()).isEqualTo(STATE1);
 
-		verify(consumer0).accept(STATE0);
+		verify(consumer0).onStateChanged(STATE0);
 		verifyNoMoreInteractions(consumer0);
 
-		verify(consumer1).accept(STATE0);
-		verify(consumer1).accept(STATE1);
+		verify(consumer1).onStateChanged(STATE0);
+		verify(consumer1).onStateChanged(STATE1);
 		verifyNoMoreInteractions(consumer1);
 
 		verify(reducer).reduce(ACTION0, STATE0);

@@ -4,13 +4,12 @@ import lombok.Getter;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Consumer;
 
 import static jfw.util.Validator.validateNotNull;
 
 public class Store<Action, State> {
 
-	private final Set<Consumer<State>> consumers = new HashSet<>();
+	private final Set<Subscriber<State>> consumers = new HashSet<>();
 	private final Reducer<Action, State> reducer;
 
 	@Getter
@@ -33,18 +32,18 @@ public class Store<Action, State> {
 		}
 	}
 
-	public Subscription subscribe(Consumer<State> consumer) {
+	public Subscription subscribe(Subscriber<State> consumer) {
 		validateNotNull(consumer, "consumer");
 		consumers.add(consumer);
 
-		consumer.accept(state);
+		consumer.onStateChanged(state);
 
 		return () -> consumers.remove(consumer);
 	}
 
 	private void notifyConsumers() {
-		for (Consumer<State> consumer : consumers) {
-			consumer.accept(state);
+		for (Subscriber<State> consumer : consumers) {
+			consumer.onStateChanged(state);
 		}
 	}
 }
