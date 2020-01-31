@@ -1,9 +1,9 @@
 package jfw.util.redux;
 
+import jfw.util.redux.middleware.Middleware;
 import lombok.Getter;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static jfw.util.Validator.validateNotNull;
 
@@ -17,10 +17,14 @@ public class Store<Action, State> {
 	private State state;
 
 	public Store(Reducer<Action, State> reducer, State state) {
+		this(reducer, state, Collections.emptyList());
+	}
+
+	public Store(Reducer<Action, State> reducer, State state, List<Middleware<Action,State>> middlewares) {
 		this.reducer = validateNotNull(reducer, "reducer");
 		this.state = validateNotNull(state, "state");
 
-		this.dispatcher = action -> {
+		Dispatcher<Action> dispatcher = action -> {
 			validateNotNull(action, "action");
 
 			State newState = this.reducer.reduce(action, this.state);
@@ -31,6 +35,12 @@ public class Store<Action, State> {
 				notifyConsumers();
 			}
 		};
+
+		for (Middleware<Action,State> middleware : middlewares) {
+			dispatcher = middleware.apply(dispatcher, this::getState);
+		}
+
+		this.dispatcher = dispatcher;
 	}
 
 	public void dispatch(Action action) {

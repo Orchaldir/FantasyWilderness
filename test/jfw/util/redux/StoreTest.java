@@ -1,14 +1,18 @@
 package jfw.util.redux;
 
+import jfw.util.redux.middleware.Middleware;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 class StoreTest {
@@ -26,6 +30,12 @@ class StoreTest {
 
 	@Mock
 	private Reducer<String, Integer> reducer;
+
+	@Mock
+	private Middleware<String, Integer> middleware;
+
+	@Mock
+	private Dispatcher<String> dispatcher;
 
 	private Store<String, Integer> store;
 
@@ -121,6 +131,27 @@ class StoreTest {
 		verifyNoInteractions(consumer1);
 		verify(reducer).reduce(ACTION0, STATE0);
 		verifyNoMoreInteractions(reducer);
+	}
+
+	@Test
+	void testMiddleware() {
+		when(middleware.apply(any(), any())).thenReturn(dispatcher);
+
+		store = new Store<>(reducer, STATE0, List.of(middleware));
+
+		store.subscribe(consumer0);
+		store.dispatch(ACTION0);
+
+		assertThat(store.getState()).isEqualTo(STATE0);
+
+		verify(consumer0).onStateChanged(STATE0);
+		verifyNoMoreInteractions(consumer0);
+		verifyNoInteractions(consumer1);
+		verifyNoInteractions(reducer);
+		verify(middleware).apply(any(), any());
+		verifyNoMoreInteractions(middleware);
+		verify(dispatcher).dispatch(ACTION0);
+		verifyNoMoreInteractions(dispatcher);
 	}
 
 	@Test

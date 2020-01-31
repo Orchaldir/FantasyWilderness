@@ -12,6 +12,7 @@ import jfw.util.map.ArrayMap2d;
 import jfw.util.map.Map2d;
 import jfw.util.redux.Reducer;
 import jfw.util.redux.Store;
+import jfw.util.redux.middleware.LogActionMiddleware;
 import jfw.util.rendering.CanvasRenderer;
 import jfw.util.rendering.TileMap;
 import jfw.util.rendering.TileRenderer;
@@ -20,7 +21,10 @@ import jfw.util.rendering.tile.Tile;
 import jfw.util.rendering.tile.TileSelector;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
 
 @Slf4j
 public class WorldDemo extends Application {
@@ -53,6 +57,7 @@ public class WorldDemo extends Application {
 
 	@AllArgsConstructor
 	@Getter
+	@ToString
 	private class WorldAction {
 		private final int index;
 		private final TerrainType terrainType;
@@ -94,7 +99,7 @@ public class WorldDemo extends Application {
 		int size = WIDTH * HEIGHT;
 		WorldCell[] cells = new WorldCell[size];
 		DemoState initState = new DemoState(new ArrayMap2d<>(WIDTH, HEIGHT, cells, new WorldCell(TerrainType.PLAIN)));
-		store = new Store<>(REDUCER, initState);
+		store = new Store<>(REDUCER, initState, List.of(new LogActionMiddleware<>()));
 
 		store.subscribe(this::render);
 	}
