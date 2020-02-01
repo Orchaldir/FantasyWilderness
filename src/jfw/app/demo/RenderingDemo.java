@@ -15,6 +15,8 @@ import jfw.util.rendering.tile.UnicodeTile;
 import jfw.util.rendering.tile.FullTile;
 import lombok.extern.slf4j.Slf4j;
 
+import static jfw.util.rendering.tile.EmptyTile.EMPTY;
+
 @Slf4j
 public class RenderingDemo extends Application {
 
@@ -37,7 +39,7 @@ public class RenderingDemo extends Application {
 	private void render(TileRenderer tileRenderer) {
 		log.info("render()");
 
-		TileMap tileMap = new TileMap(20, 10, Tile.EMPTY);
+		TileMap tileMap = new TileMap(20, 10, EMPTY);
 		UnicodeTile fireTile = new UnicodeTile(128293, Color.RED);
 		FullTile redTile = new FullTile(Color.RED);
 

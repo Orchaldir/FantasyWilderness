@@ -2,13 +2,16 @@ package jfw.util.rendering;
 
 import javafx.scene.paint.Color;
 import jfw.util.OutsideMapException;
+import jfw.util.map.ArrayMap2d;
+import jfw.util.map.Map2d;
 import jfw.util.rendering.tile.Tile;
+import jfw.util.rendering.tile.TileSelector;
 import jfw.util.rendering.tile.UnicodeTile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static jfw.util.rendering.tile.Tile.EMPTY;
+import static jfw.util.rendering.tile.EmptyTile.EMPTY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -19,6 +22,7 @@ class TileMapTest {
 	private static final int NUMBER_OF_COLUMNS = 30;
 	private static final int NUMBER_OF_ROWS = 40;
 	private static final Color COLOR = Color.RED;
+	private static final TileSelector<Integer> INTEGER_TILE_SELECTOR = i -> new UnicodeTile(i, COLOR);
 
 	private Tile tile;
 
@@ -70,9 +74,46 @@ class TileMapTest {
 		}
 	}
 
+	@Nested
+	class TestSetMap {
+
+		private Map2d<Integer> map;
+
+		@BeforeEach
+		void setUp() {
+			Integer[] integers = {0, 1, 2, 3, 4, 5};
+			map = new ArrayMap2d<>(3, 2, integers);
+		}
+
+		@Test
+		void testSetMap() {
+			tileMap.setMap(map, 4, 5, INTEGER_TILE_SELECTOR);
+
+			assertUnicode(0, 4, 5);
+			assertUnicode(1, 5, 5);
+			assertUnicode(2, 6, 5);
+			assertUnicode(3, 4, 6);
+			assertUnicode(4, 5, 6);
+			assertUnicode(5, 6, 6);
+		}
+
+		@Test
+		void testSetMapOutside() {
+			tileMap.setMap(map, -1, -1, INTEGER_TILE_SELECTOR);
+
+			assertUnicode(4, 0, 0);
+			assertUnicode(5, 1, 0);
+		}
+	}
+
 	@Test
 	void testRenderCenteredText() {
-		tileMap.setCenteredText("test", 5, COLOR);
+		tileMap.setCenteredText("Test", 5, COLOR);
+
+		assertUnicode("T", 13, 5);
+		assertUnicode("e", 14, 5);
+		assertUnicode("s", 15, 5);
+		assertUnicode("t", 16, 5);
 	}
 
 	@Nested
@@ -117,5 +158,9 @@ class TileMapTest {
 
 	private void assertUnicode(String symbol, int x, int y) {
 		assertTile(new UnicodeTile(symbol, COLOR), x, y);
+	}
+
+	private void assertUnicode(int codePoint, int x, int y) {
+		assertTile(new UnicodeTile(codePoint, COLOR), x, y);
 	}
 }

@@ -28,6 +28,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+import static jfw.util.rendering.tile.EmptyTile.EMPTY;
+
 @Slf4j
 public class WorldDemo extends Application {
 
@@ -134,11 +136,11 @@ public class WorldDemo extends Application {
 	private void render(DemoState state) {
 		log.info("render()");
 
-		TileMap worldMap = new TileMap(WIDTH, HEIGHT, Tile.EMPTY);
+		TileMap worldMap = new TileMap(WIDTH, HEIGHT, EMPTY);
 		worldMap.setMap(state.worldMap, 0, 0, TILE_SELECTOR);
 		worldMap.render(tileRenderer, 0, 0);
 
-		TileMap uiMap = new TileMap(WIDTH, HEIGHT, Tile.EMPTY);
+		TileMap uiMap = new TileMap(WIDTH, HEIGHT, EMPTY);
 		uiMap.setText("Tool=" + state.tool, 0, 9, Color.BLACK);
 		uiMap.render(tileRenderer, 0, 0);
 

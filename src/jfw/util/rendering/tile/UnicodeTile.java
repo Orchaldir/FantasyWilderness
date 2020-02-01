@@ -4,12 +4,14 @@ import javafx.scene.paint.Color;
 import jfw.util.rendering.TileRenderer;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 import static jfw.util.Unicode.stringToCodePoint;
 import static jfw.util.Validator.validateNotNull;
 
 @EqualsAndHashCode
 @Getter
+@ToString
 public class UnicodeTile implements Tile {
 
 	private final int codePoint;
