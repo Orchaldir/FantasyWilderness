@@ -97,4 +97,9 @@ public class ArrayMap2d<T> implements Map2d<T> {
 
 		throw new OutsideMapException(x, y);
 	}
+
+	@Override
+	public String toString() {
+		return String.format("[%d*%d]", width, height);
+	}
 }

@@ -52,6 +52,7 @@ public class WorldDemo extends Application {
 	};
 
 	@AllArgsConstructor
+	@ToString
 	private static class DemoState {
 		private final ArrayMap2d<WorldCell> worldMap;
 		private final TerrainType tool;
