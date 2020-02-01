@@ -1,0 +1,20 @@
+= Release Notes
+
+[%header,cols="^.<,4a"]
+|===
+| Release
+| Notes
+
+| 0.1.0
+|
+
+.A simple world editor with Redux
+image::images/world-editor.png[World Rditor]
+
+*New:*
+
+* A Redux implementation for java.
+* Tile maps to render the game & a text-based user interface.
+* A simple world editor as demo.
+
+|===
