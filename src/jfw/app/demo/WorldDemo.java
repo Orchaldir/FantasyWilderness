@@ -9,6 +9,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import jfw.game.state.world.TerrainType;
 import jfw.game.state.world.WorldCell;
+import jfw.util.ecs.ComponentMap;
+import jfw.util.ecs.ComponentStorage;
 import jfw.util.map.ArrayMap2d;
 import jfw.util.map.Map2d;
 import jfw.util.redux.Reducer;
@@ -21,12 +23,15 @@ import jfw.util.rendering.TileRenderer;
 import jfw.util.rendering.tile.FullTile;
 import jfw.util.rendering.tile.Tile;
 import jfw.util.rendering.tile.TileSelector;
+import jfw.util.rendering.tile.UnicodeTile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static jfw.util.rendering.tile.EmptyTile.EMPTY;
 
@@ -43,6 +48,8 @@ public class WorldDemo extends Application {
 	private static final Tile HILL_TILE = new FullTile(Color.SADDLEBROWN);
 	private static final Tile MOUNTAIN_TILE = new FullTile(Color.GREY);
 
+	private static final Tile CHARACTER_TILE = new UnicodeTile("@", Color.BLACK);
+
 	private static final TileSelector<WorldCell> TILE_SELECTOR = cell -> {
 		switch (cell.getTerrainType()) {
 			case PLAIN:
@@ -58,6 +65,7 @@ public class WorldDemo extends Application {
 	@ToString
 	private static class DemoState {
 		private final ArrayMap2d<WorldCell> worldMap;
+		private final ComponentStorage<Integer> positions;
 		private final TerrainType tool;
 	}
 
@@ -86,13 +94,13 @@ public class WorldDemo extends Application {
 			WorldCell newCell = new WorldCell(changeTerrain.terrainType);
 			ArrayMap2d<WorldCell> newWorldMap = oldState.worldMap.withCell(newCell, changeTerrain.index);
 
-			return new DemoState(newWorldMap, oldState.tool);
+			return new DemoState(newWorldMap, oldState.positions, oldState.tool);
 		}
 		else if (action instanceof SwitchTool) {
 			SwitchTool switchTool = (SwitchTool) action;
 
 			if (switchTool.tool != oldState.tool) {
-				return new DemoState(oldState.worldMap, switchTool.tool);
+				return new DemoState(oldState.worldMap, oldState.positions, switchTool.tool);
 			}
 		}
 
@@ -127,7 +135,13 @@ public class WorldDemo extends Application {
 		int size = WIDTH * HEIGHT;
 		WorldCell[] cells = new WorldCell[size];
 		ArrayMap2d<WorldCell> worldMap = new ArrayMap2d<>(WIDTH, HEIGHT, cells, new WorldCell(TerrainType.PLAIN));
-		DemoState initState = new DemoState(worldMap, TerrainType.MOUNTAIN);
+
+		Map<Integer,Integer> positionMap = new HashMap<>();
+		positionMap.put(0, 8);
+		positionMap.put(1, 44);
+		ComponentStorage<Integer> positions = new ComponentMap<Integer>(positionMap);
+
+		DemoState initState = new DemoState(worldMap, positions, TerrainType.MOUNTAIN);
 		store = new Store<>(REDUCER, initState, List.of(new LogActionMiddleware<>(), new LogDiffMiddleware<>()));
 
 		store.subscribe(this::render);
@@ -142,6 +156,11 @@ public class WorldDemo extends Application {
 
 		TileMap uiMap = new TileMap(WIDTH, HEIGHT, EMPTY);
 		uiMap.setText("Tool=" + state.tool, 0, 9, Color.BLACK);
+
+		for (Integer position : state.positions.getAll()) {
+			uiMap.setTile(CHARACTER_TILE, uiMap.getMap().getX(position), uiMap.getMap().getY(position));
+		}
+
 		uiMap.render(tileRenderer, 0, 0);
 
 		log.info("render(): finished");
