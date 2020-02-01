@@ -14,6 +14,7 @@ import jfw.util.map.Map2d;
 import jfw.util.redux.Reducer;
 import jfw.util.redux.Store;
 import jfw.util.redux.middleware.LogActionMiddleware;
+import jfw.util.redux.middleware.LogDiffMiddleware;
 import jfw.util.rendering.CanvasRenderer;
 import jfw.util.rendering.TileMap;
 import jfw.util.rendering.TileRenderer;
@@ -125,7 +126,7 @@ public class WorldDemo extends Application {
 		WorldCell[] cells = new WorldCell[size];
 		ArrayMap2d<WorldCell> worldMap = new ArrayMap2d<>(WIDTH, HEIGHT, cells, new WorldCell(TerrainType.PLAIN));
 		DemoState initState = new DemoState(worldMap, TerrainType.MOUNTAIN);
-		store = new Store<>(REDUCER, initState, List.of(new LogActionMiddleware<>()));
+		store = new Store<>(REDUCER, initState, List.of(new LogActionMiddleware<>(), new LogDiffMiddleware<>()));
 
 		store.subscribe(this::render);
 	}
