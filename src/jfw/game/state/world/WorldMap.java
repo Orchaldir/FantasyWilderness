@@ -14,8 +14,8 @@ public class WorldMap {
 
 	public WorldMap(int width, int height, WorldCell defaultCell) {
 		int size = width * height;
-		WorldCell[] cells = new WorldCell[size];
-		this.cells = new ArrayMap2d<>(width, height, cells, defaultCell);
+		WorldCell[] newCells = new WorldCell[size];
+		this.cells = new ArrayMap2d<>(width, height, newCells, defaultCell);
 	}
 
 }

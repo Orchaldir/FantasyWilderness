@@ -84,7 +84,7 @@ public class WorldDemo extends Application {
 		private final TerrainType tool;
 	}
 
-	private final Reducer<Object, DemoState> REDUCER = (action, oldState) -> {
+	private static final Reducer<Object, DemoState> REDUCER = (action, oldState) -> {
 		if (action instanceof ChangeTerrain) {
 			ChangeTerrain changeTerrain = (ChangeTerrain) action;
 			if (oldState.worldMap.getNode(changeTerrain.index).getTerrainType() == changeTerrain.terrainType) {
@@ -139,7 +139,7 @@ public class WorldDemo extends Application {
 		Map<Integer,Integer> positionMap = new HashMap<>();
 		positionMap.put(0, 8);
 		positionMap.put(1, 44);
-		ComponentStorage<Integer> positions = new ComponentMap<Integer>(positionMap);
+		ComponentStorage<Integer> positions = new ComponentMap<>(positionMap);
 
 		DemoState initState = new DemoState(worldMap, positions, TerrainType.MOUNTAIN);
 		store = new Store<>(REDUCER, initState, List.of(new LogActionMiddleware<>(), new LogDiffMiddleware<>()));

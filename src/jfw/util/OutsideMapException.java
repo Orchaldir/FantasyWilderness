@@ -21,6 +21,7 @@ public class OutsideMapException extends RuntimeException {
 		this(-1, -1, index, true);
 	}
 
+	@Override
 	public String getMessage() {
 		return usedIndex ?
 				String.format("Index %d is outside map!", index) :

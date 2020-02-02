@@ -1,8 +1,8 @@
 package jfw.util;
 
-public class Validator {
+public interface Validator {
 
-	public static <T> T validateNotNull(T object, String name) {
+	static <T> T validateNotNull(T object, String name) {
 		if (object == null) {
 			String message = String.format("%s is null!", name);
 			throw new NullPointerException(message);
@@ -11,8 +11,8 @@ public class Validator {
 		return object;
 	}
 
-	public static <T> T[] validateSize(T[] array, int desiredLength, String name) {
-		array = validateNotNull(array, name);
+	static <T> T[] validateSize(T[] array, int desiredLength, String name) {
+		validateNotNull(array, name);
 
 		if (array.length != desiredLength) {
 			String message = String.format("%s has length %d instead of %d!", name, array.length, desiredLength);
@@ -22,8 +22,8 @@ public class Validator {
 		return array;
 	}
 
-	public static <T> T[] validateNotEmpty(T[] array, int desiredLength, String name) {
-		array = validateSize(array, desiredLength, name);
+	static <T> T[] validateNotEmpty(T[] array, int desiredLength, String name) {
+		validateSize(array, desiredLength, name);
 
 		for (int i = 0; i < desiredLength; i++) {
 			validateNotNull(array[i], name+"[i]");
@@ -32,8 +32,8 @@ public class Validator {
 		return array;
 	}
 
-	public static String validateUnicode(String text, int desiredCodePoints, String name) {
-		text = validateNotNull(text, name);
+	static String validateUnicode(String text, int desiredCodePoints, String name) {
+		validateNotNull(text, name);
 
 		long codePoints = text.codePoints().count();
 
@@ -45,7 +45,7 @@ public class Validator {
 		return text;
 	}
 
-	public static int validateGreater(int value, int threshold, String name) {
+	static int validateGreater(int value, int threshold, String name) {
 		if (value > threshold) {
 			return value;
 		}

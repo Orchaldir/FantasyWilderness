@@ -10,6 +10,6 @@ public class EmptyTile implements Tile {
 
 	@Override
 	public void render(TileRenderer renderer, int column, int row) {
-
+		// An empty tile renders nothing.
 	}
 }

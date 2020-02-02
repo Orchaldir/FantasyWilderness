@@ -24,7 +24,7 @@ public class Store<Action, State> {
 		this.reducer = validateNotNull(reducer, "reducer");
 		this.state = validateNotNull(state, "state");
 
-		Dispatcher<Action> dispatcher = action -> {
+		Dispatcher<Action> wrappedDispatcher = action -> {
 			validateNotNull(action, "action");
 
 			State newState = this.reducer.reduce(action, this.state);
@@ -37,10 +37,10 @@ public class Store<Action, State> {
 		};
 
 		for (Middleware<Action,State> middleware : middlewares) {
-			dispatcher = middleware.apply(dispatcher, this::getState);
+			wrappedDispatcher = middleware.apply(wrappedDispatcher, this::getState);
 		}
 
-		this.dispatcher = dispatcher;
+		dispatcher = wrappedDispatcher;
 	}
 
 	public void dispatch(Action action) {

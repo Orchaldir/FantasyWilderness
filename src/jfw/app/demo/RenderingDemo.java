@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 import jfw.util.rendering.CanvasRenderer;
 import jfw.util.rendering.TileMap;
 import jfw.util.rendering.TileRenderer;
-import jfw.util.rendering.tile.Tile;
 import jfw.util.rendering.tile.UnicodeTile;
 import jfw.util.rendering.tile.FullTile;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +24,6 @@ public class RenderingDemo extends Application {
 		primaryStage.setTitle("Rendering Demo");
 		Group root = new Group();
 		Canvas canvas = new Canvas(1000, 600);
-		GraphicsContext gc = canvas.getGraphicsContext2D();
 		root.getChildren().add(canvas);
 		primaryStage.setScene(new Scene(root));
 		primaryStage.show();
