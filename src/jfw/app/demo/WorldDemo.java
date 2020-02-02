@@ -20,9 +20,7 @@ import jfw.util.redux.middleware.LogDiffMiddleware;
 import jfw.util.rendering.CanvasRenderer;
 import jfw.util.rendering.TileMap;
 import jfw.util.rendering.TileRenderer;
-import jfw.util.rendering.tile.FullTile;
 import jfw.util.rendering.tile.Tile;
-import jfw.util.rendering.tile.TileSelector;
 import jfw.util.rendering.tile.UnicodeTile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static jfw.game.state.world.WorldCell.TILE_SELECTOR;
 import static jfw.util.rendering.tile.EmptyTile.EMPTY;
 
 @Slf4j
@@ -44,22 +43,7 @@ public class WorldDemo extends Application {
 	private static final int TILE_WIDTH = 22;
 	private static final int TILE_HEIGHT = 32;
 
-	private static final Tile PLAIN_TILE = new FullTile(Color.GREEN);
-	private static final Tile HILL_TILE = new FullTile(Color.SADDLEBROWN);
-	private static final Tile MOUNTAIN_TILE = new FullTile(Color.GREY);
-
 	private static final Tile CHARACTER_TILE = new UnicodeTile("@", Color.BLACK);
-
-	private static final TileSelector<WorldCell> TILE_SELECTOR = cell -> {
-		switch (cell.getTerrainType()) {
-			case PLAIN:
-				return PLAIN_TILE;
-			case HILL:
-				return HILL_TILE;
-			default:
-				return MOUNTAIN_TILE;
-		}
-	};
 
 	@AllArgsConstructor
 	@ToString
