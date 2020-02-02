@@ -1,5 +1,7 @@
 = FantasyWilderness
 
+image:https://travis-ci.com/Orchaldir/FantasyWilderness.svg?branch=master["Build Status", link="https://travis-ci.com/Orchaldir/FantasyWilderness"]
+
 A turn-based game about exploring &amp; surviving hostile lands, strange weather, ancient ruins &amp; monsters
 
 * See link:doc/release-notes/index.adoc[Release Notes].
