@@ -1,6 +1,9 @@
 = FantasyWilderness
 
 image:https://travis-ci.com/Orchaldir/FantasyWilderness.svg?branch=master["Build Status", link="https://travis-ci.com/Orchaldir/FantasyWilderness"]
+image:https://sonarcloud.io/api/project_badges/measure?project=groupId%3AFantasyWilderness&metric=coverage[SonarCloud Coverage,link=https://sonarcloud.io/dashboard?id=groupId%3AFantasyWilderness]
+image:https://sonarcloud.io/api/project_badges/measure?project=groupId%3AFantasyWilderness&metric=bugs[SonarCloud Bugs,link=https://sonarcloud.io/dashboard?id=groupId%3AFantasyWilderness]
+image:https://sonarcloud.io/api/project_badges/measure?project=groupId%3AFantasyWilderness&metric=code_smells[SonarCloud Code Smells,link=https://sonarcloud.io/dashboard?id=groupId%3AFantasyWilderness]
 
 A turn-based game about exploring &amp; surviving hostile lands, strange weather, ancient ruins &amp; monsters
 

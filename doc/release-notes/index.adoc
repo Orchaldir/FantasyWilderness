@@ -5,6 +5,14 @@
 | Release
 | Notes
 
+| 0.2.0
+|
+
+*CI:*
+
+* Started using https://travis-ci.com/Orchaldir/FantasyWilderness[Travis CI]
+* Started using https://sonarcloud.io/dashboard?id=groupId%3AFantasyWilderness[SonarCloud]
+
 | 0.1.0
 |
 
