@@ -121,6 +121,7 @@ public class WorldDemo extends Application {
 		primaryStage.show();
 
 		scene.setOnMouseClicked(event -> onMouseClicked((int)event.getX(), (int)event.getY()));
+		scene.setOnMouseDragged(event -> onMouseClicked((int)event.getX(), (int)event.getY()));
 		scene.setOnKeyReleased(event -> onKeyReleased(event.getCode()));
 
 		CanvasRenderer canvasRenderer = new CanvasRenderer(canvas.getGraphicsContext2D());
