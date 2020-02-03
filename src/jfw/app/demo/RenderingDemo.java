@@ -7,13 +7,13 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import jfw.util.rendering.CanvasRenderer;
-import jfw.util.rendering.TileMap;
-import jfw.util.rendering.TileRenderer;
-import jfw.util.rendering.tile.UnicodeTile;
-import jfw.util.rendering.tile.FullTile;
+import jfw.util.tile.rendering.TileMap;
+import jfw.util.tile.rendering.TileRenderer;
+import jfw.util.tile.UnicodeTile;
+import jfw.util.tile.FullTile;
 import lombok.extern.slf4j.Slf4j;
 
-import static jfw.util.rendering.tile.EmptyTile.EMPTY;
+import static jfw.util.tile.EmptyTile.EMPTY;
 
 @Slf4j
 public class RenderingDemo extends Application {

@@ -1,6 +1,7 @@
-package jfw.util.rendering;
+package jfw.util.tile.rendering;
 
 import javafx.scene.paint.Color;
+import jfw.util.rendering.Renderer;
 import lombok.Getter;
 import lombok.NonNull;
 

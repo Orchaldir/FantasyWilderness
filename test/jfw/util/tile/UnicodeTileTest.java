@@ -1,4 +1,4 @@
-package jfw.util.rendering.tile;
+package jfw.util.tile;
 
 import javafx.scene.paint.Color;
 import org.junit.jupiter.api.Test;

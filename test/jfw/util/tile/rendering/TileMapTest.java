@@ -1,17 +1,18 @@
-package jfw.util.rendering;
+package jfw.util.tile.rendering;
 
 import javafx.scene.paint.Color;
 import jfw.util.OutsideMapException;
 import jfw.util.map.ArrayMap2d;
 import jfw.util.map.Map2d;
-import jfw.util.rendering.tile.Tile;
-import jfw.util.rendering.tile.TileSelector;
-import jfw.util.rendering.tile.UnicodeTile;
+import jfw.util.tile.Tile;
+import jfw.util.tile.rendering.TileMap;
+import jfw.util.tile.rendering.TileSelector;
+import jfw.util.tile.UnicodeTile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static jfw.util.rendering.tile.EmptyTile.EMPTY;
+import static jfw.util.tile.EmptyTile.EMPTY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertThrows;

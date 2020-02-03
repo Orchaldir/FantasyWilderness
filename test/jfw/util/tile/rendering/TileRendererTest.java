@@ -1,6 +1,8 @@
-package jfw.util.rendering;
+package jfw.util.tile.rendering;
 
 import javafx.scene.paint.Color;
+import jfw.util.rendering.Renderer;
+import jfw.util.tile.rendering.TileRenderer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;

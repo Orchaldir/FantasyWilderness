@@ -18,10 +18,10 @@ import jfw.util.redux.Store;
 import jfw.util.redux.middleware.LogActionMiddleware;
 import jfw.util.redux.middleware.LogDiffMiddleware;
 import jfw.util.rendering.CanvasRenderer;
-import jfw.util.rendering.TileMap;
-import jfw.util.rendering.TileRenderer;
-import jfw.util.rendering.tile.Tile;
-import jfw.util.rendering.tile.UnicodeTile;
+import jfw.util.tile.rendering.TileMap;
+import jfw.util.tile.rendering.TileRenderer;
+import jfw.util.tile.Tile;
+import jfw.util.tile.UnicodeTile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import static jfw.game.state.world.WorldCell.TILE_SELECTOR;
-import static jfw.util.rendering.tile.EmptyTile.EMPTY;
+import static jfw.util.tile.EmptyTile.EMPTY;
 
 @Slf4j
 public class WorldDemo extends Application {

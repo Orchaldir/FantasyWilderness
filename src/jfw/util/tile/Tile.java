@@ -1,6 +1,6 @@
-package jfw.util.rendering.tile;
+package jfw.util.tile;
 
-import jfw.util.rendering.TileRenderer;
+import jfw.util.tile.rendering.TileRenderer;
 
 public interface Tile {
 

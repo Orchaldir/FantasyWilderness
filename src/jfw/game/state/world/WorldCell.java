@@ -1,9 +1,9 @@
 package jfw.game.state.world;
 
 import javafx.scene.paint.Color;
-import jfw.util.rendering.tile.FullTile;
-import jfw.util.rendering.tile.Tile;
-import jfw.util.rendering.tile.TileSelector;
+import jfw.util.tile.FullTile;
+import jfw.util.tile.Tile;
+import jfw.util.tile.rendering.TileSelector;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;

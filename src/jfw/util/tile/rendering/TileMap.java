@@ -1,12 +1,11 @@
-package jfw.util.rendering;
+package jfw.util.tile.rendering;
 
 import javafx.scene.paint.Color;
 import jfw.util.map.Map2d;
 import jfw.util.map.MutableArrayMap2d;
 import jfw.util.map.MutableMap2d;
-import jfw.util.rendering.tile.Tile;
-import jfw.util.rendering.tile.TileSelector;
-import jfw.util.rendering.tile.UnicodeTile;
+import jfw.util.tile.Tile;
+import jfw.util.tile.UnicodeTile;
 import lombok.Getter;
 import lombok.NonNull;
 
