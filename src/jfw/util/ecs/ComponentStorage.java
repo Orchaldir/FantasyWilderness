@@ -4,11 +4,11 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
-public interface ComponentStorage<Component> {
+public interface ComponentStorage<COMPONENT> {
 
-	Optional<Component> get(int entityId);
+	Optional<COMPONENT> get(int entityId);
 
-	Collection<Component> getAll();
+	Collection<COMPONENT> getAll();
 
 	Set<Integer> getIds();
 
