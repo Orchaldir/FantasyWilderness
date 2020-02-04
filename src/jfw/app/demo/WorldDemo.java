@@ -1,14 +1,14 @@
 package jfw.app.demo;
 
-import javafx.application.Application;
-import javafx.scene.Group;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import jfw.game.state.world.TerrainType;
 import jfw.game.state.world.WorldCell;
+import jfw.util.TileApplication;
 import jfw.util.ecs.ComponentMap;
 import jfw.util.ecs.ComponentStorage;
 import jfw.util.map.ArrayMap2d;
@@ -17,11 +17,9 @@ import jfw.util.redux.Reducer;
 import jfw.util.redux.Store;
 import jfw.util.redux.middleware.LogActionMiddleware;
 import jfw.util.redux.middleware.LogDiffMiddleware;
-import jfw.util.rendering.CanvasRenderer;
-import jfw.util.tile.rendering.TileMap;
-import jfw.util.tile.rendering.TileRenderer;
 import jfw.util.tile.Tile;
 import jfw.util.tile.UnicodeTile;
+import jfw.util.tile.rendering.TileMap;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -32,10 +30,9 @@ import java.util.List;
 import java.util.Map;
 
 import static jfw.game.state.world.WorldCell.TILE_SELECTOR;
-import static jfw.util.tile.EmptyTile.EMPTY;
 
 @Slf4j
-public class WorldDemo extends Application {
+public class WorldDemo extends TileApplication {
 
 	private static final int WIDTH = 20;
 	private static final int HEIGHT = 10;
@@ -91,26 +88,18 @@ public class WorldDemo extends Application {
 		return oldState;
 	};
 
-	private TileRenderer tileRenderer;
 	private Store<Object, DemoState> store;
 
 	@Override
 	public void start(Stage primaryStage) {
-		primaryStage.setTitle("World Demo");
-		Group root = new Group();
-		Canvas canvas = new Canvas(WIDTH * TILE_WIDTH, HEIGHT * TILE_HEIGHT);
-		root.getChildren().add(canvas);
-		Scene scene = new Scene(root);
-		primaryStage.setScene(scene);
-		primaryStage.show();
+		Scene scene = init(primaryStage, "World Demo", WIDTH, HEIGHT, TILE_WIDTH, TILE_HEIGHT);
 
-		scene.setOnMouseClicked(event -> onMouseClicked((int)event.getX(), (int)event.getY()));
-		scene.setOnMouseDragged(event -> onMouseClicked((int)event.getX(), (int)event.getY()));
+		EventHandler<MouseEvent> mouseEventEventHandler = event -> onMouseClicked((int) event.getX(), (int) event.getY());
+
+		scene.setOnMouseClicked(mouseEventEventHandler);
+		scene.setOnMouseDragged(mouseEventEventHandler);
+
 		scene.setOnKeyReleased(event -> onKeyReleased(event.getCode()));
-
-		CanvasRenderer canvasRenderer = new CanvasRenderer(canvas.getGraphicsContext2D());
-		tileRenderer = new TileRenderer(canvasRenderer, 0, 0,  TILE_WIDTH, TILE_HEIGHT);
-
 		create();
 	}
 
@@ -135,20 +124,22 @@ public class WorldDemo extends Application {
 	private void render(DemoState state) {
 		log.info("render()");
 
-		TileMap worldMap = new TileMap(WIDTH, HEIGHT, EMPTY);
+		TileMap worldMap = createTileMap();
 		worldMap.setMap(state.worldMap, 0, 0, TILE_SELECTOR);
 		worldMap.render(tileRenderer, 0, 0);
 
-		TileMap uiMap = new TileMap(WIDTH, HEIGHT, EMPTY);
+		TileMap uiMap = createTileMap();
 		uiMap.setText("Tool=" + state.tool, 0, 9, Color.BLACK);
-
-		for (Integer position : state.positions.getAll()) {
-			uiMap.setTile(CHARACTER_TILE, uiMap.getMap().getX(position), uiMap.getMap().getY(position));
-		}
-
+		renderCharacters(state, uiMap);
 		uiMap.render(tileRenderer, 0, 0);
 
 		log.info("render(): finished");
+	}
+
+	private void renderCharacters(DemoState state, TileMap uiMap) {
+		for (Integer position : state.positions.getAll()) {
+			uiMap.setTile(CHARACTER_TILE, uiMap.getMap().getX(position), uiMap.getMap().getY(position));
+		}
 	}
 
 	private void onMouseClicked(int x, int y) {
