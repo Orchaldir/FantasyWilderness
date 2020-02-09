@@ -6,10 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.function.Supplier;
 
 @Slf4j
-public class LogActionMiddleware<Action, State> implements Middleware<Action, State> {
+public class LogActionMiddleware<A, S> implements Middleware<A, S> {
 
 	@Override
-	public Dispatcher<Action> apply(Dispatcher<Action> dispatcher, Supplier<State> stateSupplier) {
+	public Dispatcher<A> apply(Dispatcher<A> dispatcher, Supplier<S> stateSupplier) {
 		return action -> {
 			log.info("Dispatch {}", action);
 

@@ -1,8 +1,8 @@
 package jfw.util.redux;
 
 
-public interface Reducer<Action, State> {
+public interface Reducer<A, S> {
 
-	State reduce(Action action, State state);
+	S reduce(A action, S state);
 
 }

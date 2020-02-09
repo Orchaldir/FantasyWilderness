@@ -38,7 +38,7 @@ public interface Validator {
 		validateNotNull(list, name);
 
 		if (list.isEmpty()) {
-			String message = String.format("%s is empty!", name, list.size());
+			String message = String.format("%s is empty!", name);
 			throw new IllegalArgumentException(message);
 		}
 

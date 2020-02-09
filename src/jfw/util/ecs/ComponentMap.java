@@ -5,17 +5,17 @@ import lombok.AllArgsConstructor;
 import java.util.*;
 
 @AllArgsConstructor
-public class ComponentMap<COMPONENT> implements ComponentStorage<COMPONENT> {
+public class ComponentMap<T> implements ComponentStorage<T> {
 
-	private final Map<Integer, COMPONENT> map;
+	private final Map<Integer, T> map;
 
 	@Override
-	public Optional<COMPONENT> get(int id) {
+	public Optional<T> get(int id) {
 		return Optional.ofNullable(map.get(id));
 	}
 
 	@Override
-	public Collection<COMPONENT> getAll() {
+	public Collection<T> getAll() {
 		return Collections.unmodifiableCollection(map.values());
 	}
 

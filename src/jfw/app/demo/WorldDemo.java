@@ -136,9 +136,11 @@ public class WorldDemo extends TileApplication {
 		log.info("render(): finished");
 	}
 
-	private void renderCharacters(DemoState state, TileMap uiMap) {
+	private void renderCharacters(DemoState state, TileMap tileMap) {
+		Map2d<Tile> map = tileMap.getMap();
+
 		for (Integer position : state.positions.getAll()) {
-			uiMap.setTile(CHARACTER_TILE, uiMap.getMap().getX(position), uiMap.getMap().getY(position));
+			tileMap.setTile(CHARACTER_TILE, map.getX(position), map.getY(position));
 		}
 	}
 

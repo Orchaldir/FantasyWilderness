@@ -33,7 +33,9 @@ public abstract class TileApplication extends Application {
 
 		primaryStage.setTitle(title);
 		Group root = new Group();
-		Canvas canvas = new Canvas(columns * tileWidth, rows * tileHeight);
+		double canvasWidth = columns * tileWidth;
+		double canvasHeight = rows * tileHeight;
+		Canvas canvas = new Canvas(canvasWidth, canvasHeight);
 		root.getChildren().add(canvas);
 		Scene scene = new Scene(root);
 		primaryStage.setScene(scene);

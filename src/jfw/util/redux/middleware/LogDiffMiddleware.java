@@ -9,18 +9,18 @@ import org.javers.core.diff.Diff;
 import java.util.function.Supplier;
 
 @Slf4j
-public class LogDiffMiddleware<Action, State> implements Middleware<Action, State> {
+public class LogDiffMiddleware<A, S> implements Middleware<A, S> {
 
 	private Javers javers = JaversBuilder.javers().build();
 
 	@Override
-	public Dispatcher<Action> apply(Dispatcher<Action> dispatcher, Supplier<State> stateSupplier) {
+	public Dispatcher<A> apply(Dispatcher<A> dispatcher, Supplier<S> stateSupplier) {
 		return action -> {
-			State oldState = stateSupplier.get();
+			S oldState = stateSupplier.get();
 
 			dispatcher.dispatch(action);
 
-			State newState = stateSupplier.get();
+			S newState = stateSupplier.get();
 			Diff diff = javers.compare(oldState, newState);
 
 			log.info("{}", diff.prettyPrint());

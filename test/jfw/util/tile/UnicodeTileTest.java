@@ -1,9 +1,11 @@
 package jfw.util.tile;
 
 import javafx.scene.paint.Color;
+import jfw.util.tile.rendering.TileRenderer;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class UnicodeTileTest {
 
@@ -23,22 +25,14 @@ class UnicodeTileTest {
 	}
 
 	@Test
-	void testTooManySymbols() {
-		assertThatIllegalArgumentException().
-				isThrownBy(() -> new UnicodeTile("abc", Color.BLACK)).
-				withMessage("symbol has 3 code points instead of 1!");
-	}
+	void testRender() {
+		TileRenderer renderer = mock(TileRenderer.class);
+		UnicodeTile tile = new UnicodeTile("🔥", Color.RED);
 
-	@Test
-	void testBigSymbol() {
-		assertThat(new UnicodeTile("\uD83D\uDD25", Color.BLACK).getCodePoint()).
-				isEqualTo(128293);
-	}
+		tile.render(renderer, 2, 3);
 
-	@Test
-	void testBigSymbol2() {
-		assertThat(new UnicodeTile("🔥", Color.BLACK).getCodePoint()).
-				isEqualTo(128293);
+		verify(renderer).renderCharacter(128293, 2, 3, Color.RED);
+		verifyNoMoreInteractions(renderer);
 	}
 
 }

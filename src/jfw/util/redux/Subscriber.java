@@ -1,7 +1,7 @@
 package jfw.util.redux;
 
-public interface Subscriber<State> {
+public interface Subscriber<S> {
 
-	void onStateChanged(State state);
+	void onStateChanged(S state);
 
 }

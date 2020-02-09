@@ -4,8 +4,8 @@ import jfw.util.redux.Dispatcher;
 
 import java.util.function.Supplier;
 
-public interface Middleware<Action, State> {
+public interface Middleware<A, S> {
 
-	Dispatcher<Action> apply(Dispatcher<Action> dispatcher, Supplier<State> stateSupplier);
+	Dispatcher<A> apply(Dispatcher<A> dispatcher, Supplier<S> stateSupplier);
 
 }

@@ -7,27 +7,27 @@ import java.util.*;
 
 import static jfw.util.Validator.validateNotNull;
 
-public class Store<Action, State> {
+public class Store<A, S> {
 
-	private final Set<Subscriber<State>> consumers = new HashSet<>();
-	private final Reducer<Action, State> reducer;
-	private final Dispatcher<Action> dispatcher;
+	private final Set<Subscriber<S>> consumers = new HashSet<>();
+	private final Reducer<A, S> reducer;
+	private final Dispatcher<A> dispatcher;
 
 	@Getter
-	private State state;
+	private S state;
 
-	public Store(Reducer<Action, State> reducer, State state) {
+	public Store(Reducer<A, S> reducer, S state) {
 		this(reducer, state, Collections.emptyList());
 	}
 
-	public Store(Reducer<Action, State> reducer, State state, List<Middleware<Action,State>> middlewares) {
+	public Store(Reducer<A, S> reducer, S state, List<Middleware<A, S>> middlewares) {
 		this.reducer = validateNotNull(reducer, "reducer");
 		this.state = validateNotNull(state, "state");
 
-		Dispatcher<Action> wrappedDispatcher = action -> {
+		Dispatcher<A> wrappedDispatcher = action -> {
 			validateNotNull(action, "action");
 
-			State newState = this.reducer.reduce(action, this.state);
+			S newState = this.reducer.reduce(action, this.state);
 
 			if (newState != this.state) {
 				this.state = newState;
@@ -36,18 +36,18 @@ public class Store<Action, State> {
 			}
 		};
 
-		for (Middleware<Action,State> middleware : middlewares) {
+		for (Middleware<A, S> middleware : middlewares) {
 			wrappedDispatcher = middleware.apply(wrappedDispatcher, this::getState);
 		}
 
 		dispatcher = wrappedDispatcher;
 	}
 
-	public void dispatch(Action action) {
+	public void dispatch(A action) {
 		dispatcher.dispatch(action);
 	}
 
-	public Subscription subscribe(Subscriber<State> consumer) {
+	public Subscription subscribe(Subscriber<S> consumer) {
 		validateNotNull(consumer, "consumer");
 		consumers.add(consumer);
 
@@ -57,7 +57,7 @@ public class Store<Action, State> {
 	}
 
 	private void notifyConsumers() {
-		for (Subscriber<State> consumer : consumers) {
+		for (Subscriber<S> consumer : consumers) {
 			consumer.onStateChanged(state);
 		}
 	}

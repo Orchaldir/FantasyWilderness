@@ -1,7 +1,7 @@
 package jfw.util.redux;
 
-public interface Dispatcher<Action> {
+public interface Dispatcher<A> {
 
-	void dispatch(Action action);
+	void dispatch(A action);
 
 }
