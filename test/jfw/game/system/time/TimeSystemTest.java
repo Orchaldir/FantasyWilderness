@@ -3,9 +3,10 @@ package jfw.game.system.time;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 class TimeSystemTest {
 
@@ -27,6 +28,18 @@ class TimeSystemTest {
 	}
 
 	@Test
+	void testConstructorWithNull() {
+		assertThatNullPointerException().
+				isThrownBy(() -> new TimeSystem(null));
+	}
+
+	@Test
+	void testConstructorWithEmptyList() {
+		assertThatIllegalArgumentException().
+				isThrownBy(() -> new TimeSystem(Collections.emptyList()));
+	}
+
+	@Test
 	void testGetCurrentEntry() {
 		assertThat(timeSystem.getCurrentEntry()).isEqualTo(ENTRY0);
 	}
@@ -45,6 +58,13 @@ class TimeSystemTest {
 	@Test
 	void testGetAllEntriesTwice() {
 		assertStartEntries();
+		assertStartEntries();
+	}
+
+	@Test
+	void testGetAllEntriesModified() {
+		timeSystem.getAllEntries().add(ENTRY6);
+
 		assertStartEntries();
 	}
 

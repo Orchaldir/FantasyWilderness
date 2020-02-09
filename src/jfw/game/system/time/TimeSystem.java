@@ -6,12 +6,16 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
+import static jfw.util.Validator.validateNotEmpty;
+import static lombok.AccessLevel.PRIVATE;
+
+@AllArgsConstructor(access = PRIVATE)
 public class TimeSystem {
 
 	private final PriorityQueue<TimeEntry> queue;
 
 	public TimeSystem(List<TimeEntry> entries) {
+		validateNotEmpty(entries, "entries");
 		queue = new PriorityQueue<>(entries);
 	}
 

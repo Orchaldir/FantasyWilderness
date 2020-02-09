@@ -1,5 +1,7 @@
 package jfw.util;
 
+import java.util.List;
+
 public interface Validator {
 
 	static <T> T validateNotNull(T object, String name) {
@@ -30,6 +32,17 @@ public interface Validator {
 		}
 
 		return array;
+	}
+
+	static <T> List<T> validateNotEmpty(List<T> list, String name) {
+		validateNotNull(list, name);
+
+		if (list.isEmpty()) {
+			String message = String.format("%s is empty!", name, list.size());
+			throw new IllegalArgumentException(message);
+		}
+
+		return list;
 	}
 
 	static String validateUnicode(String text, int desiredCodePoints, String name) {
