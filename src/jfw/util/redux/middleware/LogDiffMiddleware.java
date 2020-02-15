@@ -21,6 +21,11 @@ public class LogDiffMiddleware<A, S> implements Middleware<A, S> {
 			dispatcher.dispatch(action);
 
 			S newState = stateSupplier.get();
+
+			if (oldState == newState) {
+				return;
+			}
+
 			Diff diff = javers.compare(oldState, newState);
 
 			log.info("{}", diff.prettyPrint());

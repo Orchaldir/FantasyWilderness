@@ -25,7 +25,11 @@ public abstract class TileApplication extends Application {
 
 	protected TileRenderer tileRenderer;
 
-	public Scene init(Stage primaryStage, String title, int columns, int rows, int tileWidth, int tileHeight) {
+	protected int getTiles() {
+		return columns * rows;
+	}
+
+	protected Scene init(Stage primaryStage, String title, int columns, int rows, int tileWidth, int tileHeight) {
 		this.columns = columns;
 		this.rows = rows;
 		this.tileWidth = tileWidth;
@@ -33,8 +37,8 @@ public abstract class TileApplication extends Application {
 
 		primaryStage.setTitle(title);
 		Group root = new Group();
-		double canvasWidth = columns * tileWidth;
-		double canvasHeight = rows * tileHeight;
+		double canvasWidth = columns * (double)tileWidth;
+		double canvasHeight = rows * (double)tileHeight;
 		Canvas canvas = new Canvas(canvasWidth, canvasHeight);
 		root.getChildren().add(canvas);
 		Scene scene = new Scene(root);
@@ -47,7 +51,7 @@ public abstract class TileApplication extends Application {
 		return scene;
 	}
 
-	public TileMap createTileMap() {
+	protected TileMap createTileMap() {
 		return new TileMap(columns, rows, EMPTY);
 	}
 }

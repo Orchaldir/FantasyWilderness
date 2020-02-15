@@ -35,12 +35,6 @@ import static jfw.game.state.world.WorldCell.TILE_SELECTOR;
 @Slf4j
 public class WorldDemo extends TileApplication {
 
-	private static final int WIDTH = 20;
-	private static final int HEIGHT = 10;
-
-	private static final int TILE_WIDTH = 22;
-	private static final int TILE_HEIGHT = 32;
-
 	private static final Tile CHARACTER_TILE = new UnicodeTile("@", Color.BLACK);
 
 	@AllArgsConstructor
@@ -93,7 +87,7 @@ public class WorldDemo extends TileApplication {
 
 	@Override
 	public void start(Stage primaryStage) {
-		Scene scene = init(primaryStage, "World Demo", WIDTH, HEIGHT, TILE_WIDTH, TILE_HEIGHT);
+		Scene scene = init(primaryStage, "World Demo", 20, 10, 22, 32);
 
 		EventHandler<MouseEvent> mouseEventEventHandler = event -> onMouseClicked((int) event.getX(), (int) event.getY());
 
@@ -107,9 +101,8 @@ public class WorldDemo extends TileApplication {
 	private void create() {
 		log.info("create()");
 
-		int size = WIDTH * HEIGHT;
-		WorldCell[] cells = new WorldCell[size];
-		ArrayMap2d<WorldCell> worldMap = new ArrayMap2d<>(WIDTH, HEIGHT, cells, new WorldCell(TerrainType.PLAIN));
+		WorldCell[] cells = new WorldCell[getTiles()];
+		ArrayMap2d<WorldCell> worldMap = new ArrayMap2d<>(getColumns(), getRows(), cells, new WorldCell(TerrainType.PLAIN));
 
 		Map<Integer,Integer> positionMap = new HashMap<>();
 		positionMap.put(0, 8);
