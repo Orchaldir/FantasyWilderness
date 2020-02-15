@@ -1,5 +1,7 @@
 package jfw.util.map;
 
+import java.util.Optional;
+
 public interface Map2d<T> {
 
 	int getWidth();
@@ -17,5 +19,7 @@ public interface Map2d<T> {
 
 	T getNode(int index);
 	T getNode(int x, int y);
+
+	Optional<Integer> getNeighborIndex(int index, Direction direction);
 
 }

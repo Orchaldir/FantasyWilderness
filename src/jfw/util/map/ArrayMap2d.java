@@ -3,6 +3,8 @@ package jfw.util.map;
 import jfw.util.OutsideMapException;
 import lombok.Getter;
 
+import java.util.Optional;
+
 import static jfw.util.Validator.*;
 
 public class ArrayMap2d<T> implements Map2d<T> {
@@ -96,6 +98,30 @@ public class ArrayMap2d<T> implements Map2d<T> {
 		}
 
 		throw new OutsideMapException(x, y);
+	}
+
+	@Override
+	public Optional<Integer> getNeighborIndex(int index, Direction direction) {
+		int neighborIndex = getUncheckedNeighborIndex(index, direction);
+
+		if (isInside(neighborIndex)) {
+			return Optional.of(neighborIndex);
+		}
+
+		return Optional.empty();
+	}
+
+	private int getUncheckedNeighborIndex(int index, Direction direction) {
+		switch (direction) {
+			case NORTH:
+				return index - width;
+			case EAST:
+				return index + 1;
+			case SOUTH:
+				return index + width;
+			default:
+				return index - 1;
+		}
 	}
 
 	@Override

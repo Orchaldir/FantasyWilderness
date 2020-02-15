@@ -4,6 +4,8 @@ import jfw.util.OutsideMapException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,7 +37,7 @@ class ArrayMap2dTest extends SharedData {
 		}
 
 		@Test
-		public void testInvalidHeight() {
+		void testInvalidHeight() {
 			assertHeight(0);
 			assertHeight(-1);
 		}
@@ -53,14 +55,14 @@ class ArrayMap2dTest extends SharedData {
 		}
 
 		@Test
-		public void testArrayIsNull() {
+		void testArrayIsNull() {
 			assertThatExceptionOfType(NullPointerException.class).
 					isThrownBy(() -> new ArrayMap2d<>(WIDTH, HEIGHT, null)).
 					withMessage("cells is null!");
 		}
 
 		@Test
-		public void testInvalidArrayLength() {
+		void testInvalidArrayLength() {
 			assertThatExceptionOfType(IllegalArgumentException.class).
 					isThrownBy(() -> new ArrayMap2d<>(WIDTH, 3, createArray())).
 					withMessage("cells has length %d instead of %d!", 20, 12);
@@ -71,22 +73,22 @@ class ArrayMap2dTest extends SharedData {
 	class TestGetters {
 
 		@Test
-		public void testGetWidth() {
+		void testGetWidth() {
 			assertThat(MAP.getWidth()).isEqualTo(WIDTH);
 		}
 
 		@Test
-		public void testGetHeight() {
+		void testGetHeight() {
 			assertThat(MAP.getHeight()).isEqualTo(HEIGHT);
 		}
 
 		@Test
-		public void testGetSize() {
+		void testGetSize() {
 			assertThat(MAP.getSize()).isEqualTo(SIZE);
 		}
 
 		@Test
-		public void testGetIndex() {
+		void testGetIndex() {
 			assertThat(MAP.getIndex(X0, Y0)).isEqualTo(INDEX0);
 			assertThat(MAP.getIndex(X1, Y1)).isEqualTo(INDEX1);
 			assertThat(MAP.getIndex(X2, Y2)).isEqualTo(INDEX2);
@@ -94,7 +96,7 @@ class ArrayMap2dTest extends SharedData {
 		}
 
 		@Test
-		public void testGetX() {
+		void testGetX() {
 			assertThat(MAP.getX(INDEX0)).isEqualTo(X0);
 			assertThat(MAP.getX(INDEX1)).isEqualTo(X1);
 			assertThat(MAP.getX(INDEX2)).isEqualTo(X2);
@@ -102,7 +104,7 @@ class ArrayMap2dTest extends SharedData {
 		}
 
 		@Test
-		public void testGetY() {
+		void testGetY() {
 			assertThat(MAP.getY(INDEX0)).isEqualTo(Y0);
 			assertThat(MAP.getY(INDEX1)).isEqualTo(Y1);
 			assertThat(MAP.getY(INDEX2)).isEqualTo(Y2);
@@ -114,19 +116,19 @@ class ArrayMap2dTest extends SharedData {
 	class TestIsInsideForX {
 
 		@Test
-		public void testInside() {
+		void testInside() {
 			for (int x = 0; x < WIDTH; x++) {
 				assertTrue(MAP.isInsideForX(x));
 			}
 		}
 
 		@Test
-		public void testTooFarLeft() {
+		void testTooFarLeft() {
 			assertFalse(MAP.isInsideForX(-1));
 		}
 
 		@Test
-		public void testTooFarRight() {
+		void testTooFarRight() {
 			assertFalse(MAP.isInsideForX(WIDTH));
 		}
 	}
@@ -135,19 +137,19 @@ class ArrayMap2dTest extends SharedData {
 	class TestIsInsideForY {
 
 		@Test
-		public void testInside() {
+		void testInside() {
 			for (int y = 0; y < HEIGHT; y++) {
 				assertTrue(MAP.isInsideForY(y));
 			}
 		}
 
 		@Test
-		public void testBelow() {
+		void testBelow() {
 			assertFalse(MAP.isInsideForY(-1));
 		}
 
 		@Test
-		public void testAbove() {
+		void testAbove() {
 			assertFalse(MAP.isInsideForY(HEIGHT));
 		}
 	}
@@ -156,7 +158,7 @@ class ArrayMap2dTest extends SharedData {
 	class TestIsInside {
 
 		@Test
-		public void testInside() {
+		void testInside() {
 			for (int x = 0; x < WIDTH; x++) {
 				for (int y = 0; y < HEIGHT; y++) {
 					assertTrue(MAP.isInside(x, y));
@@ -165,7 +167,7 @@ class ArrayMap2dTest extends SharedData {
 		}
 
 		@Test
-		public void testOutsideCorners() {
+		void testOutsideCorners() {
 			assertFalse(MAP.isInside(-1, -1));
 			assertFalse(MAP.isInside(-1, HEIGHT));
 			assertFalse(MAP.isInside(WIDTH, -1));
@@ -174,28 +176,28 @@ class ArrayMap2dTest extends SharedData {
 		}
 
 		@Test
-		public void testTooFarLeft() {
+		void testTooFarLeft() {
 			for (int y = 0; y < HEIGHT; y++) {
 				assertFalse(MAP.isInside(-1, y));
 			}
 		}
 
 		@Test
-		public void testTooFarRight() {
+		void testTooFarRight() {
 			for (int y = 0; y < HEIGHT; y++) {
 				assertFalse(MAP.isInside(WIDTH, y));
 			}
 		}
 
 		@Test
-		public void testBelowTheMap() {
+		void testBelowTheMap() {
 			for (int x = 0; x < WIDTH; x++) {
 				assertFalse(MAP.isInside(x, -1));
 			}
 		}
 
 		@Test
-		public void testAboveTheMap() {
+		void testAboveTheMap() {
 			for (int x = 0; x < WIDTH; x++) {
 				assertFalse(MAP.isInside(x, HEIGHT));
 			}
@@ -206,14 +208,14 @@ class ArrayMap2dTest extends SharedData {
 	class TestIsInsideWithIndex {
 
 		@Test
-		public void testInside() {
+		void testInside() {
 			for (int index = 0; index < SIZE; index++) {
 				assertTrue(MAP.isInside(index));
 			}
 		}
 
 		@Test
-		public void testOutside() {
+		void testOutside() {
 			assertFalse(MAP.isInside(-1));
 			assertFalse(MAP.isInside(SIZE));
 		}
@@ -223,7 +225,7 @@ class ArrayMap2dTest extends SharedData {
 	class TestGetCell {
 
 		@Test
-		public void testGetCell() {
+		void testGetCell() {
 			int i = 0;
 
 			for (int y = 0; y < HEIGHT; y++) {
@@ -236,17 +238,50 @@ class ArrayMap2dTest extends SharedData {
 		}
 
 		@Test
-		public void testCoordinatesAreOutside() {
+		void testCoordinatesAreOutside() {
 			assertThatExceptionOfType(OutsideMapException.class).
 					isThrownBy(() -> MAP.getNode(-11, -2)).
 					withMessage("Column -11 & row -2 is outside map!");
 		}
 
 		@Test
-		public void testIndexIsOutside() {
+		void testIndexIsOutside() {
 			assertThatExceptionOfType(OutsideMapException.class).
 					isThrownBy(() -> MAP.getNode(-3)).
 					withMessage("Index -3 is outside map!");
+		}
+	}
+
+	@Nested
+	class TestGetNeighborIndex {
+
+		@Test
+		void testNorth() {
+			assertNeighbor(Direction.NORTH, 2);
+		}
+
+		@Test
+		void testEast() {
+			assertNeighbor(Direction.EAST, 7);
+		}
+
+		@Test
+		void testSouth() {
+			assertNeighbor(Direction.SOUTH, 10);
+		}
+
+		@Test
+		void testWest() {
+			assertNeighbor(Direction.WEST, 5);
+		}
+
+		@Test
+		void testNeighborIsOutsideMap() {
+			assertThat(MAP.getNeighborIndex(INDEX0, Direction.WEST)).isEqualTo(Optional.empty());
+		}
+
+		private void assertNeighbor(Direction direction, int neighbor) {
+			assertThat(MAP.getNeighborIndex(INDEX3, direction)).isEqualTo(Optional.of(neighbor));
 		}
 	}
 
