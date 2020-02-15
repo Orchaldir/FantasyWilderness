@@ -6,6 +6,8 @@ import java.util.Set;
 
 public interface ComponentStorage<T> {
 
+	ComponentStorage<T> updateComponent(int entityId, T component);
+
 	Optional<T> get(int entityId);
 
 	Collection<T> getAll();

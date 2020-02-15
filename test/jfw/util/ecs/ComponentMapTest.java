@@ -60,4 +60,15 @@ class ComponentMapTest {
 		verifyNoMoreInteractions(visitor);
 	}
 
+	@Test
+	void testUpdateComponent() {
+		ComponentStorage<Integer> newStorage = componentMap.updateComponent(ID4, -9);
+
+		testGetComponent();
+
+		assertThat(newStorage.get(ID0)).isEqualTo(Optional.of(COMPONENT0));
+		assertThat(newStorage.get(ID4)).isEqualTo(Optional.of(-9));
+		assertThat(newStorage.get(ID7)).isEqualTo(Optional.of(COMPONENT7));
+	}
+
 }

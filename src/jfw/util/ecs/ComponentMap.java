@@ -10,6 +10,13 @@ public class ComponentMap<T> implements ComponentStorage<T> {
 	private final Map<Integer, T> map;
 
 	@Override
+	public ComponentStorage<T> updateComponent(int entityId, T component) {
+		Map<Integer, T> newMap = new HashMap<>(map);
+		newMap.put(entityId, component);
+		return new ComponentMap<>(newMap);
+	}
+
+	@Override
 	public Optional<T> get(int id) {
 		return Optional.ofNullable(map.get(id));
 	}
