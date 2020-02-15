@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 class ComponentMapTest {
 
@@ -45,6 +46,18 @@ class ComponentMapTest {
 	@Test
 	void testGetIds() {
 		assertThat(componentMap.getIds()).containsExactlyInAnyOrder(ID0, ID4, ID7);
+	}
+
+	@Test
+	void testVisit() {
+		Visitor<Integer> visitor = mock(Visitor.class);
+
+		componentMap.visit(visitor);
+
+		verify(visitor).visit(ID0, COMPONENT0);
+		verify(visitor).visit(ID4, COMPONENT4);
+		verify(visitor).visit(ID7, COMPONENT7);
+		verifyNoMoreInteractions(visitor);
 	}
 
 }

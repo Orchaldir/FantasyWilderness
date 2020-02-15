@@ -12,4 +12,6 @@ public interface ComponentStorage<T> {
 
 	Set<Integer> getIds();
 
+	void visit(Visitor<T> visitor);
+
 }

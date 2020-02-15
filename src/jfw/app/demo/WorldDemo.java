@@ -8,6 +8,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import jfw.game.state.world.TerrainType;
 import jfw.game.state.world.WorldCell;
+import jfw.game.view.EntityView;
 import jfw.util.TileApplication;
 import jfw.util.ecs.ComponentMap;
 import jfw.util.ecs.ComponentStorage;
@@ -130,18 +131,10 @@ public class WorldDemo extends TileApplication {
 
 		TileMap uiMap = createTileMap();
 		uiMap.setText("Tool=" + state.tool, 0, 9, Color.BLACK);
-		renderCharacters(state, uiMap);
+		EntityView.view(state.positions, uiMap, id -> CHARACTER_TILE);
 		uiMap.render(tileRenderer, 0, 0);
 
 		log.info("render(): finished");
-	}
-
-	private void renderCharacters(DemoState state, TileMap tileMap) {
-		Map2d<Tile> map = tileMap.getMap();
-
-		for (Integer position : state.positions.getAll()) {
-			tileMap.setTile(CHARACTER_TILE, map.getX(position), map.getY(position));
-		}
 	}
 
 	private void onMouseClicked(int x, int y) {

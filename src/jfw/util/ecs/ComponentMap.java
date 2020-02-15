@@ -24,4 +24,11 @@ public class ComponentMap<T> implements ComponentStorage<T> {
 		return Collections.unmodifiableSet(map.keySet());
 	}
 
+	@Override
+	public void visit(Visitor<T> visitor) {
+		for (Map.Entry<Integer, T> entry : map.entrySet()) {
+			visitor.visit(entry.getKey(),  entry.getValue());
+		}
+	}
+
 }
