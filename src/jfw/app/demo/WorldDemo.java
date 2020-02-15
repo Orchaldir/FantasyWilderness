@@ -8,40 +8,30 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import jfw.game.state.world.TerrainType;
 import jfw.game.state.world.WorldCell;
-import jfw.game.view.EntityView;
 import jfw.util.TileApplication;
-import jfw.util.ecs.ComponentMap;
-import jfw.util.ecs.ComponentStorage;
 import jfw.util.map.ArrayMap2d;
 import jfw.util.map.Map2d;
 import jfw.util.redux.Reducer;
 import jfw.util.redux.Store;
 import jfw.util.redux.middleware.LogActionMiddleware;
 import jfw.util.redux.middleware.LogDiffMiddleware;
-import jfw.util.tile.Tile;
-import jfw.util.tile.UnicodeTile;
 import jfw.util.tile.rendering.TileMap;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static jfw.game.state.world.WorldCell.TILE_SELECTOR;
 
 @Slf4j
 public class WorldDemo extends TileApplication {
 
-	private static final Tile CHARACTER_TILE = new UnicodeTile("@", Color.BLACK);
-
 	@AllArgsConstructor
 	@ToString
 	private static class DemoState {
 		private final ArrayMap2d<WorldCell> worldMap;
-		private final ComponentStorage<Integer> positions;
 		private final TerrainType tool;
 	}
 
@@ -70,13 +60,13 @@ public class WorldDemo extends TileApplication {
 			WorldCell newCell = new WorldCell(changeTerrain.terrainType);
 			ArrayMap2d<WorldCell> newWorldMap = oldState.worldMap.withCell(newCell, changeTerrain.index);
 
-			return new DemoState(newWorldMap, oldState.positions, oldState.tool);
+			return new DemoState(newWorldMap, oldState.tool);
 		}
 		else if (action instanceof SwitchTool) {
 			SwitchTool switchTool = (SwitchTool) action;
 
 			if (switchTool.tool != oldState.tool) {
-				return new DemoState(oldState.worldMap, oldState.positions, switchTool.tool);
+				return new DemoState(oldState.worldMap, switchTool.tool);
 			}
 		}
 
@@ -104,12 +94,7 @@ public class WorldDemo extends TileApplication {
 		WorldCell[] cells = new WorldCell[getTiles()];
 		ArrayMap2d<WorldCell> worldMap = new ArrayMap2d<>(getColumns(), getRows(), cells, new WorldCell(TerrainType.PLAIN));
 
-		Map<Integer,Integer> positionMap = new HashMap<>();
-		positionMap.put(0, 8);
-		positionMap.put(1, 44);
-		ComponentStorage<Integer> positions = new ComponentMap<>(positionMap);
-
-		DemoState initState = new DemoState(worldMap, positions, TerrainType.MOUNTAIN);
+		DemoState initState = new DemoState(worldMap, TerrainType.MOUNTAIN);
 		store = new Store<>(REDUCER, initState, List.of(new LogActionMiddleware<>(), new LogDiffMiddleware<>()));
 
 		store.subscribe(this::render);
@@ -124,7 +109,6 @@ public class WorldDemo extends TileApplication {
 
 		TileMap uiMap = createTileMap();
 		uiMap.setText("Tool=" + state.tool, 0, 9, Color.BLACK);
-		EntityView.view(state.positions, uiMap, id -> CHARACTER_TILE);
 		uiMap.render(tileRenderer, 0, 0);
 
 		log.info("render(): finished");
