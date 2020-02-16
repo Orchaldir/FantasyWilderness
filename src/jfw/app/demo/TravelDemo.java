@@ -11,6 +11,7 @@ import jfw.util.TileApplication;
 import jfw.util.ecs.ComponentMap;
 import jfw.util.ecs.ComponentStorage;
 import jfw.util.map.ArrayMap2d;
+import jfw.util.map.Direction;
 import jfw.util.redux.Reducer;
 import jfw.util.redux.Store;
 import jfw.util.redux.middleware.LogActionMiddleware;
@@ -19,12 +20,14 @@ import jfw.util.tile.Tile;
 import jfw.util.tile.UnicodeTile;
 import jfw.util.tile.rendering.TileMap;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static jfw.game.state.world.WorldCell.TILE_SELECTOR;
 
@@ -40,7 +43,34 @@ public class TravelDemo extends TileApplication {
 		private final ComponentStorage<Integer> positions;
 	}
 
-	private static final Reducer<Object, DemoState> REDUCER = (action, oldState) -> oldState;
+	@AllArgsConstructor
+	@Getter
+	@ToString
+	private static class MoveEntity {
+		private final int entityId;
+		private final Direction direction;
+	}
+
+	private static final Reducer<Object, DemoState> REDUCER = (action, oldState) -> {
+		if (action instanceof MoveEntity) {
+			MoveEntity moveEntity = (MoveEntity) action;
+
+			Optional<Integer> optionalPosition = oldState.positions.get(moveEntity.entityId);
+
+			if (optionalPosition.isPresent()) {
+				int position = optionalPosition.get();
+				Optional<Integer> optionalNewPosition = oldState.worldMap.getNeighborIndex(position, moveEntity.direction);
+
+				if (optionalNewPosition.isPresent()) {
+					ComponentStorage<Integer> newPositions = oldState.positions.
+							updateComponent(moveEntity.entityId, optionalNewPosition.get());
+					return new DemoState(oldState.worldMap, newPositions);
+				}
+			}
+		}
+
+		return oldState;
+	};
 
 	private Store<Object, DemoState> store;
 
@@ -86,6 +116,19 @@ public class TravelDemo extends TileApplication {
 
 	private void onKeyReleased(KeyCode keyCode) {
 		log.info("onKeyReleased(): keyCode={}", keyCode);
+
+		if (keyCode == KeyCode.UP) {
+			store.dispatch(new MoveEntity(0, Direction.NORTH));
+		}
+		else if (keyCode == KeyCode.RIGHT) {
+			store.dispatch(new MoveEntity(0, Direction.EAST));
+		}
+		else if (keyCode == KeyCode.DOWN) {
+			store.dispatch(new MoveEntity(0, Direction.SOUTH));
+		}
+		else if (keyCode == KeyCode.LEFT) {
+			store.dispatch(new MoveEntity(0, Direction.WEST));
+		}
 	}
 
 	public static void main(String[] args) {

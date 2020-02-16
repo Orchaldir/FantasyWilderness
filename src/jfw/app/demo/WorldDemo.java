@@ -53,6 +53,7 @@ public class WorldDemo extends TileApplication {
 	private static final Reducer<Object, DemoState> REDUCER = (action, oldState) -> {
 		if (action instanceof ChangeTerrain) {
 			ChangeTerrain changeTerrain = (ChangeTerrain) action;
+
 			if (oldState.worldMap.getNode(changeTerrain.index).getTerrainType() == changeTerrain.terrainType) {
 				return oldState;
 			}
