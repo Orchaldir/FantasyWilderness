@@ -97,6 +97,29 @@ class TimeSystemTest {
 		assertStartEntries();
 	}
 
+	@Test
+	void testCorrectOrder() {
+		TimeEntry e0 = new TimeEntry(0, 100);
+		TimeEntry e0b = new TimeEntry(0, 200);
+		TimeEntry e1 = new TimeEntry(1, 100);
+		TimeEntry e1b = new TimeEntry(1, 200);
+		TimeEntry e2 = new TimeEntry(2, 100);
+		TimeEntry e2b = new TimeEntry(2, 200);
+
+		List<TimeEntry> entries = List.of(e0, e1, e2);
+		TimeSystem newTimeSystem = new TimeSystem(entries).advanceCurrentEntry(100);
+
+		assertThat(newTimeSystem.getAllEntries()).containsExactly(e1, e2, e0b);
+
+		newTimeSystem = newTimeSystem.advanceCurrentEntry(100);
+
+		assertThat(newTimeSystem.getAllEntries()).containsExactly(e2, e0b, e1b);
+
+		newTimeSystem = newTimeSystem.advanceCurrentEntry(100);
+
+		assertThat(newTimeSystem.getAllEntries()).containsExactly(e0b, e1b, e2b);
+	}
+
 	private void assertStartEntries() {
 		assertThat(timeSystem.getAllEntries()).containsExactly(ENTRY0, ENTRY1, ENTRY2, ENTRY3, ENTRY4);
 	}

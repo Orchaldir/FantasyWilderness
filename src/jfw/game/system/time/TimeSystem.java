@@ -1,34 +1,32 @@
 package jfw.game.system.time;
 
-import lombok.AllArgsConstructor;
-
+import java.util.ArrayList;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.stream.Collectors;
 
 import static jfw.util.Validator.validateNotEmpty;
-import static lombok.AccessLevel.PRIVATE;
 
-@AllArgsConstructor(access = PRIVATE)
 public class TimeSystem {
 
-	private final PriorityQueue<TimeEntry> queue;
+	private final List<TimeEntry> queue;
 
 	public TimeSystem(List<TimeEntry> entries) {
 		validateNotEmpty(entries, "entries");
-		queue = new PriorityQueue<>(entries);
+		queue = new ArrayList<>();
+
+		entries.forEach(entry -> insert(queue, entry));
 	}
 
 	public TimeSystem addEntries(List<TimeEntry> entriesToAdd) {
-		PriorityQueue<TimeEntry> newQueue = new PriorityQueue<>(queue);
+		List<TimeEntry> newQueue = new ArrayList<>(queue);
 
-		newQueue.addAll(entriesToAdd);
+		entriesToAdd.forEach(entry -> insert(newQueue, entry));
 
 		return new TimeSystem(newQueue);
 	}
 
 	public TimeSystem removeEntries(List<TimeEntry> entriesToRemove) {
-		PriorityQueue<TimeEntry> newQueue = new PriorityQueue<>(queue);
+		List<TimeEntry> newQueue = new ArrayList<>(queue);
 
 		newQueue.removeAll(entriesToRemove);
 
@@ -36,13 +34,25 @@ public class TimeSystem {
 	}
 
 	public TimeSystem advanceCurrentEntry(long duration) {
-		PriorityQueue<TimeEntry> newQueue = new PriorityQueue<>(queue);
-		TimeEntry firstEntry = newQueue.poll();
+		List<TimeEntry> newQueue = new ArrayList<>(queue);
+		TimeEntry firstEntry = getCurrentEntry();
 		TimeEntry updatedEntry = firstEntry.apply(duration);
 
-		newQueue.add(updatedEntry);
+		newQueue.remove(firstEntry);
+		insert(newQueue, updatedEntry);
 
 		return new TimeSystem(newQueue);
+	}
+
+	private static void insert(List<TimeEntry> queue, TimeEntry entry) {
+		for (int i = 0; i < queue.size(); i++) {
+			if (entry.getTime() < queue.get(i).getTime()) {
+				queue.add(i, entry);
+				return;
+			}
+		}
+
+		queue.add(entry);
 	}
 
 	public List<TimeEntry> getAllEntries() {
@@ -52,11 +62,11 @@ public class TimeSystem {
 	}
 
 	public TimeEntry getCurrentEntry() {
-		return queue.peek();
+		return queue.get(0);
 	}
 
 	public long getCurrentTime() {
-		return queue.peek().getTime();
+		return getCurrentEntry().getTime();
 	}
 
 }
