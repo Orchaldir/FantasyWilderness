@@ -22,6 +22,7 @@ import jfw.util.redux.middleware.LogDiffMiddleware;
 import jfw.util.tile.Tile;
 import jfw.util.tile.UnicodeTile;
 import jfw.util.tile.rendering.TileMap;
+import jfw.util.tile.rendering.TileSelector;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -36,6 +37,7 @@ import static jfw.game.state.world.WorldCell.TILE_SELECTOR;
 public class TravelDemo extends TileApplication {
 
 	private static final Tile CHARACTER_TILE = new UnicodeTile("@", Color.BLACK);
+	private static final Tile ACTIVE_CHARACTER_TILE = new UnicodeTile("@", Color.WHITE);
 
 	@AllArgsConstructor
 	@ToString
@@ -79,6 +81,7 @@ public class TravelDemo extends TileApplication {
 
 	private Store<Object, DemoState> store;
 	private final TimeDefinition timeDefinition = new TimeDefinition();
+	private TileSelector<Integer> characterTileSelector;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -98,6 +101,7 @@ public class TravelDemo extends TileApplication {
 		Map<Integer,Integer> positionMap = new HashMap<>();
 		positionMap.put(0, 88);
 		positionMap.put(1, 44);
+		positionMap.put(2, 122);
 		ComponentStorage<Integer> positions = new ComponentMap<>(positionMap);
 
 		List<TimeEntry> entries = positions.getIds().stream().map(TimeEntry::new).collect(Collectors.toList());
@@ -105,6 +109,13 @@ public class TravelDemo extends TileApplication {
 
 		DemoState initState = new DemoState(worldMap, positions, timeSystem);
 		store = new Store<>(REDUCER, initState, List.of(new LogActionMiddleware<>(), new LogDiffMiddleware<>()));
+
+		characterTileSelector = id -> {
+			if (getCurrentEntityId(store.getState()) == id) {
+				return ACTIVE_CHARACTER_TILE;
+			}
+			return CHARACTER_TILE;
+		};
 
 		store.subscribe(this::render);
 	}
@@ -117,7 +128,7 @@ public class TravelDemo extends TileApplication {
 		worldMap.render(tileRenderer, 0, 0);
 
 		TileMap uiMap = createTileMap();
-		EntityView.view(state.positions, uiMap, id -> CHARACTER_TILE);
+		EntityView.view(state.positions, uiMap, characterTileSelector);
 		uiMap.setText(getTime(state), 0, 0, Color.BLACK);
 		uiMap.setText(getNextEntityText(state), 0, 9, Color.BLACK);
 		uiMap.render(tileRenderer, 0, 0);
@@ -130,13 +141,13 @@ public class TravelDemo extends TileApplication {
 	}
 
 	private String getNextEntityText(DemoState state) {
-		return "Entity=" + state.timeSystem.getCurrentEntry().getEntityId();
+		return "Entity=" + getCurrentEntityId(state);
 	}
 
 	private void onKeyReleased(KeyCode keyCode) {
 		log.info("onKeyReleased(): keyCode={}", keyCode);
 
-		int entityId = store.getState().timeSystem.getCurrentEntry().getEntityId();
+		int entityId = getCurrentEntityId(store.getState());
 
 		if (keyCode == KeyCode.UP) {
 			store.dispatch(new MoveEntity(entityId, Direction.NORTH));
@@ -150,6 +161,10 @@ public class TravelDemo extends TileApplication {
 		else if (keyCode == KeyCode.LEFT) {
 			store.dispatch(new MoveEntity(entityId, Direction.WEST));
 		}
+	}
+
+	private int getCurrentEntityId(DemoState state) {
+		return state.timeSystem.getCurrentEntry().getEntityId();
 	}
 
 	public static void main(String[] args) {
