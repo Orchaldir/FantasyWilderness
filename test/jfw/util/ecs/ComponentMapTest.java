@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNullPointerException;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class ComponentMapTest {
@@ -69,6 +71,11 @@ class ComponentMapTest {
 		assertThat(newStorage.get(ID0)).isEqualTo(Optional.of(COMPONENT0));
 		assertThat(newStorage.get(ID4)).isEqualTo(Optional.of(-9));
 		assertThat(newStorage.get(ID7)).isEqualTo(Optional.of(COMPONENT7));
+	}
+
+	@Test
+	void testUpdateComponentWithNull() {
+		assertThatNullPointerException().isThrownBy(() -> componentMap.updateComponent(ID4, null));
 	}
 
 }

@@ -14,7 +14,11 @@ public class TimeEntry implements Comparable<TimeEntry> {
 	private final int entityId;
 	private final long time;
 
-	public TimeEntry apply(long duration) {
+	public TimeEntry(int entityId) {
+		this(entityId, 0);
+	}
+
+	TimeEntry apply(long duration) {
 		return new TimeEntry(entityId, time + duration);
 	}
 

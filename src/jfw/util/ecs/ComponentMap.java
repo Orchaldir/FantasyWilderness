@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 
 import java.util.*;
 
+import static jfw.util.Validator.validateNotNull;
+
 @AllArgsConstructor
 public class ComponentMap<T> implements ComponentStorage<T> {
 
@@ -11,6 +13,7 @@ public class ComponentMap<T> implements ComponentStorage<T> {
 
 	@Override
 	public ComponentStorage<T> updateComponent(int entityId, T component) {
+		validateNotNull(component, "component");
 		Map<Integer, T> newMap = new HashMap<>(map);
 		newMap.put(entityId, component);
 		return new ComponentMap<>(newMap);

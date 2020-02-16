@@ -6,6 +6,9 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import jfw.game.state.world.TerrainType;
 import jfw.game.state.world.WorldCell;
+import jfw.game.system.time.TimeDefinition;
+import jfw.game.system.time.TimeEntry;
+import jfw.game.system.time.TimeSystem;
 import jfw.game.view.EntityView;
 import jfw.util.TileApplication;
 import jfw.util.ecs.ComponentMap;
@@ -24,10 +27,8 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static jfw.game.state.world.WorldCell.TILE_SELECTOR;
 
@@ -41,6 +42,7 @@ public class TravelDemo extends TileApplication {
 	private static class DemoState {
 		private final ArrayMap2d<WorldCell> worldMap;
 		private final ComponentStorage<Integer> positions;
+		private final TimeSystem timeSystem;
 	}
 
 	@AllArgsConstructor
@@ -62,9 +64,12 @@ public class TravelDemo extends TileApplication {
 				Optional<Integer> optionalNewPosition = oldState.worldMap.getNeighborIndex(position, moveEntity.direction);
 
 				if (optionalNewPosition.isPresent()) {
-					ComponentStorage<Integer> newPositions = oldState.positions.
+					ComponentStorage<Integer> positions = oldState.positions.
 							updateComponent(moveEntity.entityId, optionalNewPosition.get());
-					return new DemoState(oldState.worldMap, newPositions);
+
+					TimeSystem timeSystem = oldState.timeSystem.advanceCurrentEntry(30);
+
+					return new DemoState(oldState.worldMap, positions, timeSystem);
 				}
 			}
 		}
@@ -73,6 +78,7 @@ public class TravelDemo extends TileApplication {
 	};
 
 	private Store<Object, DemoState> store;
+	private final TimeDefinition timeDefinition = new TimeDefinition();
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -90,11 +96,14 @@ public class TravelDemo extends TileApplication {
 		ArrayMap2d<WorldCell> worldMap = new ArrayMap2d<>(getColumns(), getRows(), cells, new WorldCell(TerrainType.PLAIN));
 
 		Map<Integer,Integer> positionMap = new HashMap<>();
-		positionMap.put(0, 8);
+		positionMap.put(0, 88);
 		positionMap.put(1, 44);
 		ComponentStorage<Integer> positions = new ComponentMap<>(positionMap);
 
-		DemoState initState = new DemoState(worldMap, positions);
+		List<TimeEntry> entries = positions.getIds().stream().map(TimeEntry::new).collect(Collectors.toList());
+		TimeSystem timeSystem = new TimeSystem(entries);
+
+		DemoState initState = new DemoState(worldMap, positions, timeSystem);
 		store = new Store<>(REDUCER, initState, List.of(new LogActionMiddleware<>(), new LogDiffMiddleware<>()));
 
 		store.subscribe(this::render);
@@ -109,25 +118,37 @@ public class TravelDemo extends TileApplication {
 
 		TileMap uiMap = createTileMap();
 		EntityView.view(state.positions, uiMap, id -> CHARACTER_TILE);
+		uiMap.setText(getTime(state), 0, 0, Color.BLACK);
+		uiMap.setText(getNextEntityText(state), 0, 9, Color.BLACK);
 		uiMap.render(tileRenderer, 0, 0);
 
 		log.info("render(): finished");
 	}
 
+	private String getTime(DemoState state) {
+		return timeDefinition.toString(state.timeSystem.getCurrentTime());
+	}
+
+	private String getNextEntityText(DemoState state) {
+		return "Entity=" + state.timeSystem.getCurrentEntry().getEntityId();
+	}
+
 	private void onKeyReleased(KeyCode keyCode) {
 		log.info("onKeyReleased(): keyCode={}", keyCode);
 
+		int entityId = store.getState().timeSystem.getCurrentEntry().getEntityId();
+
 		if (keyCode == KeyCode.UP) {
-			store.dispatch(new MoveEntity(0, Direction.NORTH));
+			store.dispatch(new MoveEntity(entityId, Direction.NORTH));
 		}
 		else if (keyCode == KeyCode.RIGHT) {
-			store.dispatch(new MoveEntity(0, Direction.EAST));
+			store.dispatch(new MoveEntity(entityId, Direction.EAST));
 		}
 		else if (keyCode == KeyCode.DOWN) {
-			store.dispatch(new MoveEntity(0, Direction.SOUTH));
+			store.dispatch(new MoveEntity(entityId, Direction.SOUTH));
 		}
 		else if (keyCode == KeyCode.LEFT) {
-			store.dispatch(new MoveEntity(0, Direction.WEST));
+			store.dispatch(new MoveEntity(entityId, Direction.WEST));
 		}
 	}
 
