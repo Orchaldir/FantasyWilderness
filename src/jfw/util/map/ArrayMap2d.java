@@ -102,26 +102,29 @@ public class ArrayMap2d<T> implements Map2d<T> {
 
 	@Override
 	public Optional<Integer> getNeighborIndex(int index, Direction direction) {
-		int neighborIndex = getUncheckedNeighborIndex(index, direction);
+		int x = getX(index);
+		int y = getY(index);
 
-		if (isInside(neighborIndex)) {
-			return Optional.of(neighborIndex);
+		switch (direction) {
+			case NORTH:
+				y--;
+				break;
+			case EAST:
+				x++;
+				break;
+			case SOUTH:
+				y++;
+				break;
+			default:
+				x--;
+				break;
+		}
+
+		if (isInside(x, y)) {
+			return Optional.of(getIndex(x, y));
 		}
 
 		return Optional.empty();
-	}
-
-	private int getUncheckedNeighborIndex(int index, Direction direction) {
-		switch (direction) {
-			case NORTH:
-				return index - width;
-			case EAST:
-				return index + 1;
-			case SOUTH:
-				return index + width;
-			default:
-				return index - 1;
-		}
 	}
 
 	@Override

@@ -276,8 +276,23 @@ class ArrayMap2dTest extends SharedData {
 		}
 
 		@Test
-		void testNeighborIsOutsideMap() {
-			assertThat(MAP.getNeighborIndex(INDEX0, Direction.WEST)).isEqualTo(Optional.empty());
+		void testNorthBorder() {
+			assertThat(MAP.getNeighborIndex(2, Direction.NORTH)).isEqualTo(Optional.empty());
+		}
+
+		@Test
+		void testEastBorder() {
+			assertThat(MAP.getNeighborIndex(7, Direction.EAST)).isEqualTo(Optional.empty());
+		}
+
+		@Test
+		void testSouthBorder() {
+			assertThat(MAP.getNeighborIndex(22, Direction.SOUTH)).isEqualTo(Optional.empty());
+		}
+
+		@Test
+		void testWestBorder() {
+			assertThat(MAP.getNeighborIndex(4, Direction.WEST)).isEqualTo(Optional.empty());
 		}
 
 		private void assertNeighbor(Direction direction, int neighbor) {
