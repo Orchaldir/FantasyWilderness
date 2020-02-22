@@ -1,0 +1,13 @@
+= Naming Conventions
+
+* Component
+** an ECS component
+* Demo
+** a demo application
+* Manager
+** manages a list of content
+* Store
+** a redux store
+* System?
+* View?
+* Window?
