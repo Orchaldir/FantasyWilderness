@@ -8,6 +8,15 @@
 | 0.2.0
 |
 
+.A simple travel demo with ECS & Redux
+image::images/travel-demo.png[Travel Demo]
+
+*New:*
+
+* A entity component system implementation for java.
+* A system to manage time.
+* Entities can travel the map.
+
 *CI:*
 
 * Started using https://travis-ci.com/Orchaldir/FantasyWilderness[Travis CI]
