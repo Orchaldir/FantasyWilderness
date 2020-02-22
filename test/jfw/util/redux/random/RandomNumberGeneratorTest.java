@@ -50,6 +50,38 @@ class RandomNumberGeneratorTest {
 	}
 
 	@Test
+	void testRollDice() {
+		when(state0.getNumber(START_INDEX)).thenReturn(3);
+
+		assertThat(generator.rollDice(6)).isEqualTo(4);
+
+		verify(state0).getNumber(START_INDEX);
+		verifyNoMoreInteractions(state0);
+	}
+
+	@Test
+	void testRollDiceWithBiggerNumber() {
+		when(state0.getNumber(START_INDEX)).thenReturn(8);
+
+		assertThat(generator.rollDice(6)).isEqualTo(3);
+
+		verify(state0).getNumber(START_INDEX);
+		verifyNoMoreInteractions(state0);
+	}
+
+	@Test
+	void testRollPositiveAndNegativeDice() {
+		when(state0.getNumber(START_INDEX)).thenReturn(3);
+		when(state0.getNumber(START_INDEX+1)).thenReturn(5);
+
+		assertThat(generator.rollPositiveAndNegativeDice(6)).isEqualTo(-2);
+
+		verify(state0).getNumber(START_INDEX);
+		verify(state0).getNumber(START_INDEX+1);
+		verifyNoMoreInteractions(state0);
+	}
+
+	@Test
 	void testGetUpdateState() {
 		when(state0.with(START_INDEX)).thenReturn(state1);
 

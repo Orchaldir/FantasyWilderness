@@ -5,9 +5,13 @@
 * Demo
 ** a demo application
 * Manager
-** manages a list of content
+** manages a type of content
+* State
+** a redux state
 * Store
 ** a redux store
+* Storage
+** manages a type of components
 * System?
 * View?
 * Window?

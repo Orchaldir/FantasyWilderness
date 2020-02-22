@@ -17,4 +17,13 @@ public class RandomNumberGenerator {
 	public int getInt() {
 		return state.getNumber(index++);
 	}
+
+	public int rollDice(int sides) {
+		return (getInt() % sides) + 1;
+	}
+
+	public int rollPositiveAndNegativeDice(int sides) {
+		return rollDice(sides) - rollDice(sides);
+	}
+
 }
