@@ -23,7 +23,9 @@ public class RandomNumberGenerator {
 	}
 
 	public int rollPositiveAndNegativeDice(int sides) {
-		return rollDice(sides) - rollDice(sides);
+		int positiveDice = rollDice(sides);
+		int negativeDice = rollDice(sides);
+		return positiveDice - negativeDice;
 	}
 
 }

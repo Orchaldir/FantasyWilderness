@@ -4,10 +4,11 @@ import org.javers.common.collections.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.NoSuchElementException;
+import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 class RandomNumberStateTest {
 
@@ -24,7 +25,30 @@ class RandomNumberStateTest {
 	}
 
 	@Test
+	void testConstructor() {
+		Random random = mock(Random.class);
+
+		when(random.nextInt()).thenReturn(30, 20, 10);
+
+		state = new RandomNumberState(random, 3);
+
+		assertThat(state.getIndex()).isEqualTo(0);
+
+		assertThat(state.getNumber(0)).isEqualTo(30);
+		assertThat(state.getNumber(1)).isEqualTo(20);
+		assertThat(state.getNumber(2)).isEqualTo(10);
+		assertThat(state.getNumber(3)).isEqualTo(30);
+	}
+
+	@Test
 	void testGetIndex() {
+		assertThat(state.getIndex()).isEqualTo(INDEX0);
+	}
+
+	@Test
+	void testGetIndexAfterGetNumber() {
+		state.getNumber(0);
+
 		assertThat(state.getIndex()).isEqualTo(INDEX0);
 	}
 
