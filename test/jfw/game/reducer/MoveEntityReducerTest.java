@@ -28,7 +28,7 @@ class MoveEntityReducerTest {
 	private static final ArrayMap2d<WorldCell> WORLD_MAP =
 			new ArrayMap2d<>(4, 4, new WorldCell[16], new WorldCell(TerrainType.PLAIN));
 
-	private static final ComponentStorage<Integer> POSITIONS = new ComponentMap<>(Map.of(ENTITY_ID, 5));
+	private static final ComponentStorage<Integer> POSITIONS = new ComponentMap<>(Map.of(ENTITY_ID, 4));
 
 	private static final TimeSystem TIME_SYSTEM = new TimeSystem(List.of(new TimeEntry(ENTITY_ID, START_TIME)));
 
@@ -41,9 +41,19 @@ class MoveEntityReducerTest {
 		assertThat(state.getWorldMap()).isEqualTo(WORLD_MAP);
 
 		assertThat(state.getPositions().getIds()).contains(ENTITY_ID);
-		assertThat(state.getPositions().get(ENTITY_ID)).isEqualTo(Optional.of(6));
+		assertThat(state.getPositions().get(ENTITY_ID)).isEqualTo(Optional.of(5));
 
 		assertThat(state.getTimeSystem().getAllEntries()).contains(new TimeEntry(ENTITY_ID, START_TIME + MOVE_DURATION));
+	}
+
+	@Test
+	void testMoveInvalidEntity() {
+		assertThat(REDUCER.reduce(new MoveEntity(99, Direction.EAST), INIT_STATE)).isEqualTo(INIT_STATE);
+	}
+
+	@Test
+	void testMoveAgainstBorder() {
+		assertThat(REDUCER.reduce(new MoveEntity(ENTITY_ID, Direction.WEST), INIT_STATE)).isEqualTo(INIT_STATE);
 	}
 
 }

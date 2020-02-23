@@ -8,11 +8,11 @@ import jfw.util.redux.Reducer;
 
 import java.util.Optional;
 
-public class MoveEntityReducer {
+public interface MoveEntityReducer {
 
-	public static final int MOVE_DURATION = 30;
+	int MOVE_DURATION = 30;
 
-	public static final Reducer<MoveEntity, State> REDUCER = (action, oldState) -> {
+	Reducer<MoveEntity, State> REDUCER = (action, oldState) -> {
 		Optional<Integer> optionalPosition = oldState.getPositions().get(action.getEntityId());
 
 		if (optionalPosition.isPresent()) {
