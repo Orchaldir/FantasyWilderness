@@ -8,9 +8,9 @@ import jfw.util.redux.Reducer;
 
 import java.util.Optional;
 
-public interface MoveEntityReducer {
+import static jfw.game.action.MoveEntity.MOVE_DURATION;
 
-	int MOVE_DURATION = 30;
+public interface MoveEntityReducer {
 
 	Reducer<MoveEntity, State> REDUCER = (action, oldState) -> {
 		Optional<Integer> optionalPosition = oldState.getPositions().get(action.getEntityId());
@@ -25,7 +25,7 @@ public interface MoveEntityReducer {
 
 				TimeSystem timeSystem = oldState.getTimeSystem().advanceCurrentEntry(MOVE_DURATION);
 
-				return new State(oldState.getWorldMap(), positions, timeSystem);
+				return new State(oldState.getWorldMap(), positions, oldState.getStatisticsStorage(), timeSystem);
 			}
 		}
 

@@ -2,6 +2,7 @@ package jfw.game.reducer;
 
 import jfw.game.action.MoveEntity;
 import jfw.game.state.State;
+import jfw.game.state.component.Statistics;
 import jfw.game.state.world.TerrainType;
 import jfw.game.state.world.WorldCell;
 import jfw.game.system.time.TimeEntry;
@@ -12,11 +13,12 @@ import jfw.util.map.ArrayMap2d;
 import jfw.util.map.Direction;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static jfw.game.reducer.MoveEntityReducer.MOVE_DURATION;
+import static jfw.game.action.MoveEntity.MOVE_DURATION;
 import static jfw.game.reducer.MoveEntityReducer.REDUCER;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,9 +32,11 @@ class MoveEntityReducerTest {
 
 	private static final ComponentStorage<Integer> POSITIONS = new ComponentMap<>(Map.of(ENTITY_ID, 4));
 
+	private static final ComponentStorage<Statistics> STATISTICS = new ComponentMap<>(Collections.emptyMap());
+
 	private static final TimeSystem TIME_SYSTEM = new TimeSystem(List.of(new TimeEntry(ENTITY_ID, START_TIME)));
 
-	private static final State INIT_STATE = new State(WORLD_MAP, POSITIONS, TIME_SYSTEM);
+	private static final State INIT_STATE = new State(WORLD_MAP, POSITIONS, STATISTICS, TIME_SYSTEM);
 
 	@Test
 	void testMoveSuccess() {
@@ -42,6 +46,8 @@ class MoveEntityReducerTest {
 
 		assertThat(state.getPositions().getIds()).contains(ENTITY_ID);
 		assertThat(state.getPositions().get(ENTITY_ID)).isEqualTo(Optional.of(5));
+
+		assertThat(state.getStatisticsStorage()).isEqualTo(STATISTICS);
 
 		assertThat(state.getTimeSystem().getAllEntries()).contains(new TimeEntry(ENTITY_ID, START_TIME + MOVE_DURATION));
 	}

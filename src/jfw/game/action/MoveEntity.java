@@ -9,6 +9,10 @@ import lombok.ToString;
 @Getter
 @ToString
 public class MoveEntity {
+
+	public static final int MOVE_DURATION = 30;
+
 	private final int entityId;
 	private final Direction direction;
+
 }

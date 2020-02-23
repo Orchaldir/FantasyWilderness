@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import jfw.game.action.MoveEntity;
 import jfw.game.reducer.MoveEntityReducer;
 import jfw.game.state.State;
+import jfw.game.state.component.Statistics;
 import jfw.game.state.world.TerrainType;
 import jfw.game.state.world.WorldCell;
 import jfw.game.system.time.TimeDefinition;
@@ -71,10 +72,12 @@ public class TravelDemo extends TileApplication {
 		positionMap.put(2, 122);
 		ComponentStorage<Integer> positions = new ComponentMap<>(positionMap);
 
+		ComponentStorage<Statistics> statisticsStorage = new ComponentMap<>(Collections.emptyMap());
+
 		List<TimeEntry> entries = positions.getIds().stream().map(TimeEntry::new).collect(Collectors.toList());
 		TimeSystem timeSystem = new TimeSystem(entries);
 
-		State initState = new State(worldMap, positions, timeSystem);
+		State initState = new State(worldMap, positions, statisticsStorage, timeSystem);
 		store = new Store<>(REDUCER, initState, List.of(new LogActionMiddleware<>()));
 
 		characterTileSelector = id -> {
