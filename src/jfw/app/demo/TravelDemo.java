@@ -4,6 +4,9 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import jfw.game.action.MoveEntity;
+import jfw.game.reducer.MoveEntityReducer;
+import jfw.game.state.State;
 import jfw.game.state.world.TerrainType;
 import jfw.game.state.world.WorldCell;
 import jfw.game.system.time.TimeDefinition;
@@ -18,14 +21,10 @@ import jfw.util.map.Direction;
 import jfw.util.redux.Reducer;
 import jfw.util.redux.Store;
 import jfw.util.redux.middleware.LogActionMiddleware;
-import jfw.util.redux.middleware.LogDiffMiddleware;
 import jfw.util.tile.Tile;
 import jfw.util.tile.UnicodeTile;
 import jfw.util.tile.rendering.TileMap;
 import jfw.util.tile.rendering.TileSelector;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -39,47 +38,15 @@ public class TravelDemo extends TileApplication {
 	private static final Tile CHARACTER_TILE = new UnicodeTile("@", Color.BLACK);
 	private static final Tile ACTIVE_CHARACTER_TILE = new UnicodeTile("@", Color.WHITE);
 
-	@AllArgsConstructor
-	@ToString
-	private static class DemoState {
-		private final ArrayMap2d<WorldCell> worldMap;
-		private final ComponentStorage<Integer> positions;
-		private final TimeSystem timeSystem;
-	}
-
-	@AllArgsConstructor
-	@Getter
-	@ToString
-	private static class MoveEntity {
-		private final int entityId;
-		private final Direction direction;
-	}
-
-	private static final Reducer<Object, DemoState> REDUCER = (action, oldState) -> {
+	private static final Reducer<Object, State> REDUCER = (action, oldState) -> {
 		if (action instanceof MoveEntity) {
-			MoveEntity moveEntity = (MoveEntity) action;
-
-			Optional<Integer> optionalPosition = oldState.positions.get(moveEntity.entityId);
-
-			if (optionalPosition.isPresent()) {
-				int position = optionalPosition.get();
-				Optional<Integer> optionalNewPosition = oldState.worldMap.getNeighborIndex(position, moveEntity.direction);
-
-				if (optionalNewPosition.isPresent()) {
-					ComponentStorage<Integer> positions = oldState.positions.
-							updateComponent(moveEntity.entityId, optionalNewPosition.get());
-
-					TimeSystem timeSystem = oldState.timeSystem.advanceCurrentEntry(30);
-
-					return new DemoState(oldState.worldMap, positions, timeSystem);
-				}
-			}
+			return MoveEntityReducer.REDUCER.reduce((MoveEntity) action, oldState);
 		}
 
 		return oldState;
 	};
 
-	private Store<Object, DemoState> store;
+	private Store<Object, State> store;
 	private final TimeDefinition timeDefinition = new TimeDefinition();
 	private TileSelector<Integer> characterTileSelector;
 
@@ -107,8 +74,8 @@ public class TravelDemo extends TileApplication {
 		List<TimeEntry> entries = positions.getIds().stream().map(TimeEntry::new).collect(Collectors.toList());
 		TimeSystem timeSystem = new TimeSystem(entries);
 
-		DemoState initState = new DemoState(worldMap, positions, timeSystem);
-		store = new Store<>(REDUCER, initState, List.of(new LogActionMiddleware<>(), new LogDiffMiddleware<>()));
+		State initState = new State(worldMap, positions, timeSystem);
+		store = new Store<>(REDUCER, initState, List.of(new LogActionMiddleware<>()));
 
 		characterTileSelector = id -> {
 			if (getCurrentEntityId(store.getState()) == id) {
@@ -120,15 +87,15 @@ public class TravelDemo extends TileApplication {
 		store.subscribe(this::render);
 	}
 
-	private void render(DemoState state) {
+	private void render(State state) {
 		log.info("render()");
 
 		TileMap worldMap = createTileMap();
-		worldMap.setMap(state.worldMap, 0, 0, TILE_SELECTOR);
+		worldMap.setMap(state.getWorldMap(), 0, 0, TILE_SELECTOR);
 		worldMap.render(tileRenderer, 0, 0);
 
 		TileMap uiMap = createTileMap();
-		EntityView.view(state.positions, uiMap, characterTileSelector);
+		EntityView.view(state.getPositions(), uiMap, characterTileSelector);
 		uiMap.setText(getTime(state), 0, 0, Color.BLACK);
 		uiMap.setText(getNextEntityText(state), 0, 9, Color.BLACK);
 		uiMap.render(tileRenderer, 0, 0);
@@ -136,11 +103,11 @@ public class TravelDemo extends TileApplication {
 		log.info("render(): finished");
 	}
 
-	private String getTime(DemoState state) {
-		return timeDefinition.toString(state.timeSystem.getCurrentTime());
+	private String getTime(State state) {
+		return timeDefinition.toString(state.getTimeSystem().getCurrentTime());
 	}
 
-	private String getNextEntityText(DemoState state) {
+	private String getNextEntityText(State state) {
 		return "Entity=" + getCurrentEntityId(state);
 	}
 
@@ -163,8 +130,8 @@ public class TravelDemo extends TileApplication {
 		}
 	}
 
-	private int getCurrentEntityId(DemoState state) {
-		return state.timeSystem.getCurrentEntry().getEntityId();
+	private int getCurrentEntityId(State state) {
+		return state.getTimeSystem().getCurrentEntry().getEntityId();
 	}
 
 	public static void main(String[] args) {
