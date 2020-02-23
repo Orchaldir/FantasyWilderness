@@ -4,6 +4,6 @@ import jfw.util.tile.Tile;
 
 public interface TileConverter<T> {
 
-	Tile select(T parameter);
+	Tile convert(T parameter);
 
 }

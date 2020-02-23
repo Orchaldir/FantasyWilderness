@@ -42,7 +42,7 @@ class EntityViewTest {
 		when(tileMap.getMap()).thenReturn(map);
 		when(map.getX(POSITION0)).thenReturn(X0);
 		when(map.getY(POSITION0)).thenReturn(Y0);
-		when(tileConverter.select(ID0)).thenReturn(tile);
+		when(tileConverter.convert(ID0)).thenReturn(tile);
 
 		view(positions, tileMap, tileConverter);
 

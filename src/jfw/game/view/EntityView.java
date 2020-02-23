@@ -12,6 +12,6 @@ public interface EntityView {
 		Map2d<Tile> map = tileMap.getMap();
 
 		positions.visit((id, position) ->
-				tileMap.setTile(tileConverter.select(id), map.getX(position), map.getY(position)));
+				tileMap.setTile(tileConverter.convert(id), map.getX(position), map.getY(position)));
 	}
 }

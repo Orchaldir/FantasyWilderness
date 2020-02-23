@@ -43,7 +43,7 @@ public class TileMap {
 				int currentRow = row + r;
 
 				if (this.map.isInside(currentColumn, currentRow)) {
-					this.map.setNode(selector.select(map.getNode(c, r)), currentColumn, currentRow);
+					this.map.setNode(selector.convert(map.getNode(c, r)), currentColumn, currentRow);
 				}
 			}
 		}
