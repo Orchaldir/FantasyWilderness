@@ -36,7 +36,7 @@ public class TileMap {
 		}
 	}
 
-	public <T> void setMap(Map2d<T> map, int column, int row, TileSelector<T> selector) {
+	public <T> void setMap(Map2d<T> map, int column, int row, TileConverter<T> selector) {
 		for (int r = 0; r < map.getHeight(); r++) {
 			for (int c = 0; c < map.getWidth(); c++) {
 				int currentColumn = column + c;

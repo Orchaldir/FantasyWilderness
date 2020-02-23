@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
-import static jfw.game.state.world.WorldCell.TILE_SELECTOR;
+import static jfw.game.state.world.WorldCell.TILE_CONVERTER;
 
 @Slf4j
 public class WorldDemo extends TileApplication {
@@ -105,7 +105,7 @@ public class WorldDemo extends TileApplication {
 		log.info("render()");
 
 		TileMap worldMap = createTileMap();
-		worldMap.setMap(state.worldMap, 0, 0, TILE_SELECTOR);
+		worldMap.setMap(state.worldMap, 0, 0, TILE_CONVERTER);
 		worldMap.render(tileRenderer, 0, 0);
 
 		TileMap uiMap = createTileMap();

@@ -25,13 +25,13 @@ import jfw.util.redux.middleware.LogActionMiddleware;
 import jfw.util.tile.Tile;
 import jfw.util.tile.UnicodeTile;
 import jfw.util.tile.rendering.TileMap;
-import jfw.util.tile.rendering.TileSelector;
+import jfw.util.tile.rendering.TileConverter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static jfw.game.state.world.WorldCell.TILE_SELECTOR;
+import static jfw.game.state.world.WorldCell.TILE_CONVERTER;
 
 @Slf4j
 public class TravelDemo extends TileApplication {
@@ -49,7 +49,7 @@ public class TravelDemo extends TileApplication {
 
 	private Store<Object, State> store;
 	private final TimeDefinition timeDefinition = new TimeDefinition();
-	private TileSelector<Integer> characterTileSelector;
+	private TileConverter<Integer> characterTileConverter;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -80,7 +80,7 @@ public class TravelDemo extends TileApplication {
 		State initState = new State(worldMap, positions, statisticsStorage, timeSystem);
 		store = new Store<>(REDUCER, initState, List.of(new LogActionMiddleware<>()));
 
-		characterTileSelector = id -> {
+		characterTileConverter = id -> {
 			if (getCurrentEntityId(store.getState()) == id) {
 				return ACTIVE_CHARACTER_TILE;
 			}
@@ -94,11 +94,11 @@ public class TravelDemo extends TileApplication {
 		log.info("render()");
 
 		TileMap worldMap = createTileMap();
-		worldMap.setMap(state.getWorldMap(), 0, 0, TILE_SELECTOR);
+		worldMap.setMap(state.getWorldMap(), 0, 0, TILE_CONVERTER);
 		worldMap.render(tileRenderer, 0, 0);
 
 		TileMap uiMap = createTileMap();
-		EntityView.view(state.getPositions(), uiMap, characterTileSelector);
+		EntityView.view(state.getPositions(), uiMap, characterTileConverter);
 		uiMap.setText(getTime(state), 0, 0, Color.BLACK);
 		uiMap.setText(getNextEntityText(state), 0, 9, Color.BLACK);
 		uiMap.render(tileRenderer, 0, 0);

@@ -5,8 +5,6 @@ import jfw.util.OutsideMapException;
 import jfw.util.map.ArrayMap2d;
 import jfw.util.map.Map2d;
 import jfw.util.tile.Tile;
-import jfw.util.tile.rendering.TileMap;
-import jfw.util.tile.rendering.TileSelector;
 import jfw.util.tile.UnicodeTile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -23,7 +21,7 @@ class TileMapTest {
 	private static final int NUMBER_OF_COLUMNS = 30;
 	private static final int NUMBER_OF_ROWS = 40;
 	private static final Color COLOR = Color.RED;
-	private static final TileSelector<Integer> INTEGER_TILE_SELECTOR = i -> new UnicodeTile(i, COLOR);
+	private static final TileConverter<Integer> INTEGER_TILE_CONVERTER = i -> new UnicodeTile(i, COLOR);
 
 	private Tile tile;
 
@@ -88,7 +86,7 @@ class TileMapTest {
 
 		@Test
 		void testSetMap() {
-			tileMap.setMap(map, 4, 5, INTEGER_TILE_SELECTOR);
+			tileMap.setMap(map, 4, 5, INTEGER_TILE_CONVERTER);
 
 			assertUnicode(0, 4, 5);
 			assertUnicode(1, 5, 5);
@@ -100,7 +98,7 @@ class TileMapTest {
 
 		@Test
 		void testSetMapOutside() {
-			tileMap.setMap(map, -1, -1, INTEGER_TILE_SELECTOR);
+			tileMap.setMap(map, -1, -1, INTEGER_TILE_CONVERTER);
 
 			assertUnicode(4, 0, 0);
 			assertUnicode(5, 1, 0);

@@ -5,7 +5,7 @@ import jfw.util.ecs.ComponentStorage;
 import jfw.util.map.Map2d;
 import jfw.util.tile.Tile;
 import jfw.util.tile.rendering.TileMap;
-import jfw.util.tile.rendering.TileSelector;
+import jfw.util.tile.rendering.TileConverter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -31,7 +31,7 @@ class EntityViewTest {
 	@Mock
 	private TileMap tileMap;
 	@Mock
-	private TileSelector<Integer> tileSelector;
+	private TileConverter<Integer> tileConverter;
 	@Mock
 	private Tile tile;
 
@@ -42,9 +42,9 @@ class EntityViewTest {
 		when(tileMap.getMap()).thenReturn(map);
 		when(map.getX(POSITION0)).thenReturn(X0);
 		when(map.getY(POSITION0)).thenReturn(Y0);
-		when(tileSelector.select(ID0)).thenReturn(tile);
+		when(tileConverter.select(ID0)).thenReturn(tile);
 
-		view(positions, tileMap, tileSelector);
+		view(positions, tileMap, tileConverter);
 
 		verify(tileMap).setTile(tile, X0, Y0);
 		verifyNoMoreInteractions(tileMap);
