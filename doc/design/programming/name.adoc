@@ -6,12 +6,14 @@
 ** a demo application
 * Manager
 ** manages a type of content
+* Selector
+** a redux selector
 * State
 ** a redux state
-* Store
-** a redux store
 * Storage
 ** manages a type of components
+* Store
+** a redux store
 * System?
 * View?
 * Window?

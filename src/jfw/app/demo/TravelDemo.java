@@ -31,6 +31,8 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static jfw.game.selector.TimeSystemSelector.getCurrentEntityId;
+import static jfw.game.selector.TimeSystemSelector.getCurrentTime;
 import static jfw.game.state.world.WorldCell.TILE_CONVERTER;
 
 @Slf4j
@@ -99,19 +101,11 @@ public class TravelDemo extends TileApplication {
 
 		TileMap uiMap = createTileMap();
 		EntityView.view(state.getPositions(), uiMap, characterTileConverter);
-		uiMap.setText(getTime(state), 0, 0, Color.BLACK);
+		uiMap.setText(getCurrentTimeString(state), 0, 0, Color.BLACK);
 		uiMap.setText(getNextEntityText(state), 0, 9, Color.BLACK);
 		uiMap.render(tileRenderer, 0, 0);
 
 		log.info("render(): finished");
-	}
-
-	private String getTime(State state) {
-		return timeDefinition.toString(state.getTimeSystem().getCurrentTime());
-	}
-
-	private String getNextEntityText(State state) {
-		return "Entity=" + getCurrentEntityId(state);
 	}
 
 	private void onKeyReleased(KeyCode keyCode) {
@@ -133,8 +127,14 @@ public class TravelDemo extends TileApplication {
 		}
 	}
 
-	private int getCurrentEntityId(State state) {
-		return state.getTimeSystem().getCurrentEntry().getEntityId();
+	// selectors
+
+	private String getCurrentTimeString(State state) {
+		return timeDefinition.toString(getCurrentTime(state));
+	}
+
+	private String getNextEntityText(State state) {
+		return "Entity=" + getCurrentEntityId(state);
 	}
 
 	public static void main(String[] args) {
