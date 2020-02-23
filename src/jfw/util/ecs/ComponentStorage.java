@@ -8,7 +8,9 @@ public interface ComponentStorage<T> {
 
 	ComponentStorage<T> updateComponent(int entityId, T component);
 
-	Optional<T> get(int entityId);
+	T get(int entityId);
+
+	Optional<T> getOptional(int entityId);
 
 	Collection<T> getAll();
 

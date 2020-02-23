@@ -20,8 +20,19 @@ public class ComponentMap<T> implements ComponentStorage<T> {
 	}
 
 	@Override
-	public Optional<T> get(int id) {
-		return Optional.ofNullable(map.get(id));
+	public T get(int entityId) {
+		T component = map.get(entityId);
+
+		if (component == null) {
+			throw new NullPointerException(String.format("No component for entity %d!", entityId));
+		}
+
+		return component;
+	}
+
+	@Override
+	public Optional<T> getOptional(int entityId) {
+		return Optional.ofNullable(map.get(entityId));
 	}
 
 	@Override

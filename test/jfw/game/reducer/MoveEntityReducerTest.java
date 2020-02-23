@@ -21,6 +21,7 @@ import java.util.Optional;
 import static jfw.game.action.MoveEntity.MOVE_DURATION;
 import static jfw.game.reducer.MoveEntityReducer.REDUCER;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MoveEntityReducerTest {
 
@@ -45,7 +46,7 @@ class MoveEntityReducerTest {
 		assertThat(state.getWorldMap()).isEqualTo(WORLD_MAP);
 
 		assertThat(state.getPositions().getIds()).contains(ENTITY_ID);
-		assertThat(state.getPositions().get(ENTITY_ID)).isEqualTo(Optional.of(5));
+		assertThat(state.getPositions().getOptional(ENTITY_ID)).isEqualTo(Optional.of(5));
 
 		assertThat(state.getStatisticsStorage()).isEqualTo(STATISTICS);
 
@@ -54,7 +55,8 @@ class MoveEntityReducerTest {
 
 	@Test
 	void testMoveInvalidEntity() {
-		assertThat(REDUCER.reduce(new MoveEntity(99, Direction.EAST), INIT_STATE)).isEqualTo(INIT_STATE);
+		assertThrows(NullPointerException.class, () -> REDUCER.reduce(new MoveEntity(99, Direction.EAST), INIT_STATE),
+				"No component for entity 2!");
 	}
 
 	@Test

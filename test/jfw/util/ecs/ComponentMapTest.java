@@ -29,15 +29,27 @@ class ComponentMapTest {
 	}
 
 	@Test
-	void testGetUnknownComponent() {
-		assertThat(componentMap.get(2)).isEqualTo(Optional.empty());
+	void testGetWithUnknownComponent() {
+		assertThrows(NullPointerException.class, () -> componentMap.get(2), "No component for entity 2!");
 	}
 
 	@Test
-	void testGetComponent() {
-		assertThat(componentMap.get(ID0)).isEqualTo(Optional.of(COMPONENT0));
-		assertThat(componentMap.get(ID4)).isEqualTo(Optional.of(COMPONENT4));
-		assertThat(componentMap.get(ID7)).isEqualTo(Optional.of(COMPONENT7));
+	void testGet() {
+		assertThat(componentMap.get(ID0)).isEqualTo(COMPONENT0);
+		assertThat(componentMap.get(ID4)).isEqualTo(COMPONENT4);
+		assertThat(componentMap.get(ID7)).isEqualTo(COMPONENT7);
+	}
+
+	@Test
+	void testGetOptionalWithUnknownComponent() {
+		assertThat(componentMap.getOptional(2)).isEqualTo(Optional.empty());
+	}
+
+	@Test
+	void testGetOptional() {
+		assertThat(componentMap.getOptional(ID0)).isEqualTo(Optional.of(COMPONENT0));
+		assertThat(componentMap.getOptional(ID4)).isEqualTo(Optional.of(COMPONENT4));
+		assertThat(componentMap.getOptional(ID7)).isEqualTo(Optional.of(COMPONENT7));
 	}
 
 	@Test
@@ -66,11 +78,11 @@ class ComponentMapTest {
 	void testUpdateComponent() {
 		ComponentStorage<Integer> newStorage = componentMap.updateComponent(ID4, -9);
 
-		testGetComponent();
+		testGetOptional();
 
-		assertThat(newStorage.get(ID0)).isEqualTo(Optional.of(COMPONENT0));
-		assertThat(newStorage.get(ID4)).isEqualTo(Optional.of(-9));
-		assertThat(newStorage.get(ID7)).isEqualTo(Optional.of(COMPONENT7));
+		assertThat(newStorage.getOptional(ID0)).isEqualTo(Optional.of(COMPONENT0));
+		assertThat(newStorage.getOptional(ID4)).isEqualTo(Optional.of(-9));
+		assertThat(newStorage.getOptional(ID7)).isEqualTo(Optional.of(COMPONENT7));
 	}
 
 	@Test
