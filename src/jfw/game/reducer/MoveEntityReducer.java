@@ -23,7 +23,7 @@ public interface MoveEntityReducer {
 
 			TimeSystem timeSystem = oldState.getTimeSystem().advanceCurrentEntry(MOVE_DURATION);
 
-			return new State(oldState.getWorldMap(), positions, oldState.getStatisticsStorage(), timeSystem);
+			return new State(oldState.getWorldMap(), oldState.getNames(), positions, oldState.getStatisticsStorage(), timeSystem);
 		}
 
 		return oldState;

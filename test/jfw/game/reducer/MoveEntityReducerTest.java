@@ -31,19 +31,23 @@ class MoveEntityReducerTest {
 	private static final ArrayMap2d<WorldCell> WORLD_MAP =
 			new ArrayMap2d<>(4, 4, new WorldCell[16], new WorldCell(TerrainType.PLAIN));
 
+	private static final ComponentStorage<String> NAMES = new ComponentMap<>(Collections.emptyMap());
+
 	private static final ComponentStorage<Integer> POSITIONS = new ComponentMap<>(Map.of(ENTITY_ID, 4));
 
 	private static final ComponentStorage<Statistics> STATISTICS = new ComponentMap<>(Collections.emptyMap());
 
 	private static final TimeSystem TIME_SYSTEM = new TimeSystem(List.of(new TimeEntry(ENTITY_ID, START_TIME)));
 
-	private static final State INIT_STATE = new State(WORLD_MAP, POSITIONS, STATISTICS, TIME_SYSTEM);
+	private static final State INIT_STATE = new State(WORLD_MAP, NAMES, POSITIONS, STATISTICS, TIME_SYSTEM);
 
 	@Test
 	void testMoveSuccess() {
 		State state = REDUCER.reduce(new MoveEntity(ENTITY_ID, Direction.EAST), INIT_STATE);
 
 		assertThat(state.getWorldMap()).isEqualTo(WORLD_MAP);
+
+		assertThat(state.getNames()).isEqualTo(NAMES);
 
 		assertThat(state.getPositions().getIds()).contains(ENTITY_ID);
 		assertThat(state.getPositions().getOptional(ENTITY_ID)).isEqualTo(Optional.of(5));

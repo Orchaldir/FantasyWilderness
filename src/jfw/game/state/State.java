@@ -14,6 +14,7 @@ import lombok.ToString;
 @ToString
 public class State {
 	private final ArrayMap2d<WorldCell> worldMap;
+	private final ComponentStorage<String> names;
 	private final ComponentStorage<Integer> positions;
 	private final ComponentStorage<Statistics> statisticsStorage;
 	private final TimeSystem timeSystem;

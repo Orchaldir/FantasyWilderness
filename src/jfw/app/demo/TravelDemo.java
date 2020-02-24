@@ -31,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static jfw.game.selector.NameSelector.getCurrentName;
 import static jfw.game.selector.TimeSystemSelector.getCurrentEntityId;
 import static jfw.game.selector.TimeSystemSelector.getCurrentTime;
 import static jfw.game.state.world.WorldCell.TILE_CONVERTER;
@@ -68,6 +69,8 @@ public class TravelDemo extends TileApplication {
 		WorldCell[] cells = new WorldCell[getTiles()];
 		ArrayMap2d<WorldCell> worldMap = new ArrayMap2d<>(getColumns(), getRows(), cells, new WorldCell(TerrainType.PLAIN));
 
+		ComponentStorage<String> names = new ComponentMap<>(Map.of(0, "Aragorn"));
+
 		Map<Integer,Integer> positionMap = new HashMap<>();
 		positionMap.put(0, 88);
 		positionMap.put(1, 44);
@@ -79,7 +82,7 @@ public class TravelDemo extends TileApplication {
 		List<TimeEntry> entries = positions.getIds().stream().map(TimeEntry::new).collect(Collectors.toList());
 		TimeSystem timeSystem = new TimeSystem(entries);
 
-		State initState = new State(worldMap, positions, statisticsStorage, timeSystem);
+		State initState = new State(worldMap, names, positions, statisticsStorage, timeSystem);
 		store = new Store<>(REDUCER, initState, List.of(new LogActionMiddleware<>()));
 
 		characterTileConverter = id -> {
@@ -102,7 +105,7 @@ public class TravelDemo extends TileApplication {
 		TileMap uiMap = createTileMap();
 		EntityView.view(state.getPositions(), uiMap, characterTileConverter);
 		uiMap.setText(getCurrentTimeString(state), 0, 0, Color.BLACK);
-		uiMap.setText(getNextEntityText(state), 0, 9, Color.BLACK);
+		uiMap.setText(getCurrentName(state), 0, 9, Color.BLACK);
 		uiMap.render(tileRenderer, 0, 0);
 
 		log.info("render(): finished");
@@ -131,10 +134,6 @@ public class TravelDemo extends TileApplication {
 
 	private String getCurrentTimeString(State state) {
 		return timeDefinition.toString(getCurrentTime(state));
-	}
-
-	private String getNextEntityText(State state) {
-		return "Entity=" + getCurrentEntityId(state);
 	}
 
 	public static void main(String[] args) {
