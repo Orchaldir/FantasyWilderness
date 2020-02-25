@@ -2,10 +2,12 @@ package jfw.game.action;
 
 import jfw.util.map.Direction;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
 @AllArgsConstructor
+@EqualsAndHashCode
 @Getter
 @ToString
 public class MoveEntity {
