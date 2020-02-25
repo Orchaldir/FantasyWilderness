@@ -23,7 +23,6 @@ import jfw.util.redux.Store;
 import jfw.util.redux.middleware.LogActionMiddleware;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +78,7 @@ public class TravelDemo extends TileApplication {
 		State initState = new State(worldMap, names, positions, statisticsStorage, timeSystem);
 		store = new Store<>(REDUCER, initState, List.of(new LogActionMiddleware<>()));
 
-		statusView = new StatusView(store, tileRenderer);
+		statusView = new StatusView(tileRenderer);
 
 		travelView = new TravelView(store, tileRenderer);
 

@@ -1,33 +1,28 @@
 package jfw.game.view;
 
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import jfw.game.content.skill.Skill;
 import jfw.game.state.State;
-import jfw.util.redux.Store;
 import jfw.util.tile.FullTile;
 import jfw.util.tile.rendering.TileMap;
 import jfw.util.tile.rendering.TileRenderer;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.function.Supplier;
 
 import static jfw.util.Validator.validateNotNull;
 
-public class StatusView {
+public class StatusView implements View {
 
 	public static final FullTile BACKGROUND_TILE = new FullTile(Color.GREY);
 
-	private final Store<Object, State> store;
-
 	private final TileRenderer tileRenderer;
 
-	public StatusView(Store<Object, State> store, TileRenderer tileRenderer) {
-		this.store = validateNotNull(store, "store");
+	public StatusView(TileRenderer tileRenderer) {
 		this.tileRenderer = validateNotNull(tileRenderer, "tileRenderer");
 	}
 
+	@Override
 	public void render(State state, Supplier<TileMap> supplier) {
 		int entityId = state.getCurrentEntityId();
 		Map<Skill, Integer> skillMap = state.getSkillMap(entityId);
@@ -51,5 +46,4 @@ public class StatusView {
 		status.render(tileRenderer);
 	}
 
-	public void onKeyReleased(KeyCode keyCode) { }
 }

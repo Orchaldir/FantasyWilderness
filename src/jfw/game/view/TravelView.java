@@ -18,7 +18,7 @@ import java.util.function.Supplier;
 import static jfw.game.state.world.WorldCell.TILE_CONVERTER;
 import static jfw.util.Validator.validateNotNull;
 
-public class TravelView {
+public class TravelView implements View {
 
 	private static final Tile CHARACTER_TILE = new UnicodeTile("@", Color.BLACK);
 	private static final Tile ACTIVE_CHARACTER_TILE = new UnicodeTile("@", Color.WHITE);
@@ -41,6 +41,7 @@ public class TravelView {
 		};
 	}
 
+	@Override
 	public void render(State state, Supplier<TileMap> supplier) {
 		TileMap worldMap = supplier.get();
 		worldMap.setMap(state.getWorldMap(), 0, 0, TILE_CONVERTER);
@@ -53,6 +54,7 @@ public class TravelView {
 		uiMap.render(tileRenderer);
 	}
 
+	@Override
 	public void onKeyReleased(KeyCode keyCode) {
 		int entityId = store.getState().getCurrentEntityId();
 
