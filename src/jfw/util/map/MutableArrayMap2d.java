@@ -1,7 +1,5 @@
 package jfw.util.map;
 
-import jfw.util.OutsideMapException;
-
 public class MutableArrayMap2d<T> extends ArrayMap2d<T> implements MutableMap2d<T> {
 
 	public MutableArrayMap2d(int width, int height, T[] cells) {

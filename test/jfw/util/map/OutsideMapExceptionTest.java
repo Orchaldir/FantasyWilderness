@@ -1,4 +1,4 @@
-package jfw.util;
+package jfw.util.map;
 
 import org.junit.jupiter.api.Test;
 

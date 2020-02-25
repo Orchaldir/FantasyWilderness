@@ -1,6 +1,5 @@
 package jfw.util.map;
 
-import jfw.util.OutsideMapException;
 import lombok.Getter;
 
 import java.util.Optional;

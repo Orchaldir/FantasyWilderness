@@ -1,6 +1,5 @@
 package jfw.util.map;
 
-import jfw.util.OutsideMapException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

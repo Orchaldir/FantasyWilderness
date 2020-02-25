@@ -1,4 +1,4 @@
-package jfw.util;
+package jfw.util.map;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

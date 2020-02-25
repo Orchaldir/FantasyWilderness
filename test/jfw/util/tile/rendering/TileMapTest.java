@@ -1,7 +1,7 @@
 package jfw.util.tile.rendering;
 
 import javafx.scene.paint.Color;
-import jfw.util.OutsideMapException;
+import jfw.util.map.OutsideMapException;
 import jfw.util.map.ArrayMap2d;
 import jfw.util.map.Map2d;
 import jfw.util.tile.Tile;
