@@ -16,6 +16,7 @@ import jfw.util.tile.rendering.TileRenderer;
 import java.util.function.Supplier;
 
 import static jfw.game.state.world.WorldCell.TILE_CONVERTER;
+import static jfw.util.Validator.validateNotNull;
 
 public class TravelView {
 
@@ -29,8 +30,8 @@ public class TravelView {
 	private final TileRenderer tileRenderer;
 
 	public TravelView(Store<Object, State> store, TileRenderer tileRenderer) {
-		this.store = store;
-		this.tileRenderer = tileRenderer;
+		this.store = validateNotNull(store, "store");
+		this.tileRenderer = validateNotNull(tileRenderer, "tileRenderer");
 
 		characterTileConverter = id -> {
 			if (store.getState().getCurrentEntityId() == id) {

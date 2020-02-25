@@ -4,6 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import jfw.game.action.MoveEntity;
+import jfw.game.content.skill.Skill;
 import jfw.game.reducer.MoveEntityReducer;
 import jfw.game.state.State;
 import jfw.game.state.component.Statistics;
@@ -11,6 +12,7 @@ import jfw.game.state.world.TerrainType;
 import jfw.game.state.world.WorldCell;
 import jfw.game.system.time.TimeEntry;
 import jfw.game.system.time.TimeSystem;
+import jfw.game.view.StatusView;
 import jfw.game.view.TravelView;
 import jfw.util.TileApplication;
 import jfw.util.ecs.ComponentMap;
@@ -39,6 +41,7 @@ public class TravelDemo extends TileApplication {
 	};
 
 	private Store<Object, State> store;
+	private StatusView statusView;
 	private TravelView travelView;
 
 	@Override
@@ -56,21 +59,27 @@ public class TravelDemo extends TileApplication {
 		WorldCell[] cells = new WorldCell[getTiles()];
 		ArrayMap2d<WorldCell> worldMap = new ArrayMap2d<>(getColumns(), getRows(), cells, new WorldCell(TerrainType.PLAIN));
 
-		ComponentStorage<String> names = new ComponentMap<>(Map.of(0, "Aragorn"));
+		int aragornId = 0;
+		ComponentStorage<String> names = new ComponentMap<>(Map.of(aragornId, "Aragorn"));
 
 		Map<Integer,Integer> positionMap = new HashMap<>();
-		positionMap.put(0, 88);
+		positionMap.put(aragornId, 88);
 		positionMap.put(1, 44);
 		positionMap.put(2, 122);
 		ComponentStorage<Integer> positions = new ComponentMap<>(positionMap);
 
-		ComponentStorage<Statistics> statisticsStorage = new ComponentMap<>(Collections.emptyMap());
+		Skill survival  = new Skill("Survival");
+		Skill fighting  = new Skill("Fighting");
+		Statistics statistics = new Statistics(Map.of(survival, 7,  fighting, 9));
+		ComponentStorage<Statistics> statisticsStorage = new ComponentMap<>(Map.of(aragornId, statistics));
 
 		List<TimeEntry> entries = positions.getIds().stream().map(TimeEntry::new).collect(Collectors.toList());
 		TimeSystem timeSystem = new TimeSystem(entries);
 
 		State initState = new State(worldMap, names, positions, statisticsStorage, timeSystem);
 		store = new Store<>(REDUCER, initState, List.of(new LogActionMiddleware<>()));
+
+		statusView = new StatusView(store, tileRenderer);
 
 		travelView = new TravelView(store, tileRenderer);
 
@@ -80,7 +89,7 @@ public class TravelDemo extends TileApplication {
 	private void render(State state) {
 		log.info("render()");
 
-		travelView.render(state, this::createTileMap);
+		statusView.render(state, this::createTileMap);
 
 		log.info("render(): finished");
 	}

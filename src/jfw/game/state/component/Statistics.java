@@ -3,7 +3,9 @@ package jfw.game.state.component;
 import jfw.game.content.skill.Skill;
 import lombok.AllArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @AllArgsConstructor
@@ -22,6 +24,14 @@ public class Statistics {
 
 	public int getRank(Skill skill) {
 		return skillMap.getOrDefault(skill, DEFAULT_RANK);
+	}
+
+	public List<Skill> getSkills() {
+		return new ArrayList<>(skillMap.keySet());
+	}
+
+	public Map<Skill, Integer> getMap() {
+		return new HashMap<>(skillMap);
 	}
 
 }

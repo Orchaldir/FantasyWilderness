@@ -1,5 +1,6 @@
 package jfw.game.state;
 
+import jfw.game.content.skill.Skill;
 import jfw.game.state.component.Statistics;
 import jfw.game.state.world.WorldCell;
 import jfw.game.system.time.TimeSystem;
@@ -8,6 +9,10 @@ import jfw.util.map.ArrayMap2d;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
+
+import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Getter
@@ -27,6 +32,18 @@ public class State {
 
 	public String getName(int entityId) {
 		return names.getOptional(entityId).orElse("Entity " + entityId);
+	}
+
+	// statistics
+
+	public Map<Skill, Integer> getSkillMap(int entityId) {
+		Optional<Statistics> optional = statisticsStorage.getOptional(entityId);
+
+		if (optional.isPresent()) {
+			return optional.get().getMap();
+		}
+
+		return Collections.emptyMap();
 	}
 
 	// time

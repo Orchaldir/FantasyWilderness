@@ -73,4 +73,10 @@ public class TileMap {
 		map.setNode(tile, column, row);
 	}
 
+	public void setTile(@NonNull Tile tile) {
+		for (int i = 0; i < map.getSize(); i++) {
+			map.setNode(tile, i);
+		}
+	}
+
 }
