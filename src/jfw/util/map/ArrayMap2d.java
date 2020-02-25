@@ -36,6 +36,10 @@ public class ArrayMap2d<T> implements Map2d<T> {
 	}
 
 	public ArrayMap2d<T> withCell(T cell, int index) {
+		if (!isInside(index)) {
+			throw new OutsideMapException(index);
+		}
+
 		T[] newCells = cells.clone();
 		newCells[index] = cell;
 

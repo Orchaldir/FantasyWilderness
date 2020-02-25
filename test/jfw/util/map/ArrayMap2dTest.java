@@ -19,7 +19,7 @@ class ArrayMap2dTest extends SharedData {
 	private static final int X2 = 0, Y2 = 3, INDEX2 = 12;
 	private static final int X3 = 2, Y3 = 1, INDEX3 = 6;
 
-	private static final Map2d<Integer> MAP;
+	private static final ArrayMap2d<Integer> MAP;
 
 	static {
 		MAP = new ArrayMap2d<>(WIDTH, HEIGHT, createArray());
@@ -66,6 +66,33 @@ class ArrayMap2dTest extends SharedData {
 			assertThatExceptionOfType(IllegalArgumentException.class).
 					isThrownBy(() -> new ArrayMap2d<>(WIDTH, 3, createArray())).
 					withMessage("cells has length %d instead of %d!", 20, 12);
+		}
+	}
+
+	@Nested
+	class TestWith {
+
+		private static final int INDEX = 5;
+		private static final int CELL = 99;
+
+		@Test
+		void testWithSuccess() {
+			ArrayMap2d<Integer> newMap = MAP.withCell(CELL, INDEX);
+
+			for (int i = 0; i < SIZE; i++) {
+				assertThat(MAP.getNode(i)).isEqualTo(i);
+				assertThat(newMap.getNode(i)).isEqualTo(i == INDEX ? CELL : i);
+			}
+		}
+
+		@Test
+		void testWithNull() {
+			assertThrows(NullPointerException.class, () -> MAP.withCell(null, INDEX), "cell is null!");
+		}
+
+		@Test
+		void testWithInvalidIndex() {
+			assertThrows(OutsideMapException.class, () -> MAP.withCell(CELL, -1), "Index -1 is outside map!");
 		}
 	}
 
@@ -298,6 +325,11 @@ class ArrayMap2dTest extends SharedData {
 		private void assertNeighbor(Direction direction, int neighbor) {
 			assertThat(MAP.getNeighborIndex(INDEX3, direction)).isEqualTo(Optional.of(neighbor));
 		}
+	}
+
+	@Test
+	void testToString() {
+		assertThat(MAP.toString()).isEqualTo("[4*5]");
 	}
 
 }
