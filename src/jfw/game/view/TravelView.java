@@ -15,9 +15,6 @@ import jfw.util.tile.rendering.TileRenderer;
 
 import java.util.function.Supplier;
 
-import static jfw.game.selector.NameSelector.getCurrentName;
-import static jfw.game.selector.TimeSystemSelector.getCurrentEntityId;
-import static jfw.game.selector.TimeSystemSelector.getCurrentTime;
 import static jfw.game.state.world.WorldCell.TILE_CONVERTER;
 
 public class TravelView {
@@ -36,7 +33,7 @@ public class TravelView {
 		this.tileRenderer = tileRenderer;
 
 		characterTileConverter = id -> {
-			if (getCurrentEntityId(store.getState()) == id) {
+			if (store.getState().getCurrentEntityId() == id) {
 				return ACTIVE_CHARACTER_TILE;
 			}
 			return CHARACTER_TILE;
@@ -51,12 +48,12 @@ public class TravelView {
 		TileMap uiMap = supplier.get();
 		EntityView.view(state.getPositions(), uiMap, characterTileConverter);
 		uiMap.setText(getCurrentTimeString(state), 0, 0, Color.BLACK);
-		uiMap.setText(getCurrentName(state), 0, 9, Color.BLACK);
+		uiMap.setText(state.getCurrentName(), 0, 9, Color.BLACK);
 		uiMap.render(tileRenderer);
 	}
 
 	public void onKeyReleased(KeyCode keyCode) {
-		int entityId = getCurrentEntityId(store.getState());
+		int entityId = store.getState().getCurrentEntityId();
 
 		if (keyCode == KeyCode.UP) {
 			store.dispatch(new MoveEntity(entityId, Direction.NORTH));
@@ -73,6 +70,6 @@ public class TravelView {
 	}
 
 	private String getCurrentTimeString(State state) {
-		return timeDefinition.toString(getCurrentTime(state));
+		return timeDefinition.toString(state.getCurrentTime());
 	}
 }

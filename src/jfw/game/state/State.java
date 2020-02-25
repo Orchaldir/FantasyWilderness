@@ -18,4 +18,24 @@ public class State {
 	private final ComponentStorage<Integer> positions;
 	private final ComponentStorage<Statistics> statisticsStorage;
 	private final TimeSystem timeSystem;
+
+	// name
+
+	public String getCurrentName() {
+		return getName(getCurrentEntityId());
+	}
+
+	public String getName(int entityId) {
+		return names.getOptional(entityId).orElse("Entity " + entityId);
+	}
+
+	// time
+
+	public int getCurrentEntityId() {
+		return timeSystem.getCurrentEntry().getEntityId();
+	}
+
+	public long getCurrentTime() {
+		return timeSystem.getCurrentTime();
+	}
 }

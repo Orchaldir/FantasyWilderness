@@ -37,7 +37,7 @@ class EntityViewTest {
 
 	@Test
 	void test() {
-		positions = new ComponentMap<>(Map.of(ID0,POSITION0));
+		positions = new ComponentMap<>(Map.of(ID0, POSITION0));
 
 		when(tileMap.getMap()).thenReturn(map);
 		when(map.getX(POSITION0)).thenReturn(X0);
