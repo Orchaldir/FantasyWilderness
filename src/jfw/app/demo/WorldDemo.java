@@ -106,11 +106,11 @@ public class WorldDemo extends TileApplication {
 
 		TileMap worldMap = createTileMap();
 		worldMap.setMap(state.worldMap, 0, 0, TILE_CONVERTER);
-		worldMap.render(tileRenderer, 0, 0);
+		worldMap.render(tileRenderer);
 
 		TileMap uiMap = createTileMap();
 		uiMap.setText("Tool=" + state.tool, 0, 9, Color.BLACK);
-		uiMap.render(tileRenderer, 0, 0);
+		uiMap.render(tileRenderer);
 
 		log.info("render(): finished");
 	}

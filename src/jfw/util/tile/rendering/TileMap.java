@@ -26,6 +26,9 @@ public class TileMap {
 		return map;
 	}
 
+	public void render(TileRenderer renderer) {
+		render(renderer, 0, 0);
+	}
 	public void render(TileRenderer renderer, int column, int row) {
 		int index = 0;
 

@@ -51,7 +51,7 @@ public class RenderingDemo extends Application {
 		tileMap.setText("Test: 🌳 & 🌲", 1, 2, Color.BLUE);
 		tileMap.setCenteredText("Centered", 8, Color.GREEN);
 
-		tileMap.render(tileRenderer, 0, 0);
+		tileMap.render(tileRenderer);
 
 		log.info("render(): finished");
 	}

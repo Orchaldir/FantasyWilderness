@@ -2,7 +2,6 @@ package jfw.app.demo;
 
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import jfw.game.action.MoveEntity;
 import jfw.game.reducer.MoveEntityReducer;
@@ -10,37 +9,26 @@ import jfw.game.state.State;
 import jfw.game.state.component.Statistics;
 import jfw.game.state.world.TerrainType;
 import jfw.game.state.world.WorldCell;
-import jfw.game.system.time.TimeDefinition;
 import jfw.game.system.time.TimeEntry;
 import jfw.game.system.time.TimeSystem;
-import jfw.game.view.EntityView;
+import jfw.game.view.TravelView;
 import jfw.util.TileApplication;
 import jfw.util.ecs.ComponentMap;
 import jfw.util.ecs.ComponentStorage;
 import jfw.util.map.ArrayMap2d;
-import jfw.util.map.Direction;
 import jfw.util.redux.Reducer;
 import jfw.util.redux.Store;
 import jfw.util.redux.middleware.LogActionMiddleware;
-import jfw.util.tile.Tile;
-import jfw.util.tile.UnicodeTile;
-import jfw.util.tile.rendering.TileMap;
-import jfw.util.tile.rendering.TileConverter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-
-import static jfw.game.selector.NameSelector.getCurrentName;
-import static jfw.game.selector.TimeSystemSelector.getCurrentEntityId;
-import static jfw.game.selector.TimeSystemSelector.getCurrentTime;
-import static jfw.game.state.world.WorldCell.TILE_CONVERTER;
 
 @Slf4j
 public class TravelDemo extends TileApplication {
-
-	private static final Tile CHARACTER_TILE = new UnicodeTile("@", Color.BLACK);
-	private static final Tile ACTIVE_CHARACTER_TILE = new UnicodeTile("@", Color.WHITE);
 
 	private static final Reducer<Object, State> REDUCER = (action, oldState) -> {
 		if (action instanceof MoveEntity) {
@@ -51,8 +39,7 @@ public class TravelDemo extends TileApplication {
 	};
 
 	private Store<Object, State> store;
-	private final TimeDefinition timeDefinition = new TimeDefinition();
-	private TileConverter<Integer> characterTileConverter;
+	private TravelView travelView;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -85,12 +72,7 @@ public class TravelDemo extends TileApplication {
 		State initState = new State(worldMap, names, positions, statisticsStorage, timeSystem);
 		store = new Store<>(REDUCER, initState, List.of(new LogActionMiddleware<>()));
 
-		characterTileConverter = id -> {
-			if (getCurrentEntityId(store.getState()) == id) {
-				return ACTIVE_CHARACTER_TILE;
-			}
-			return CHARACTER_TILE;
-		};
+		travelView = new TravelView(store, tileRenderer);
 
 		store.subscribe(this::render);
 	}
@@ -98,15 +80,7 @@ public class TravelDemo extends TileApplication {
 	private void render(State state) {
 		log.info("render()");
 
-		TileMap worldMap = createTileMap();
-		worldMap.setMap(state.getWorldMap(), 0, 0, TILE_CONVERTER);
-		worldMap.render(tileRenderer, 0, 0);
-
-		TileMap uiMap = createTileMap();
-		EntityView.view(state.getPositions(), uiMap, characterTileConverter);
-		uiMap.setText(getCurrentTimeString(state), 0, 0, Color.BLACK);
-		uiMap.setText(getCurrentName(state), 0, 9, Color.BLACK);
-		uiMap.render(tileRenderer, 0, 0);
+		travelView.render(state, this::createTileMap);
 
 		log.info("render(): finished");
 	}
@@ -114,26 +88,7 @@ public class TravelDemo extends TileApplication {
 	private void onKeyReleased(KeyCode keyCode) {
 		log.info("onKeyReleased(): keyCode={}", keyCode);
 
-		int entityId = getCurrentEntityId(store.getState());
-
-		if (keyCode == KeyCode.UP) {
-			store.dispatch(new MoveEntity(entityId, Direction.NORTH));
-		}
-		else if (keyCode == KeyCode.RIGHT) {
-			store.dispatch(new MoveEntity(entityId, Direction.EAST));
-		}
-		else if (keyCode == KeyCode.DOWN) {
-			store.dispatch(new MoveEntity(entityId, Direction.SOUTH));
-		}
-		else if (keyCode == KeyCode.LEFT) {
-			store.dispatch(new MoveEntity(entityId, Direction.WEST));
-		}
-	}
-
-	// selectors
-
-	private String getCurrentTimeString(State state) {
-		return timeDefinition.toString(getCurrentTime(state));
+		travelView.onKeyReleased(keyCode);
 	}
 
 	public static void main(String[] args) {
