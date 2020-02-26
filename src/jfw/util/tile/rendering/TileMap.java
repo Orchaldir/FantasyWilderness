@@ -64,6 +64,10 @@ public class TileMap {
 		}
 	}
 
+	public void setTextFromBottom(String text, int column, int row, Color color) {
+		setText(text, column, map.getHeight() - 1 - row, color);
+	}
+
 	public void setCenteredText(String text, int row, Color color) {
 		int column = (map.getWidth() - text.length()) / 2;
 		setText(text, column, row, color);

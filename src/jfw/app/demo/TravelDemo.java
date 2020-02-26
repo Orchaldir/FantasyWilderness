@@ -2,6 +2,7 @@ package jfw.app.demo;
 
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import jfw.game.action.MoveEntity;
 import jfw.game.content.skill.Skill;
@@ -81,7 +82,7 @@ public class TravelDemo extends TileApplication {
 		store = new Store<>(REDUCER, initState, List.of(new LogActionMiddleware<>()));
 
 		statusView = new StatusView(tileRenderer);
-		travelView = new TravelView(store, tileRenderer);
+		travelView = new TravelView(store, tileRenderer, Color.BLACK);
 		currentView = travelView;
 
 		store.subscribe(this::render);

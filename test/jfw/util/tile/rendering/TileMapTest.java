@@ -132,6 +132,19 @@ class TileMapTest {
 		}
 
 		@Test
+		void testRenderTextFromBottom() {
+			tileMap.setTextFromBottom("Bottom.", 2, 3, COLOR);
+
+			assertUnicode("B", 2, 36);
+			assertUnicode("o", 3, 36);
+			assertUnicode("t", 4, 36);
+			assertUnicode("t", 5, 36);
+			assertUnicode("o", 6, 36);
+			assertUnicode("m", 7, 36);
+			assertUnicode(".", 8, 36);
+		}
+
+		@Test
 		void testRenderTextWithEndOutside() {
 			tileMap.setText("A test!", 27, 7, COLOR);
 

@@ -28,10 +28,12 @@ public class TravelView implements View {
 
 	private final TileConverter<Integer> characterTileConverter;
 	private final TileRenderer tileRenderer;
+	private final Color fontColor;
 
-	public TravelView(Store<Object, State> store, TileRenderer tileRenderer) {
+	public TravelView(Store<Object, State> store, TileRenderer tileRenderer, Color fontColor) {
 		this.store = validateNotNull(store, "store");
 		this.tileRenderer = validateNotNull(tileRenderer, "tileRenderer");
+		this.fontColor = validateNotNull(fontColor, "fontColor");
 
 		characterTileConverter = id -> {
 			if (store.getState().getCurrentEntityId() == id) {
@@ -49,8 +51,8 @@ public class TravelView implements View {
 
 		TileMap uiMap = supplier.get();
 		EntityView.view(state.getPositions(), uiMap, characterTileConverter);
-		uiMap.setText(getCurrentTimeString(state), 0, 0, Color.BLACK);
-		uiMap.setText(state.getCurrentName(), 0, uiMap.getMap().getHeight() - 1, Color.BLACK);
+		uiMap.setText(getCurrentTimeString(state), 0, 0, fontColor);
+		uiMap.setTextFromBottom("Next: " + state.getCurrentName(), 0, 0, fontColor);
 		uiMap.render(tileRenderer);
 	}
 
