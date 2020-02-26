@@ -13,6 +13,14 @@ class TimeEntryTest {
 	private static final TimeEntry ENTRY1 = new TimeEntry(5, 456);
 
 	@Test
+	void testConstructor() {
+		TimeEntry entry = new TimeEntry(ID0);
+
+		assertThat(entry.getEntityId()).isEqualTo(ID0);
+		assertThat(entry.getTime()).isEqualTo(0);
+	}
+
+	@Test
 	void testGetters() {
 		assertThat(ENTRY0.getEntityId()).isEqualTo(ID0);
 		assertThat(ENTRY0.getTime()).isEqualTo(TIME0);

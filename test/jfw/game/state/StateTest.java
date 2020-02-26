@@ -1,5 +1,7 @@
 package jfw.game.state;
 
+import jfw.game.content.skill.Skill;
+import jfw.game.state.component.Statistics;
 import jfw.game.system.time.TimeEntry;
 import jfw.game.system.time.TimeSystem;
 import jfw.util.ecs.ComponentStorage;
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -72,6 +75,38 @@ class StateTest {
 			verify(names).getOptional(ENTITY_ID);
 			verifyNoMoreInteractions(names);
 		}
+	}
+
+	@Nested
+	class TestStatisticsSelector {
+
+		@Mock
+		private Map<Skill,Integer> map;
+		@Mock
+		private Statistics statistics;
+		@Mock
+		private ComponentStorage<Statistics> storage;
+
+		@BeforeEach
+		void setup() {
+			state = new State(null, null,  null, storage, null);
+		}
+
+		@Test
+		void testGetSkillMap() {
+			when(storage.getOptional(ENTITY_ID)).thenReturn(Optional.of(statistics));
+			when(statistics.getMap()).thenReturn(map);
+
+			assertThat(state.getSkillMap(ENTITY_ID)).isEqualTo(map);
+		}
+
+		@Test
+		void testGetEmptySkillMap() {
+			when(storage.getOptional(ENTITY_ID)).thenReturn(Optional.empty());
+
+			assertThat(state.getSkillMap(ENTITY_ID)).isEmpty();
+		}
+
 	}
 
 	@Nested

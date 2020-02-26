@@ -12,7 +12,6 @@ import lombok.ToString;
 
 import java.util.Collections;
 import java.util.Map;
-import java.util.Optional;
 
 @AllArgsConstructor
 @Getter
@@ -37,13 +36,9 @@ public class State {
 	// statistics
 
 	public Map<Skill, Integer> getSkillMap(int entityId) {
-		Optional<Statistics> optional = statisticsStorage.getOptional(entityId);
-
-		if (optional.isPresent()) {
-			return optional.get().getMap();
-		}
-
-		return Collections.emptyMap();
+		return statisticsStorage.getOptional(entityId).
+				map(Statistics::getMap).
+				orElse(Collections.emptyMap());
 	}
 
 	// time

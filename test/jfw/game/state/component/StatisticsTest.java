@@ -59,6 +59,16 @@ class StatisticsTest {
 		assertThat(statistics.getRank(SKILL2)).isEqualTo(DEFAULT_RANK);
 	}
 
+	@Test
+	void testGetSkills() {
+		assertThat(statistics.getSkills()).contains(SKILL0, SKILL1);
+	}
+
+	@Test
+	void testGetMap() {
+		assertThat(statistics.getMap()).isEqualTo(Map.of(SKILL0, RANK0, SKILL1, RANK1));
+	}
+
 	void assertInit(Statistics statistics) {
 		assertThat(statistics.getRank(SKILL0)).isEqualTo(RANK0);
 		assertThat(statistics.getRank(SKILL1)).isEqualTo(RANK1);
