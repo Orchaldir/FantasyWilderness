@@ -14,6 +14,7 @@ import jfw.game.system.time.TimeEntry;
 import jfw.game.system.time.TimeSystem;
 import jfw.game.view.StatusView;
 import jfw.game.view.TravelView;
+import jfw.game.view.View;
 import jfw.util.TileApplication;
 import jfw.util.ecs.ComponentMap;
 import jfw.util.ecs.ComponentStorage;
@@ -42,10 +43,11 @@ public class TravelDemo extends TileApplication {
 	private Store<Object, State> store;
 	private StatusView statusView;
 	private TravelView travelView;
+	private View currentView;
 
 	@Override
 	public void start(Stage primaryStage) {
-		Scene scene = init(primaryStage, "Travel Demo", 20, 10, 22, 32);
+		Scene scene = init(primaryStage, "Travel Demo", 50, 30, 22, 32);
 
 		scene.setOnKeyReleased(event -> onKeyReleased(event.getCode()));
 
@@ -79,8 +81,8 @@ public class TravelDemo extends TileApplication {
 		store = new Store<>(REDUCER, initState, List.of(new LogActionMiddleware<>()));
 
 		statusView = new StatusView(tileRenderer);
-
 		travelView = new TravelView(store, tileRenderer);
+		currentView = travelView;
 
 		store.subscribe(this::render);
 	}
@@ -88,7 +90,7 @@ public class TravelDemo extends TileApplication {
 	private void render(State state) {
 		log.info("render()");
 
-		statusView.render(state, this::createTileMap);
+		currentView.render(state, this::createTileMap);
 
 		log.info("render(): finished");
 	}
@@ -96,7 +98,21 @@ public class TravelDemo extends TileApplication {
 	private void onKeyReleased(KeyCode keyCode) {
 		log.info("onKeyReleased(): keyCode={}", keyCode);
 
-		travelView.onKeyReleased(keyCode);
+		if (keyCode == KeyCode.F1) {
+			switchView(travelView);
+			return;
+		}
+		else if (keyCode == KeyCode.F2) {
+			switchView(statusView);
+			return;
+		}
+
+		currentView.onKeyReleased(keyCode);
+	}
+
+	private void switchView(View view) {
+		currentView = view;
+		render(store.getState());
 	}
 
 	public static void main(String[] args) {

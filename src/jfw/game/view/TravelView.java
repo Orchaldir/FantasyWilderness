@@ -50,7 +50,7 @@ public class TravelView implements View {
 		TileMap uiMap = supplier.get();
 		EntityView.view(state.getPositions(), uiMap, characterTileConverter);
 		uiMap.setText(getCurrentTimeString(state), 0, 0, Color.BLACK);
-		uiMap.setText(state.getCurrentName(), 0, 9, Color.BLACK);
+		uiMap.setText(state.getCurrentName(), 0, uiMap.getMap().getHeight() - 1, Color.BLACK);
 		uiMap.render(tileRenderer);
 	}
 

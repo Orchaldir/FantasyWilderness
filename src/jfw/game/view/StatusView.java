@@ -14,7 +14,7 @@ import static jfw.util.Validator.validateNotNull;
 
 public class StatusView implements View {
 
-	public static final FullTile BACKGROUND_TILE = new FullTile(Color.GREY);
+	public static final FullTile BACKGROUND_TILE = new FullTile(new Color(0.81, 0.78, 0.69, 1.0));
 
 	private final TileRenderer tileRenderer;
 
@@ -31,15 +31,18 @@ public class StatusView implements View {
 		background.setTile(BACKGROUND_TILE);
 		background.render(tileRenderer);
 
+		int row = 0;
+
 		TileMap status = supplier.get();
-		status.setText("Name=" + state.getName(entityId), 0, 0, Color.BLACK);
+		status.setText("Name=" + state.getName(entityId), 0, row++, Color.BLACK);
+
+		row++;
 
 		if (!skillMap.isEmpty()) {
-			status.setText("Skill:", 0, 1, Color.BLACK);
+			status.setText("Skill:", 0, row++, Color.BLACK);
 
-			int skillRow = 2;
 			for (Map.Entry<Skill, Integer> entry : skillMap.entrySet()) {
-				status.setText(entry.getKey().getName() + ":" + entry.getValue(), 2, skillRow++, Color.BLACK);
+				status.setText(entry.getKey().getName() + ":" + entry.getValue(), 2, row++, Color.BLACK);
 			}
 		}
 
