@@ -24,7 +24,7 @@ class StatusViewTest {
 
 	private static final String NAME = "Character0";
 
-	private static final String SKILL_NAME0 = "abc";
+	private static final String SKILL_NAME0 = "Abc";
 	private static final String SKILL_NAME1 = "Skill7";
 
 	private static final int SKILL_RANK0 = 5;
@@ -69,7 +69,7 @@ class StatusViewTest {
 
 			verify(statusTileMap).setText("Name=Character0", 0, 0, FONT_COLOR);
 			verify(statusTileMap).setText("Skills:", 0, 2, FONT_COLOR);
-			verify(statusTileMap).setText("abc:5", 2, 3, FONT_COLOR);
+			verify(statusTileMap).setText("Abc:5", 2, 3, FONT_COLOR);
 			verify(statusTileMap).setText("Skill7:12", 2, 4, FONT_COLOR);
 			verify(statusTileMap).render(tileRenderer);
 			verifyNoMoreInteractions(statusTileMap);

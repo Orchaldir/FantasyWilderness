@@ -28,6 +28,7 @@ public class SkillManager {
 		return skillMap.
 				values().
 				stream().
-				sorted(Comparator.comparing(Skill::getName)).collect(Collectors.toList());
+				sorted().
+				collect(Collectors.toList());
 	}
 }
