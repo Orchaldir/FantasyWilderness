@@ -27,31 +27,32 @@ public class StatusView implements View {
 
 	@Override
 	public void render(State state, Supplier<TileMap> supplier) {
-		int entityId = state.getCurrentEntityId();
-		Map<Skill, Integer> skillMap = state.getSkillMap(entityId);
-
 		TileMap background = supplier.get();
 		background.setTile(BACKGROUND_TILE);
 		background.render(tileRenderer);
 
-		int row = 0;
+		state.getCurrentEntityId().ifPresent(entityId -> {
+			Map<Skill, Integer> skillMap = state.getSkillMap(entityId);
 
-		TileMap status = supplier.get();
-		status.setText("Name=" + state.getName(entityId), 0, row++, FONT_COLOR);
+			int row = 0;
 
-		row++;
+			TileMap status = supplier.get();
+			status.setText("Name=" + state.getName(entityId), 0, row++, FONT_COLOR);
 
-		if (!skillMap.isEmpty()) {
-			status.setText("Skills:", 0, row++, FONT_COLOR);
+			row++;
 
-			List<Skill> skills = skillMap.keySet().stream().sorted().collect(Collectors.toList());
+			if (!skillMap.isEmpty()) {
+				status.setText("Skills:", 0, row++, FONT_COLOR);
 
-			for (Skill skill : skills) {
-				status.setText(skill.getName() + ":" + skillMap.get(skill), 2, row++, FONT_COLOR);
+				List<Skill> skills = skillMap.keySet().stream().sorted().collect(Collectors.toList());
+
+				for (Skill skill : skills) {
+					status.setText(skill.getName() + ":" + skillMap.get(skill), 2, row++, FONT_COLOR);
+				}
 			}
-		}
 
-		status.render(tileRenderer);
+			status.render(tileRenderer);
+		});
 	}
 
 }

@@ -11,7 +11,8 @@ import jfw.game.state.State;
 import jfw.game.state.component.Statistics;
 import jfw.game.state.world.TerrainType;
 import jfw.game.state.world.WorldCell;
-import jfw.game.system.time.TimeEntry;
+import jfw.game.system.time.event.EntityEntry;
+import jfw.game.system.time.event.Event;
 import jfw.game.system.time.TimeSystem;
 import jfw.game.view.StatusView;
 import jfw.game.view.TravelView;
@@ -50,9 +51,9 @@ public class TravelDemo extends TileApplication {
 	public void start(Stage primaryStage) {
 		Scene scene = init(primaryStage, "Travel Demo", 50, 30, 22, 32);
 
-		scene.setOnKeyReleased(event -> onKeyReleased(event.getCode()));
-
 		create();
+
+		scene.setOnKeyReleased(event -> onKeyReleased(event.getCode()));
 	}
 
 	private void create() {
@@ -75,7 +76,7 @@ public class TravelDemo extends TileApplication {
 		Statistics statistics = new Statistics(Map.of(survival, 7,  fighting, 9));
 		ComponentStorage<Statistics> statisticsStorage = new ComponentMap<>(Map.of(aragornId, statistics));
 
-		List<TimeEntry> entries = positions.getIds().stream().map(TimeEntry::new).collect(Collectors.toList());
+		List<Event> entries = positions.getIds().stream().map(EntityEntry::new).collect(Collectors.toList());
 		TimeSystem timeSystem = new TimeSystem(entries);
 
 		State initState = new State(worldMap, names, positions, statisticsStorage, timeSystem);

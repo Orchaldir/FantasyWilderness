@@ -18,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import static jfw.game.state.world.WorldCell.TILE_CONVERTER;
@@ -27,6 +28,8 @@ import static org.mockito.Mockito.*;
 class TravelViewTest {
 
 	private static final Color COLOR = Color.BLUE;
+
+	private static final int ENTITY_ID = 42;
 
 	@Mock
 	private State state;
@@ -64,8 +67,9 @@ class TravelViewTest {
 		@Test
 		void testRender() {
 			when(state.getPositions()).thenReturn(positions);
-			when(state.getCurrentName()).thenReturn("Name");
-			when(state.getCurrentTime()).thenReturn(0L);
+			when(state.getCurrentEntityId()).thenReturn(Optional.of(ENTITY_ID));
+			when(state.getName(ENTITY_ID)).thenReturn("Name");
+			when(state.getCurrentTime()).thenReturn(2963L);
 			when(state.getWorldMap()).thenReturn(worldMap);
 
 			view.render(state, supplier);
@@ -75,7 +79,7 @@ class TravelViewTest {
 			verifyNoMoreInteractions(backgroundTileMap);
 
 			verify(positions).visit(any());
-			verify(uiTileMap).setText("Day 0 0:00", 0, 0, COLOR);
+			verify(uiTileMap).setText("Day 2 1:23", 0, 0, COLOR);
 			verify(uiTileMap).setTextFromBottom("Next: Name", 0, 0, COLOR);
 			verify(uiTileMap).getMap();
 			verify(uiTileMap).render(tileRenderer);
@@ -86,14 +90,23 @@ class TravelViewTest {
 	@Nested
 	class TestOnKeyReleased {
 
-		private static final int ENTITY_ID = 42;
-
 		@Test
 		void testNoTravel() {
 			when(store.getState()).thenReturn(state);
-			when(state.getCurrentEntityId()).thenReturn(ENTITY_ID);
+			when(state.getCurrentEntityId()).thenReturn(Optional.of(ENTITY_ID));
 
 			view.onKeyReleased(KeyCode.ENTER);
+
+			verify(store).getState();
+			verifyNoMoreInteractions(store);
+		}
+
+		@Test
+		void testNoCurrentEntity() {
+			when(store.getState()).thenReturn(state);
+			when(state.getCurrentEntityId()).thenReturn(Optional.empty());
+
+			view.onKeyReleased(KeyCode.UP);
 
 			verify(store).getState();
 			verifyNoMoreInteractions(store);
@@ -121,7 +134,7 @@ class TravelViewTest {
 
 		private void testTravel(KeyCode keyCode, Direction direction) {
 			when(store.getState()).thenReturn(state);
-			when(state.getCurrentEntityId()).thenReturn(ENTITY_ID);
+			when(state.getCurrentEntityId()).thenReturn(Optional.of(ENTITY_ID));
 
 			view.onKeyReleased(keyCode);
 

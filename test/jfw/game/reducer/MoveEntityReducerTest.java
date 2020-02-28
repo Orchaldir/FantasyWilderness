@@ -5,7 +5,7 @@ import jfw.game.state.State;
 import jfw.game.state.component.Statistics;
 import jfw.game.state.world.TerrainType;
 import jfw.game.state.world.WorldCell;
-import jfw.game.system.time.TimeEntry;
+import jfw.game.system.time.event.EntityEntry;
 import jfw.game.system.time.TimeSystem;
 import jfw.util.ecs.ComponentMap;
 import jfw.util.ecs.ComponentStorage;
@@ -37,7 +37,7 @@ class MoveEntityReducerTest {
 
 	private static final ComponentStorage<Statistics> STATISTICS = new ComponentMap<>(Collections.emptyMap());
 
-	private static final TimeSystem TIME_SYSTEM = new TimeSystem(List.of(new TimeEntry(ENTITY_ID, START_TIME)));
+	private static final TimeSystem TIME_SYSTEM = new TimeSystem(List.of(new EntityEntry(ENTITY_ID, START_TIME)));
 
 	private static final State INIT_STATE = new State(WORLD_MAP, NAMES, POSITIONS, STATISTICS, TIME_SYSTEM);
 
@@ -54,7 +54,7 @@ class MoveEntityReducerTest {
 
 		assertThat(state.getStatisticsStorage()).isEqualTo(STATISTICS);
 
-		assertThat(state.getTimeSystem().getAllEntries()).contains(new TimeEntry(ENTITY_ID, START_TIME + MOVE_DURATION));
+		assertThat(state.getTimeSystem().getAllEntries()).contains(new EntityEntry(ENTITY_ID, START_TIME + MOVE_DURATION));
 	}
 
 	@Test

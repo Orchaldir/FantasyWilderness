@@ -2,7 +2,8 @@ package jfw.game.state;
 
 import jfw.game.content.skill.Skill;
 import jfw.game.state.component.Statistics;
-import jfw.game.system.time.TimeEntry;
+import jfw.game.system.time.event.EntityEntry;
+import jfw.game.system.time.event.Event;
 import jfw.game.system.time.TimeSystem;
 import jfw.util.ecs.ComponentStorage;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +32,7 @@ class StateTest {
 		private static final String NAME = "Test Name";
 
 		@Mock
-		private TimeEntry entry;
+		private Event entry;
 
 		@Mock
 		private TimeSystem timeSystem;
@@ -59,18 +60,6 @@ class StateTest {
 			when(names.getOptional(ENTITY_ID)).thenReturn(Optional.empty());
 
 			assertThat(state.getName(ENTITY_ID)).isEqualTo("Entity 66");
-
-			verify(names).getOptional(ENTITY_ID);
-			verifyNoMoreInteractions(names);
-		}
-
-		@Test
-		void testGetCurrentName() {
-			when(timeSystem.getCurrentEntry()).thenReturn(entry);
-			when(entry.getEntityId()).thenReturn(ENTITY_ID);
-			when(names.getOptional(ENTITY_ID)).thenReturn(Optional.of(NAME));
-
-			assertThat(state.getCurrentName()).isEqualTo(NAME);
 
 			verify(names).getOptional(ENTITY_ID);
 			verifyNoMoreInteractions(names);
@@ -113,7 +102,9 @@ class StateTest {
 	class TestTimeSelector {
 
 		@Mock
-		private TimeEntry entry;
+		private EntityEntry entityEntry;
+		@Mock
+		private Event event;
 		@Mock
 		private TimeSystem timeSystem;
 
@@ -124,10 +115,17 @@ class StateTest {
 
 		@Test
 		void testGetCurrentEntityId() {
-			when(timeSystem.getCurrentEntry()).thenReturn(entry);
-			when(entry.getEntityId()).thenReturn(ENTITY_ID);
+			when(timeSystem.getCurrentEntry()).thenReturn(entityEntry);
+			when(entityEntry.getEntityId()).thenReturn(ENTITY_ID);
 
-			assertThat(state.getCurrentEntityId()).isEqualTo(ENTITY_ID);
+			assertThat(state.getCurrentEntityId()).isEqualTo(Optional.of(ENTITY_ID));
+		}
+
+		@Test
+		void testNoCurrentEntityId() {
+			when(timeSystem.getCurrentEntry()).thenReturn(event);
+
+			assertThat(state.getCurrentEntityId()).isEqualTo(Optional.empty());
 		}
 
 		@Test

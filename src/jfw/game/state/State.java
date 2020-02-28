@@ -4,6 +4,8 @@ import jfw.game.content.skill.Skill;
 import jfw.game.state.component.Statistics;
 import jfw.game.state.world.WorldCell;
 import jfw.game.system.time.TimeSystem;
+import jfw.game.system.time.event.EntityEntry;
+import jfw.game.system.time.event.Event;
 import jfw.util.ecs.ComponentStorage;
 import jfw.util.map.ArrayMap2d;
 import lombok.AllArgsConstructor;
@@ -12,6 +14,7 @@ import lombok.ToString;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Getter
@@ -24,10 +27,6 @@ public class State {
 	private final TimeSystem timeSystem;
 
 	// name
-
-	public String getCurrentName() {
-		return getName(getCurrentEntityId());
-	}
 
 	public String getName(int entityId) {
 		return names.getOptional(entityId).orElse("Entity " + entityId);
@@ -43,8 +42,14 @@ public class State {
 
 	// time
 
-	public int getCurrentEntityId() {
-		return timeSystem.getCurrentEntry().getEntityId();
+	public Optional<Integer> getCurrentEntityId() {
+		Event currentEntry = timeSystem.getCurrentEntry();
+
+		if (currentEntry instanceof EntityEntry) {
+			return Optional.of(((EntityEntry) currentEntry).getEntityId());
+		}
+
+		return Optional.empty();
 	}
 
 	public long getCurrentTime() {

@@ -13,6 +13,7 @@ import jfw.util.tile.rendering.TileConverter;
 import jfw.util.tile.rendering.TileMap;
 import jfw.util.tile.rendering.TileRenderer;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import static jfw.game.state.world.WorldCell.TILE_CONVERTER;
@@ -26,7 +27,6 @@ public class TravelView implements View {
 	private final Store<Object, State> store;
 	private final TimeDefinition timeDefinition = new TimeDefinition();
 
-	private final TileConverter<Integer> characterTileConverter;
 	private final TileRenderer tileRenderer;
 	private final Color fontColor;
 
@@ -34,47 +34,55 @@ public class TravelView implements View {
 		this.store = validateNotNull(store, "store");
 		this.tileRenderer = validateNotNull(tileRenderer, "tileRenderer");
 		this.fontColor = validateNotNull(fontColor, "fontColor");
-
-		characterTileConverter = id -> {
-			if (store.getState().getCurrentEntityId() == id) {
-				return ACTIVE_CHARACTER_TILE;
-			}
-			return CHARACTER_TILE;
-		};
 	}
 
 	@Override
 	public void render(State state, Supplier<TileMap> supplier) {
+		Optional<Integer> optionalId = state.getCurrentEntityId();
+
 		TileMap worldMap = supplier.get();
 		worldMap.setMap(state.getWorldMap(), 0, 0, TILE_CONVERTER);
 		worldMap.render(tileRenderer);
 
 		TileMap uiMap = supplier.get();
-		EntityView.view(state.getPositions(), uiMap, characterTileConverter);
+		EntityView.view(state.getPositions(), uiMap, getCharacterTileConverter(optionalId.orElse(-1)));
 		uiMap.setText(getCurrentTimeString(state), 0, 0, fontColor);
-		uiMap.setTextFromBottom("Next: " + state.getCurrentName(), 0, 0, fontColor);
+
+		optionalId.ifPresent(id ->
+				uiMap.setTextFromBottom("Next: " + state.getName(id), 0, 0, fontColor));
+
 		uiMap.render(tileRenderer);
 	}
 
 	@Override
 	public void onKeyReleased(KeyCode keyCode) {
-		int entityId = store.getState().getCurrentEntityId();
-
-		if (keyCode == KeyCode.UP) {
-			store.dispatch(new MoveEntity(entityId, Direction.NORTH));
-		}
-		else if (keyCode == KeyCode.RIGHT) {
-			store.dispatch(new MoveEntity(entityId, Direction.EAST));
-		}
-		else if (keyCode == KeyCode.DOWN) {
-			store.dispatch(new MoveEntity(entityId, Direction.SOUTH));
-		}
-		else if (keyCode == KeyCode.LEFT) {
-			store.dispatch(new MoveEntity(entityId, Direction.WEST));
-		}
+		store.getState().getCurrentEntityId().ifPresent(entityId -> {
+			if (keyCode == KeyCode.UP) {
+				store.dispatch(new MoveEntity(entityId, Direction.NORTH));
+			}
+			else if (keyCode == KeyCode.RIGHT) {
+				store.dispatch(new MoveEntity(entityId, Direction.EAST));
+			}
+			else if (keyCode == KeyCode.DOWN) {
+				store.dispatch(new MoveEntity(entityId, Direction.SOUTH));
+			}
+			else if (keyCode == KeyCode.LEFT) {
+				store.dispatch(new MoveEntity(entityId, Direction.WEST));
+			}
+		});
 	}
 
 	private String getCurrentTimeString(State state) {
 		return timeDefinition.toString(state.getCurrentTime());
+	}
+
+	private TileConverter<Integer> getCharacterTileConverter(int entityId) {
+		return id -> {
+			if (entityId == id) {
+				return ACTIVE_CHARACTER_TILE;
+			}
+
+			return CHARACTER_TILE;
+		};
 	}
 }
