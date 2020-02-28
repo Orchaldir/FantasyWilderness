@@ -6,7 +6,7 @@ public interface Validator {
 
 	static <T> T validateNotNull(T object, String name) {
 		if (object == null) {
-			String message = String.format("%s is null!", name);
+			String message = String.format("'%s' is null!", name);
 			throw new NullPointerException(message);
 		}
 
@@ -17,7 +17,7 @@ public interface Validator {
 		validateNotNull(array, name);
 
 		if (array.length != desiredLength) {
-			String message = String.format("%s has length %d instead of %d!", name, array.length, desiredLength);
+			String message = String.format("'%s' has length %d instead of %d!", name, array.length, desiredLength);
 			throw new IllegalArgumentException(message);
 		}
 
@@ -38,7 +38,7 @@ public interface Validator {
 		validateNotNull(list, name);
 
 		if (list.isEmpty()) {
-			String message = String.format("%s is empty!", name);
+			String message = String.format("'%s' is empty!", name);
 			throw new IllegalArgumentException(message);
 		}
 
@@ -51,7 +51,7 @@ public interface Validator {
 		long codePoints = text.codePoints().count();
 
 		if (codePoints != desiredCodePoints) {
-			String message = String.format("%s has %d code points instead of %d!", name, codePoints, desiredCodePoints);
+			String message = String.format("'%s' has %d code points instead of %d!", name, codePoints, desiredCodePoints);
 			throw new IllegalArgumentException(message);
 		}
 
@@ -63,7 +63,34 @@ public interface Validator {
 			return value;
 		}
 
-		String message = String.format("%s requires %d > %d", name, value, threshold);
+		String message = String.format("'%s' requires %d > %d!", name, value, threshold);
 		throw new IllegalArgumentException(message);
+	}
+
+	static long validateGreater(long value, long threshold, String name) {
+		if (value > threshold) {
+			return value;
+		}
+
+		String message = String.format("'%s' requires %d > %d!", name, value, threshold);
+		throw new IllegalArgumentException(message);
+	}
+
+	static boolean validateTrue(boolean value, String name) {
+		if (!value) {
+			String message = String.format("'%s' must be true!", name);
+			throw new IllegalArgumentException(message);
+		}
+
+		return true;
+	}
+
+	static boolean validateFalse(boolean value, String name) {
+		if (value) {
+			String message = String.format("'%s' must be false!", name);
+			throw new IllegalArgumentException(message);
+		}
+
+		return false;
 	}
 }

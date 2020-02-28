@@ -44,27 +44,27 @@ class ArrayMap2dTest extends SharedData {
 		private void assertWidth(int width) {
 			assertThatExceptionOfType(IllegalArgumentException.class).
 					isThrownBy(() -> new ArrayMap2d<>(width, HEIGHT, createArray())).
-					withMessage("%s requires %d > %d", "width", width, 0);
+					withMessage("'width' requires %d > 0!", width);
 		}
 
 		private void assertHeight(int height) {
 			assertThatExceptionOfType(IllegalArgumentException.class).
 					isThrownBy(() -> new ArrayMap2d<>(WIDTH, height, createArray())).
-					withMessage("%s requires %d > %d", "height", height, 0);
+					withMessage("'height' requires %d > 0!", height);
 		}
 
 		@Test
 		void testArrayIsNull() {
 			assertThatExceptionOfType(NullPointerException.class).
 					isThrownBy(() -> new ArrayMap2d<>(WIDTH, HEIGHT, null)).
-					withMessage("cells is null!");
+					withMessage("'cells' is null!");
 		}
 
 		@Test
 		void testInvalidArrayLength() {
 			assertThatExceptionOfType(IllegalArgumentException.class).
 					isThrownBy(() -> new ArrayMap2d<>(WIDTH, 3, createArray())).
-					withMessage("cells has length %d instead of %d!", 20, 12);
+					withMessage("'cells' has length %d instead of %d!", 20, 12);
 		}
 	}
 

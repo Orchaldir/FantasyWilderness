@@ -17,7 +17,7 @@ class UnicodeTest {
 	void testTooManySymbols() {
 		assertThatIllegalArgumentException().
 				isThrownBy(() -> stringToCodePoint("abc")).
-				withMessage("symbol has 3 code points instead of 1!");
+				withMessage("'symbol' has 3 code points instead of 1!");
 	}
 
 	@Test

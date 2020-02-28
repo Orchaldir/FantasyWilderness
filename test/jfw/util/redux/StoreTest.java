@@ -48,14 +48,14 @@ class StoreTest {
 	void testInvalidReducer() {
 		assertThatExceptionOfType(NullPointerException.class).
 				isThrownBy(() -> new Store<>(null, STATE0)).
-				withMessage("reducer is null!");
+				withMessage("'reducer' is null!");
 	}
 
 	@Test
 	void testInvalidState() {
 		assertThatExceptionOfType(NullPointerException.class).
 				isThrownBy(() -> new Store<>(reducer, null)).
-				withMessage("state is null!");
+				withMessage("'state' is null!");
 	}
 
 	@Test
@@ -67,7 +67,7 @@ class StoreTest {
 	void testSubscribeWithNull() {
 		assertThatExceptionOfType(NullPointerException.class).
 				isThrownBy(() ->store.subscribe(null)).
-				withMessage("consumer is null!");
+				withMessage("'consumer' is null!");
 	}
 
 	@Test
@@ -83,7 +83,7 @@ class StoreTest {
 	void testDispatchWithNull() {
 		assertThatExceptionOfType(NullPointerException.class).
 				isThrownBy(() ->store.dispatch(null)).
-				withMessage("action is null!");
+				withMessage("'action' is null!");
 	}
 
 	@Test
